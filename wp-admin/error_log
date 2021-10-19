@@ -448,13 +448,3 @@
 [22-Feb-2017 14:39:52 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
 [22-Feb-2017 14:40:51 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
 [22-Feb-2017 14:42:35 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:43:35 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:45:35 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:46:36 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:48:36 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:50:37 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:52:38 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 101 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:54:39 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:55:41 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:57:41 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902
-[22-Feb-2017 14:58:42 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 1024 bytes) in /home/programmerlab/public_html/wp-includes/option.php on line 1902

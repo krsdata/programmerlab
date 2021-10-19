@@ -12,7 +12,7 @@ if ( !defined('ABSPATH') )
     <div class="likebtn-likebox">
         <?php if ($text): ?>
             <div class="likebtn-likebox-txt">
-                <? echo $text; ?>
+                <?php echo $text; ?>
             </div>
         <?php endif ?>
     	<div class="likebtn-likebox-list">

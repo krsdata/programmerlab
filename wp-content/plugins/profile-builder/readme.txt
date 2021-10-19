@@ -1,71 +1,79 @@
-﻿=== User registration & user profile - Profile Builder ===
-Contributors: cozmoslabs, reflectionmedia, sareiodata, adispiac, madalin.ungureanu, iova.mihai, barinagabriel
+﻿=== User Registration & User Profile - Profile Builder ===
+Contributors: cozmoslabs, reflectionmedia, sareiodata, adispiac, madalin.ungureanu, iova.mihai, barinagabriel, vadasan
 Donate link: http://www.cozmoslabs.com/wordpress-profile-builder/
-Tags: user registration, user profile, user registration form, user fields, extra user fields, edit profile, user custom fields, front-end login, front-end edit profile, front-end user registration, email confirmation, login form
-
+Tags: user registration, user profile, user registration form, user fields, registration, edit profile, user custom fields, front-end login, front-end edit profile, front-end user registration, email confirmation, login form, content restriction, restrict content, profile
 Requires at least: 3.1
-Tested up to: 4.7.2
-Stable tag: 2.5.6
+Tested up to: 5.7
+Stable tag: 3.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Simple to use profile plugin allowing front-end login, user registration and edit profile by using shortcodes.
- 
+Powerful user profile plugin for creating front-end login, user registration and edit profile forms. Includes content restriction and user role editor.
+
 == Description ==
 
-**Profile Builder is WordPress user registration done right.**
+**[Profile Builder](http://www.cozmoslabs.com/wordpress-profile-builder/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) is the all in one user profile plugin for WordPress.**
 
-**Like this plugin?** Consider leaving a [5 star review](https://wordpress.org/support/view/plugin-reviews/profile-builder?filter=5).
+Easy to use [user profile plugin](https://www.cozmoslabs.com/154636-best-wordpress-user-profile-plugins-compared/) for creating front-end login, user registration and edit profile forms by using shortcodes.
 
-It lets you customize your website by adding a front-end menu for all your users, 
-giving them a more flexible way to modify their user profile or register users (front-end user registration).
+**Restrict Content** based on user role or logged in status. Manage user roles and capabilities using the built in **Role Editor**.
+
+[Profile Builder](https://www.cozmoslabs.com/1341-wordpress-profile-builder-a-front-end-user-registration-login-and-edit-profile-plugin/) lets you customize your website by adding a front-end menu for all your users, giving them a more flexible way to modify their user profile or register (front-end user registration).
 Users with administrator rights can customize basic user fields or add custom user fields to the front-end forms.
 
 To achieve this, simply create a new page and give it an intuitive name(i.e. Edit Profile).
 Now all you need to do is add the following shortcode: [wppb-edit-profile].
 Publish the page and you are done!
 
-= Front-end User Registration, Login, Edit Profile and Password Recovery Shortcodes =
-You can use the following shortcode list:
+== Front-end User Registration, Login, User Profile and Password Recovery Forms ==
+You can use the following shortcode list to display the forms:
 
 * **[wppb-edit-profile]** - to grant users front-end access to their user profile (requires user to be logged in).
 * **[wppb-login]** - to add a front-end login form.
 * **[wppb-logout]** - to add logout functionality.
-* **[wppb-register]** - register users via a front-end register form.
+* **[wppb-register]** - easily register users via a front-end register form.
 * **[wppb-recover-password]** - to add a password recovery form.
+* **[wppb-restrict]** Content to restrict **[/wppb-restrict]** - to restrict content of any type
 
-Users with administrator rights have access to the following features:
+== Profile Builder Features ==
 
 * drag & drop to reorder user profile fields
-* enable **Email Confirmation** (on registration users will receive a notification to confirm their email address).
-* allow users to **Log-in with their Username or Email**
-* enforce a **minimum password length** and **minimum password strength** (using the default WordPress password strength meter)
+* enable **Email Confirmation** (on registration users will receive a notification to [confirm their email address](https://www.cozmoslabs.com/14722-wordpress-email-confirmation/))
+* choose between login with **only Username, Email** or **both**
+* enforce [WordPress password requirements](https://www.cozmoslabs.com/28998-wordpress-minimum-password-length-strength/) by setting up a **minimum password length** and **minimum password strength** (using the default WordPress password strength meter)
 * assign users a specific role at registration (using **[wppb-register role="desired_role"]** shortcode argument for the register form)
-* redirect users after login, register and edit-profile using redirect_url shortcode argument ( e.g **[wppb-login redirect_url="www.example.com"]** )
+* [redirect users](https://www.cozmoslabs.com/46469-redirect-users-after-login-registration-wordpress/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) after login, register and edit-profile using redirect_url shortcode argument ( e.g **[wppb-login redirect_url="www.example.com"]** )
 * add register and lost password links below the login form (using **[wppb-login register_url="www.example.com" lostpassword_url="www.example.com"]** shortcode arguments)
 * customizable user login widget
-* add a custom stylesheet/inherit values from the current theme or use the default one built into this plugin.
-* chose which user roles view the admin bar in the front-end of the website (Admin Bar Settings page).
-* select which profile fields users can use in frontend.
+* add a custom stylesheet/inherit values from the current theme or use the default one built into this plugin
+* **Admin Bar Settings**: choose which user roles view the admin bar in the front-end
+* select which user profile fields are visible in the frontend
 * extended functionality available via [Add-ons](http://www.cozmoslabs.com/profile-builder-add-ons/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree)
+* **Roles Editor**: add, edit, remove or clone [user roles](https://www.cozmoslabs.com/90914-how-to-create-custom-wordpress-user-roles-with-profile-builder/) and capabilities
+* [reCAPTCHA support](https://www.cozmoslabs.com/40120-adding-recaptcha-wordpress-register-login-lost-password-forms-profile-builder/) for Profile Builder and Wordpress default forms
+* **User Role Select** field on register and edit profile forms
+* **Content Restriction**: [restrict content](https://www.cozmoslabs.com/105571-restrict-content-user-role-profile-builder/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) based on current users role or logged in status
+* Restrict WooCommerce shop page and products
+* Invisible reCAPTCHA support for both Profile Builder forms as well as default WordPress forms
+* **Private Website**: setup a [WordPress private site](https://www.cozmoslabs.com/132715-wordpress-private-site/) that is visible only to members or logged in users
 
 **PROFILE BUILDER PRO**
 
 The [Pro version](http://www.cozmoslabs.com/wordpress-profile-builder/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) has the following extra features:
 
-* Create Extra User Fields (Heading, Input, Hidden-Input, Checkbox, Agree to Terms Checkbox, Radio Buttons, DatePicker, Textareas, WYSIWYG, reCAPTCHA, Upload fields, Selects, User Role Select, Country Select, Timezone Select, Avatar Upload, Map, HTML, Phone, Time Picker, ColorPicker, Custom Validation field, Currency Select)
+* Create Extra User Fields (Heading, Input, Hidden Input, Number, Checkbox, Agree to Terms Checkbox, Radio Buttons, , Textarea, WYSIWYG, reCAPTCHA, Upload fields, Selects, User Role Select, Country Select, Timezone Select, Avatar Upload, Map, HTML, Phone, Datepicker, Timepicker, Colorpicker, Custom Validation field, Currency Select, CPT Select)
 * Add Avatar Upload for users
 * Support for Conditional Fields
 * Front-end User Listing (fully customizable, sorting included)
 * Create Multiple User Listings
+* Create a [Map of Users Locations](https://www.cozmoslabs.com/160142-add-users-map-wordpress/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree)
 * Custom Redirects
-* Multiple Registration Forms (set up multiple registration forms with different profile fields for certain user roles)
+* Multiple Registration Forms (set up [multiple registration forms](https://www.cozmoslabs.com/docs/profile-builder-2/add-ons/multiple-registration-forms/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) with different profile fields for certain user roles)
 * Multiple Edit Profile Forms
-* Admin Approval
+* Admin Approval ([approve new users from dashboard or via email](https://www.cozmoslabs.com/112321-approve-users-from-admin-email-using-profile-builder/))
 * Email Customizer (Personalize all emails sent to your users or admins; customize default WordPress registration email)
-* reCAPTCHA on user registration form
-* Advanced Modules (e.g. custom redirects, user listing, multiple registration forms etc.)
-* Access to support forums and documentation
+* Advanced Add-ons (e.g. custom redirects, user listing, multiple registration forms etc.)
+* Access to support and documentation
 * 1 Year of Updates / Priority Support
 
 [Find out more about Profile Builder PRO](http://www.cozmoslabs.com/wordpress-profile-builder/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree)
@@ -77,6 +85,9 @@ For more functionality check out [Profile Builder Add-ons page](http://www.cozmo
 
 **Free Add-ons**
 
+* [Customization Toolbox](https://www.cozmoslabs.com/add-ons/customization-toolbox/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - all in one toolbox packing Profile Builder's most popular customization requests.
+* [Custom Login Page Templates](https://www.cozmoslabs.com/add-ons/custom-login-page-templates/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - customize the default WordPress login page with your own design.
+* [Client Portal](https://www.cozmoslabs.com/add-ons/client-portal/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - create private pages for your website users that only an administrator can edit.
 * [Email Confirmation Field](http://www.cozmoslabs.com/add-ons/email-confirmation-field/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - check if the email address entered matches the first one, making sure a user submits a valid and correct email address
 * [Multiple Admin E-mails](http://www.cozmoslabs.com/add-ons/multiple-admin-e-mails/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - send user notification emails to multiple email addresses
 * [Custom CSS Classes on Fields](http://www.cozmoslabs.com/add-ons/custom-css-classes-fields/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - add custom CSS classes for fields
@@ -86,34 +97,37 @@ For more functionality check out [Profile Builder Add-ons page](http://www.cozmo
 * [Maximum Character Length](http://www.cozmoslabs.com/add-ons/maximum-character-length/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - set a maximum character length for custom input or textarea fields
 * [Labels Edit](http://www.cozmoslabs.com/add-ons/labels-edit/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - easily edit all Profile Builder labels
 * [Placeholder Labels](http://www.cozmoslabs.com/add-ons/placeholder-labels/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - replace labels with placeholders in Profile Builder form
-* [Select2](http://www.cozmoslabs.com/add-ons/select2/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - create select fields with search and filter functionality
 
 **Premium Add-ons**
 
-* [WooCommerce Sync](http://www.cozmoslabs.com/add-ons/woocommerce-sync/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - integrates Profile Builder with WooCommerce, allowing you to manage Shipping and Billing fields from WooCommerce with PB and more
+* [WooCommerce Sync](http://www.cozmoslabs.com/add-ons/woocommerce-sync/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - integrates Profile Builder with [WooCommerce](https://www.cozmoslabs.com/33671-manage-woocommerce-customer-fields-profile-builder/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree), allowing you to manage Shipping and Billing fields from WooCommerce with PB and [more](https://www.cozmoslabs.com/113343-add-conditional-logic-fields-woocommerce-checkout-page/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree)
 * [Social Connect](http://www.cozmoslabs.com/add-ons/social-connect/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - enable social login on your website, users can login with Facebook, Google+ or Twitter
 * [Custom Profile Menus](http://www.cozmoslabs.com/add-ons/custom-profile-menus/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - add custom menu items like Login/Logout or just Logout button and Login/Register/Edit Profile in iFrame Popup
 * [MailChimp](http://www.cozmoslabs.com/add-ons/profile-builder-mailchimp/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allow users to subscribe to your Mailchimp lists directly from the Register or Edit Profile forms
 * [Campaign Monitor](http://www.cozmoslabs.com/add-ons/profile-builder-campaign-monitor/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allow users to subscribe to your Campaign Monitor lists directly from the Register or Edit Profile forms
 * [MailPoet](http://www.cozmoslabs.com/add-ons/mailpoet/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allow users to subscribe to your MailPoet lists directly from the Register and Edit Profile forms
 * [Field Visibility](http://www.cozmoslabs.com/add-ons/field-visibility/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allows you to change the visibility options for the extra fields
+* [bbPress](https://www.cozmoslabs.com/add-ons/bbpress/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allows you to integrate Profile Builder with the popular forums plugin, bbPress.
+* [Multi-Step Forms](https://www.cozmoslabs.com/add-ons/multi-step-forms/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allow users to build multi-step forms for Registration and Edit Profile forms.
+* [BuddyPress](https://www.cozmoslabs.com/add-ons/buddypress/?utm_source=wp.org&utm_medium=pb-description-page&utm_campaign=PBFree) - allows extending BuddyPress user profiles with Profile Builder user fields.
 
 
 = Documentation =
 
-http://www.cozmoslabs.com/docs/profile-builder-2/
+Please visit the [documentation page](https://www.cozmoslabs.com/docs/profile-builder-2/) for this plugin
 
 = Website =
 
-http://www.cozmoslabs.com/wordpress-profile-builder/
+For more details visit our [website](http://www.cozmoslabs.com/wordpress-profile-builder/)
 
 = Profile Builder in your Language =
-We're focusing on translating Profile Builder in as many languages as we can. So far, the translations for 10 languages are almost complete, but we still need help on a lot of other languages, so please join us at [translate.cozmoslabs.com.](http://translate.cozmoslabs.com/projects/profile-builder)
-You will be able to download all the [available language packs](http://translate.cozmoslabs.com/projects/profile-builder) as well as help us translate Profile Builder in your language.
+We're focusing on translating Profile Builder in as many languages as we can. So far, the translations for 10 languages are almost complete, but we still need help on a lot of other languages, so please join us at [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/profile-builder)
+You will be able to download all the [available language packs](https://translate.wordpress.org/projects/wp-plugins/profile-builder) as well as help us translate Profile Builder in your language.
+For more information please visit [cozmoslabs.com](https://www.cozmoslabs.com/docs/profile-builder-2/translate-profile-builder/)
 
 NOTE:
 This plugin adds/removes user fields in the front-end. Both default and extra profile fields will be visible in the back-end as well.
-	
+
 
 
 == Installation ==
@@ -138,18 +152,504 @@ This plugin adds/removes user fields in the front-end. Both default and extra pr
 
 
 == Screenshots ==
-1. Basic Information - Profile Builder, front-end user registration plugin
-2. General Settings - Profile Builder, front-end user registration plugin
-3. Show/Hide Admin Bar
-4. Profile Builder - Manage Default User Fields (Add, Edit or Delete)
-5. Profile Builder - Drag & Drop to Reorder User Profile Fields
-6. Register Form - Front-end User Registration Page
-7. User Login Page
-8. Edit User Profile Page
-9. Recover Password Page
-10. Profile Builder Login Widget
+1. Basic Information - Profile Builder, user registration plugin
+2. General Settings in Profile Builder user profile plugin
+3. Manage User Registration Form Fields (Add, Edit or Delete)
+4. Drag & Drop to Reorder User Profile Fields
+5. Register Form - Front-end User Registration Page
+6. Login Form - Front-end User Login Page
+7. Profile Form - Front-end User Profile Page
+8. Recover Password Page
+9. Profile Builder Login Widget
+10. Admin Bar Settings - Choose which user roles view the admin bar
+11. Content Restriction settings - Profile Builder, user registration plugin
+12. Private Website - restrict access to entire site
+13. Profile Builder Advanced Settings
+14. User Roles Editor
+15. Edit or Add New User Role
 
 == Changelog ==
+= 3.4.6 =
+* Misc: Added a wrapper to the content restriction message
+* Misc: Added individual classes to the register and lost password links from the login form
+
+= 3.4.5 =
+* Fix: Error triggered with Elementor coming from the latest update
+
+= 3.4.4 =
+* Fix: Issue with some Elementor styling settings for the Username field input
+* Misc: Updated reCaptcha links
+* Misc: Removed period after the password in the email generated by the Automatically Generate Passwords for users advanced setting
+* Misc: Hide extra dismiss button from the reviews notice
+
+= 3.4.3 =
+* Fix: An issue when a default form was used in an Elementor widget
+* Fix: An issue with the Toolbox option to Save Last Login Date
+* Fix: GDPR Communication Preferences field is not validated correctly
+* Misc: Added translation support for the roles in the Select User Role field
+
+= 3.4.2 =
+* Fix: An issue where the Username field was not required
+* Misc: Add $form_name parameter to edit other users dropdown display and user role filters
+* Misc: Don't let users assign meta-names that begin or end with spaces
+* Misc: Removed the WooCommerce Shop page from the Private Page -> Allowed Pages dropdown. The Allowed Paths option should be used for this page
+
+= 3.4.1 =
+* Fix: An issue with the Simple Upload field not saving when Email Confirmation was enabled
+* Fix: A warning regarding the Elementor integration
+* Misc: Add a filter that would allow users to remove the wppb_referer_url query argument from the private website redirect: wppb_private_website_redirect_add_query_args
+* Misc: Improved description for the Allow Users to Log In With option
+
+= 3.4.0 =
+* Provided more information on the type of reCAPTCHA in Form Fields to avoid confusion
+* Fixed a compatibility issue with Twenty Twenty-one theme
+* Rectify WPML string names for some default fields
+* Added 'url_only' parameter for [wppb-logout] shortcode to output a simple url
+* Fixed a security issue regarding login form error
+
+= 3.3.9 =
+* Added further support for Elementor styling
+* Fixed some possible warnings
+* Fixed some possible PHP 8 warnings
+* Fixes for Placeholder Labels not displaying correctly some fields
+* Added filter to modify date format for Last Profile Update and Last Login
+* Fixed minor typos in plugin
+* Restricted comments from private/restricted posts and pages from queries
+* Cached the wppb_get_abs_home function result.
+* Added a setting that controls the automatic scrolling of form pages after submit
+
+= 3.3.8 =
+* Elementor integration
+* Fixed some urls encoding in certain cases
+* Fixed a possible warning in advanced-settings.php
+* Fixed displaying additional email field with Placeholder Labels
+
+= 3.3.7 =
+* Some minor security improvements
+* Fix for Invalid argument supplied for foreach() warning triggered by empty field list.
+* Added filter to allow switching the reCAPTCHA source from www.google.com to www.recaptcha.net.
+* We now trim meta names when searching for them in the queries
+* Changed Email Confirmation field to type email
+* Fixed a possible php warning
+
+= 3.3.6 =
+* Fixed a js error that was preventing a form to submit
+
+= 3.3.5 =
+* jQuery updates regarding WordPress jQuery versions changes
+
+= 3.3.4 =
+* Refactored add-on page to unify add-ons and modules, also did some refactoring of folders
+* Integrated Customization Toolbox addon as Advanced Settings in main plugin
+* Integrated Placeholder labels addon in Advanced Settings
+* Integrated Email Confirmation add-on as field in main plugin
+* Integrated Multiple Admin Emails add-on in Advanced Settings
+* Integrated Custom CSS Classes on fields add-on in main plugin
+* Integrated GDPR Communication Preferences add-on in main plugin
+* Integrated Import and Export add-on in main plugin
+* Integrated Labels Edit add-on in main plugin
+* Integrated Maximum Character Length add-on in main plugin
+* Fix for bbPress Messages compatibility issue.
+
+= 3.3.3 =
+* Changed some sanitization functions to more specific ones
+* Add form name to 'User to edit' field ID so it works when multiple forms are on the same page.
+* Add compatibility with the Divi Overlay plugin.
+* Fixed a problem with values disappearing for some fields if the meta_name contained the word 'map'
+
+= 3.3.2 =
+* Fixed a PHP 'undefined offset 0' notice.
+* Fixed xCrud compatibility issue
+* Replaced e-mail string with email.
+
+= 3.3.1 =
+* Fixed a possible warning regarding user deletions and Email Confirmation
+* Fixed dynamic redirect bug when private website is enabled
+* Improved compatibility with Paid Member Subscriptions plugin
+
+= 3.3.0 =
+* Add 'automatic_login' parameter for the [wppb-register] shortcode and make sure that the shortcode, multiple registration setting, general setting priority is respected.
+* Pass the referer URL forward when the Login form shows an error so the user is still redirected to the page they came from.
+* Change 'E-mail' to 'Email' for the password recovery form.
+* Switched deprecated jQuery event 'hover' with 'mouseenter mouseleave'.
+
+= 3.2.9 =
+* Check the reset password key existence before resetting a password. Credit to Shiraz Ali Khan
+* Changed german translation files
+* Fixed a incompatibility with Private Website and Buddypress
+* Fixed a warning that was being thrown when the plugin was installed.
+
+= 3.2.8 =
+* Security improvements
+
+= 3.2.7 =
+* Added auto-login at registration option
+* Added path exclusion from Private Website functionality
+* Removed an extra space before a question mark in a string
+* Added an extra missing parameter for some fields for the filter wppb_maximum_character_length
+
+= 3.2.6 =
+* Added nocache_headers before some wp_redirects to prevent issues with private website and other redirects
+* Improved error messages on password recover form if Recaptcha was present
+* Allow the GDPR Checkbox field to be added to the Form Fields list again once it has been deleted.
+
+= 3.2.5 =
+* Removed a deprecated jQuery event from our code
+* Added a filter for form request data
+* Fixed Private Website not properly restricting json api, and added a setting for it
+* Fixed password strength message translation
+* Fixed a security issue regarding a nonce field
+* Fixed Private Site not excluding search results
+
+= 3.2.4 =
+* Skipped this version to synchronize with the PRO version
+
+= 3.2.3 =
+* Skipped this version to synchronize with the PRO version
+
+= 3.2.2 =
+* We now restrict comments as well
+* Fixed a error message when both login fields were empty
+* Limit where the reCAPTCHA script is loaded.
+* Fixed a conflict between Profile Builder Private Website and WPML
+* Make sure that if no value is set for the Email Confirmation setting in the database the option is set to 'No'
+
+= 3.2.1 =
+* Fixed a warning regarding Admin Approval on settings page
+* Login widget uses correct redirect parameter now
+
+= 3.2.0 =
+* Fixed a notice that appeared if the Email field was hidden on Edit Profile forms
+* Limited loading on recaptcha js scripts only to pages where it is needed
+* Fixed issue with recaptcha not working on password recover forms
+
+= 3.1.9 =
+* Now the login widget shows errors in the backend if a valid URL was not entered
+* Fixed a warning about non-numerical value on auto-login.
+* Fixed a potential php notice
+* Fixed a filter that was not sending enough parameters to the Field Visibility addon
+* Fix responsive media queries not being applied correctly
+
+= 3.1.8 =
+* Fixed a potential PHP error
+* Fixed a string consistency problem on Login form
+* Display the correct compatible plugin versions on the Add-Ons page.
+* Change content restriction metabox priority for compatibility with Paid Member Subscriptions.
+* Fixed a problem with WPML where domains were mismatched on backend and frontend for labels
+
+= 3.1.7 =
+* Added support for Max character length addon for default website field
+* Fixed possible issues with Email Confirmation on some domains
+
+= 3.1.6 =
+* Fixed an issue with default value for Biographical Info Field
+* Fixed a notice on register forms when the form did not pass a required check
+* Fixed a problem with User to Edit on pages with multiple edit forms on them
+* Compatibility with Wordpress 5.4 nav_menu hooks
+
+= 3.1.5 =
+* Fixed a problem on multisite where admins were not being able to confirm/unconfirm Email Confirmation users
+* Fixed page title on admin pages for Email Confirmation User page
+* Fixed pagination display on Email Confirmation User page in admin
+* Added Screen Options on Email Confirmation User page where we can change the number of displayed users
+* Fixed a compatibility issue with Invisible Recaptcha and Paid Member Subscriptions
+
+= 3.1.4 =
+* We now have the capability to show Select User Role field on edit profile forms
+* Small css modification
+* Changed the logo icons inside the plugin
+* Added an icon to the update screen for PB pro
+* Fixed an issue with Query monitor plugin not working on Roles Editor page
+
+= 3.1.3 =
+* Fixed a potential php notice on recover password form
+* Added filters over the submit button classes of the login and password reset form.
+* Refactored wppb_curpageurl() function
+
+= 3.1.2 =
+* We now make sure you cant use a meta-name for a field that is a reserved query var in WP. which would result in an unexpected behaviour
+* Fixed a potential php error regarding a filter
+* We now scroll to the top of a success form submit through js and not through anchor
+* Fixed a conflict with reCAPTCHA and Paid Member Subscriptions
+
+= 3.1.1 =
+* Security update
+* Fixed a compatibility issue with PMS and redirect url
+* Fixed issue in backend when labels for user roles contained a %
+
+= 3.1.0 =
+* We now add html and body tags to html emails that we send
+* Fixed issue with admin approval still impacting the flow after downgrading from Pro to Free
+* Fixed a conflict with Oxigen Builder.
+* Fixed issue with global $post variable in content restriction.
+* Added a filter over the edit other users dropdown display name.
+
+= 3.0.9 =
+* Fixed a php 5.4 compatibility issue
+
+= 3.0.8 =
+* Modified how we display the user roles in backend edit users to be consistent with how wordpress does it
+* Fixed an issue with user role search not working when pressing enter key
+
+= 3.0.7 =
+* Fixed a possible notice on Recover Password page for an undefined variable
+* Fixed an issue with GDPR checkbox and multi-step forms
+* Fixed the height of the search button in some cases
+* reCAPTCHA field language is now set reliably
+
+= 3.0.6 =
+* Fix: php notice. Check if global  actually is set before moving forward
+* Fix: check add-ons for 'Profile Builder' in their names before determining if an add-on is activated.
+* Fix: refactored the password reset shortcode
+* Enhancement: included the question mark in the Lost your password message
+* Enhancement: disables the button in Profile Builder registration form if the form was submited in order to prevent double submissions.
+
+= 3.0.5 =
+* Fixed: Elementor Templates restriction brakes rendering of templates
+
+= 3.0.4 =
+* We now show a success message when settings are saved
+* Translation updates
+* Fixed issue with Elementor Templates restriction
+
+= 3.0.3 =
+* Fixed an error introduced in the last update regarding content restriction and Posts Page
+
+= 3.0.2 =
+* Now the Static Posts Page can be restricted as expected
+* Added support for restricting Elementor Single Page templates.
+* Fix issue with Elementor content restriction by user roles.
+
+= 3.0.1 =
+* Added GDPR Delete Button as a field
+* Export Personal Data now exports Profile Builder fields
+* GDPR improvements
+
+= 3.0.0 =
+* Security improvements
+* Added a filter for the Register and Edit Profile forms.
+
+= 2.9.9 =
+* Implemented Elementor Widget/Section restriction.
+* Security improvements
+* When submitting our forms we scroll to the top of the form now and not the top of the page
+
+= 2.9.8 =
+* Removed a create_function call for compatibility with php 7.2
+* Changed some in-plugin notifications
+
+= 2.9.7 =
+* Fixed an issue with private website and login forms that didn't work even though they were on the allowed pages list
+* Fixed a issue with the reCaptcha field on themes that did not enqueue jQuery
+* Removed the deactivation feedback form
+
+= 2.9.6 =
+* Added Divi PageBuilder compatibility with Content Restriction
+* Fix password recovery issue when username contained spaces.
+
+= 2.9.5 =
+* Fixed an issue with the Boss theme by moving the priority of the login_redirect filter
+* Fixed issue with edit other user on the Twenty Nineteen theme
+* Fixed issues with jQuery code and the Twenty Nineteen theme
+* Fixed conflict with Elementor Pro.
+
+= 2.9.4 =
+* Added (int) cast in manage fields meta name generation to prevent some php notices
+* Fixed issue with private website when the login page url contained a $_GET parameter
+* Added classes on body when Private Website is enabled and some css to hide the main menu container
+
+= 2.9.3 =
+* Display name shows properly in admin bar if login with email is selected
+* Fixed Buddypress add-on import fields error
+
+= 2.9.2 =
+* Change single post redirect hook to template_redirect which runs only in frontend for content restriction
+* Modified the edit other user dropdown on edit profile forms for administrators
+
+= 2.9.1 =
+* Rewrote login errors so they can be translated easily
+* Extended the send credentials email so there is a bit more info like the link to the website
+* Add plugin notification about the Toolbox add-on.
+* Fixed issue with update password and field visibility addon.
+
+= 2.9.0 =
+* Fixed an issue with Private page settings not saving "Redirect to page" if "Allowed pages" was empty
+* Fixed some html validation issues in our forms
+* Added support for detecting the current page url based on WordPress home_url()
+* Removed a deprecated filter that we used in Private Page
+* Added a few extra filters in our forms
+* Fixed an issue with some menu items still appearing when not on Profile Builder pages
+* Fixed some compatibility issues with the import/export plugin
+
+= 2.8.9 =
+* Added Private Website functionality
+* Added a plugin notice for Private Website
+* Removed from the admin menu the pages that have a tab on the settings page
+
+= 2.8.8 =
+* We no longer allow users to login with username is is set to login with email. added 'wppb_allow_login_with_username_when_is_set_to_email' filter to still allow it
+* Small css changes
+
+= 2.8.7 =
+* Secupress plugin compatiblity when activating "Move the login and admin pages"
+* Fixed issue with content restriction and url redirect if url was missing 'http'
+* Select2 now offers a labels tag in the Userlisting
+* Small css change
+* Reimplemented the deactivation feedback poll
+
+= 2.8.6 =
+* Implemented a tabbed settings interface
+* Content restriction activated setting is now in the Content Restriction tab
+* Fixed a fatal error that occurred on some instances on the Settings page
+* Fixed typo in query for existing pages in setup process
+
+= 2.8.5 =
+* Added a small setup process for creating forms
+* GDPR field now saves the value on Edit Profile
+* We no longer consider the 'users_can_register' option in our forms
+* Fixed product description paragraphs in Woocommerce
+* Fixed issue with login form on some pages that weren't logging you in the backend as well
+
+= 2.8.4 =
+* Refactored the login form. This should fix a lot of issues with wordpress.com and other incompatibilities with plugins
+* Fixed issue with content restriction and Woocommerce products adding extra html
+
+= 2.8.3 =
+* Usability improvements and some name changes
+* Refactored manage fields dropdown to be more user friendly
+* Added the GDPR field on the Edit Profile as well
+
+= 2.8.2 =
+* Added GDPR checkbox default field
+* Fixed some warnings with Onfleek theme
+
+= 2.8.1 =
+* Added a feedback modal on plugin deactivate for profile builder
+* Added 'form_name' parameter to the submit button value hook.
+* Fixed small typos.
+
+= 2.8.0 =
+* Improved reCaptcha security on login forms
+* Fixed issue with 'User to edit' field and multiple edit forms on the same page
+* Fixed some warnings regarding the 'save_post' hook
+* Fixed a warning regarding 'create_function'
+
+= 2.7.9 =
+* Added support for Content Restriction on WooCommerce shop page and products
+* Fixed php version 7.2 warnings
+* Modification to the recaptcha field that will eliminate some warnings
+
+= 2.7.8 =
+* Fixed issue with reCaptcha not appearing any more in some cases
+* Fixed a notice introduced in the last update
+
+= 2.7.7 =
+* Added Invisible reCAPTCHA support for both PB forms as well as default WordPress forms
+* Small CSS modification in role editor
+* Fixing some CSS issues with notifications class on some pages and addon pages
+
+= 2.7.6 =
+* Fixed some issues on the login form that prevented some users from logging in
+* When changing/recovering password we now log out of all other/all sessions
+* Increased the performance of the plugin on the frontend
+
+= 2.7.5 =
+* Improved security on forms
+* Implemented a better plugin notification system
+
+= 2.7.4 =
+* Improved admin interface speed in most cases by up to 100% by reducing the number of ajax calls
+* Improved the admin interface with small visual tweaks and bug-fixes
+* Fixed bug with email not showing up for unconfirmed users table listing in backend
+
+= 2.7.3 =
+* Now we save the registration date only in GMT time to avoid confusions. We have a filter to be able to save to local time: wppb_return_local_time_for_register
+* Added functionality to update meta name for existing fields in the database if they change. It is off by default but can be activated with the filter wppb_update_field_meta_key_in_db
+* Added a mention to Roles Editor in the Basic Info Page
+
+= 2.7.2 =
+* Updated translation file.
+* Fixed issue with login token generating duplicated ID validation error
+
+= 2.7.1 =
+* Fixed an issue with the Biographical Info field that was showing html tags
+* Fixed Content Restriction preview post before more-tag issue
+* Fixed Roles Editor conflict with Dokan plugin
+* Fixed redirect_priority='top' not working after login
+* Fixed back-end login with after login redirect set to http_referer
+
+= 2.7.0 =
+* Added [wppb-restrict] shortcode for Content Restriction
+* Password Strength Indicator improvements
+* Added an extra filter (wppb_mail) to wppb_mail function that gives the possibility to also send headers
+* Updated German translation files.
+* Added context to the 3 wppb_mail calls so we can identify the recover password emails being sent using the filters/actions from wppb_mail.
+* Fixed content restriction meta-box for attachments
+
+= 2.6.9 =
+* Implemented Content Restriction feature
+* Added nonce field on Profile Builder login form for security check
+* Security improvements on login form
+* Fixed an issue with po file-names that was causing random issues with different environments/FTP clients.
+* Fixed a redirect loop when we log in from Paid Member Subscribtions and we had a redirect for default WordPress login
+* Changed the locale for the Slovenian translation files. It was using the locale for Sierra Leone.
+
+= 2.6.8 =
+* Edit other users dropdown on the frontend Edit Profile form is now a select2
+* Fixed a potential error when submitting the Register form
+
+= 2.6.7 =
+* Added option in backend user new/edit screen to add multiple user roles when user roles module is active
+* Added user role multiple select for admin in front-end edit profile form when roles editor is active and select role field is in the form
+* Changed password reset success email
+
+= 2.6.6 =
+* Updated translation files
+* Added the wppb_fields_extra_css_class filter to default fields
+
+= 2.6.5 =
+* Fixed an issue where certain users could view the Roles Editor page without permission
+* Changed the strings in Recover Password accordingly with the option set in 'Allow Users to Log in With' setting
+
+= 2.6.4 =
+* Fixed a bug which was preventing deleting thrashed posts
+* Compatibility fixes with Advanced Custom Fields Plugin
+
+= 2.6.3 =
+* Fixed a small display bug for custom capabilities on Roles Editor
+* Fixed a potential warning with the login form and WPML when cURL was not working properly
+
+= 2.6.2 =
+* Added Role Editor which grants you control over roles and capabilities on your site.
+* Added reacaptcha field for Profile Builder forms and WordPress default forms
+* Added User Role select field
+* We now prevent our forms from executing in the header on the wp_head hook to prevent conflicts with other plugins like Yoast SEO
+* Improved WPML compatibility with login forms
+* Now checkboxes retain their value on edit profile forms if the form errors out
+* Changed the way we set the default settings that was sometimes not adding them properly
+
+= 2.6.1 =
+* Updated translation files
+* Added a filter for already logged in message on recover password form: wppb_recover_password_already_logged_in
+* We now process only the submitted form so we can have multiple forms on the same page
+
+= 2.6.0 =
+* Compatibility with WPML for login widget/shortcode error messages
+* Small change to meta name generation function that could eliminate a notice on some setups
+* Updated translation files
+
+= 2.5.9 =
+* Fixed a issue with a database error that happened in certain conditions
+* Compatibility with Captcha by BestWebSoft latest version
+
+= 2.5.8 =
+* Fixed security issues and performed a security audit
+
+= 2.5.7 =
+* Fixed an issue with "Display name as" field on register forms
+* Recover password form now doesn't appear for logged in users
+* Fixed a wrong variable passed to a filter in Email Confirmation
+
 = 2.5.6 =
 * Compatibility fix with php 7.1
 * Redirects code refactoring which should fix some minor issues with redirects as well
@@ -594,7 +1094,7 @@ Minor changes
 = 1.1.25 =
 Different security issues fixed with other updates.
 
-= 1.1.24 = 
+= 1.1.24 =
 Wordpress 3.3 support
 
 = 1.1.23 =
@@ -603,19 +1103,19 @@ Consecutive bugfixes.
 = 1.1.14 =
 Compatibility fix for WP version 3.3
 
-= 1.1.13 = 
+= 1.1.13 =
 Minor changes to different parts of the plugin. Also updated the english translation.
 
-= 1.1.12 = 
+= 1.1.12 =
 Minor changes to readme file.
 
-= 1.1.11 = 
+= 1.1.11 =
 Minor changes to readme file.
 
-= 1.1.10 = 
+= 1.1.10 =
 Minor changes to readme file.
 
-= 1.1.9 = 
+= 1.1.9 =
 Minor changes to readme file.
 
 = 1.1.8 =
@@ -628,7 +1128,7 @@ Added translations:
 Minor modification in the readme file.
 
 = 1.1.6 =
-Minor upload bug on WP repository. 
+Minor upload bug on WP repository.
 
 = 1.1.5 =
 Added translations:
@@ -636,19 +1136,19 @@ Added translations:
 *updated the english translation
 
 = 1.1.4 =
-Added the possibility to set up the default user-role on registration; by adding the role="role_name" argument (e.g. [wppb-register role="editor"]) the role is automaticly set to all new users. 
+Added the possibility to set up the default user-role on registration; by adding the role="role_name" argument (e.g. [wppb-register role="editor"]) the role is automaticly set to all new users.
 Added translations:
 *norvegian (thanks to Havard Ulvin, haavard@ulvin.no)
 *dutch (thanks to Pascal Frencken, pascal.frencken@dedeelgaard.nl)
 *german (thanks to Simon Stich, simon@1000ff.de)
-*spanish (thanks to redywebs, www.redywebs.com) 
- 
+*spanish (thanks to redywebs, www.redywebs.com)
+
 
 = 1.1.3 =
 Minor bugfix.
 
 = 1.1.2 =
-Added translations to: 
+Added translations to:
 *hungarian(thanks to Peter VIOLA, info@violapeter.hu)
 *french(thanks to Sebastien CEZARD, sebastiencezard@orange.fr)
 

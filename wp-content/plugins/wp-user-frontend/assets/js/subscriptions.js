@@ -31,7 +31,7 @@
 		},
 
         packAlert : function () {
-            alert( 'Please Cancel Your Currently Active Pack first ! ' );
+            alert( wpuf_subscription.pack_notice );
         },
 
         showPackDropdown: function(e) {
@@ -58,17 +58,30 @@
         },
 
         deletePack: function(e){
-            var userid = $(e.target).attr('data-userid');
+            var self = $(this),
+                wrap = self.parents('.wpuf-user-subscription'),
+                sub_dropdown = wrap.find('.wpuf-pack-dropdown'),
+                selected_sub = wrap.find( '#wpuf_sub_pack' ),
+                userid = $(e.target).attr('data-userid'),
+                packid = $(e.target).attr('data-packid');
+
+            wrap.find('.wpuf-delete-pack-btn').attr('disabled', true);
+            wrap.css('opacity', 0.5);
             $.post(
                 ajaxurl,
                 {
                     'action' : 'wpuf_delete_user_package',
-                    'userid' : userid
+                    'userid' : userid,
+                    'packid' : packid,
+                    'wpuf_subscription_delete_nonce': wpuf_subs_vars.wpuf_subscription_delete_nonce
                 },
                 function(data){
                     if(data){
+                        wrap.css( 'opacity', 1 );
                         $('.wpuf-user-sub-info').remove();
                         $(e.target).remove();
+                        selected_sub.val(-1);
+                        sub_dropdown.show();
                     }
                 }
             );
@@ -102,26 +115,20 @@
                 coupon_field.removeClass('wpuf-coupon-field-spinner');
 
                 if ( res.success ) {
-
                     $('.wpuf-pack-inner' ).html( res.data.append_data );
-
                     $('.wpuf-coupon-id-field').val('');
 
                     var coupon_wrap = self.closest('.wpuf-copon-wrap');
 
                     coupon_wrap.hide();
-
                     coupon_wrap.siblings('.wpuf-copon-show').show();
 
+                    $('.wpuf-subscription-success').html('');
+                    $('.wpuf-subscription-error').html('');
                 }
 
             });
-
-
-
         },
-
-
 
         couponShow: function(e) {
 
@@ -135,8 +142,6 @@
 
         },
 
-
-
         couponApply: function(e) {
 
             e.preventDefault();
@@ -149,6 +154,7 @@
 
             if ( coupon === '' ) {
 
+                $('.wpuf-subscription-error').html( wpuf_frontend.coupon_error );
                 return;
 
             }
@@ -165,8 +171,6 @@
 
                 };
 
-
-
             if ( self.attr('disabled') === 'disabled' ) {
 
                 //return;
@@ -177,55 +181,37 @@
 
             coupon_field.addClass('wpuf-coupon-field-spinner');
 
-
-
             $.post( wpuf_frontend.ajaxurl, data, function( res ) {
-
                 coupon_field.removeClass('wpuf-coupon-field-spinner');
 
                 if ( res.success ) {
-
-
-
                     $('.wpuf-pack-inner' ).html( res.data.append_data );
-
                     $('.wpuf-coupon-id-field').val( res.data.coupon_id );
 
                     if ( res.data.amount <= 0 ) {
-
                         $('.wpuf-nullamount-hide').hide();
-
                     }
 
+                    $('.wpuf-subscription-success').html(res.data.message);
+                    $('.wpuf-subscription-error').html('');
                 } else {
-
+                    $('.wpuf-subscription-success').html('');
                     $('.wpuf-subscription-error').html(res.data.message);
-
                 }
 
             });
 
         },
 
-
-
 		showSubscriptionRecurring: function() {
-
-
 
             var self = $(this),
 
-            	wrap = self.parents('table.form-table'),
-
+                wrap = self.parents('table.form-table'),
                 pack_child = wrap.find('.wpuf-recurring-child'),
-
-                trial_checkbox = wrap.find( 'input#wpuf-trial-status'),
-
+                trial_checkbox = wrap.find('input#wpuf-trial-status'),
                 trial_child = wrap.find('.wpuf-trial-child'),
-
                 expire_field = wrap.find('.wpuf-subcription-expire');
-
-
 
             if ( self.is(':checked') ) {
 
@@ -250,8 +236,6 @@
             }
 
         },
-
-
 
         showSubscriptionPack: function() {
 
@@ -289,9 +273,9 @@
             var checkbox_obj = e.target? $(e.target) : $(e);
 
             if ( checkbox_obj.is(':checked') ) {
-                $('.wpuf_expiration_field').show();
+                $('.wpuf_subscription_expiration_field').show();
             } else {
-                $('.wpuf_expiration_field').hide();
+                $('.wpuf_subscription_expiration_field').hide();
             }
         }
 

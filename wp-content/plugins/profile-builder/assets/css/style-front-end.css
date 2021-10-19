@@ -7,7 +7,7 @@
 2.0 - Forms
 3.0 - Alignments
 4.0 - Errors & Notices
-5.0 - User Listing 
+5.0 - User Listing
 6.0 - Media Queries
 --------------------------------------------------------------*/
 
@@ -24,7 +24,7 @@
 /*--------------------------------------------------------------
 2.0 Forms
 --------------------------------------------------------------*/
-.wppb-user-forms input:not([type="button"]):not([type="reset"]):not([type="submit"]),
+.wppb-user-forms input:not([type="button"]):not([type="reset"]):not([type="submit"]):not([type="file"]):not([value="agree"]),
 .wppb-user-forms select,
 .wppb-user-forms textarea{
 	font-size: 100%; /* Corrects font size not being inherited in all browsers */
@@ -128,6 +128,10 @@
     margin-bottom: 0;
 }
 
+.wppb-gdpr-delete-button .wppb-delete-account {
+    width: 110px;
+}
+
 /*--------------------------------------------------------------
 3.0 Alignments
 --------------------------------------------------------------*/
@@ -181,7 +185,6 @@
 	float:left;
 	min-height:1px;
 }
-.wppb-form-field input,
 .wppb-form-field input[type="text"], .wppb-form-field input[type="number"], .wppb-form-field input[type="email"], .wppb-form-field input[type="url"], .wppb-form-field input[type="password"], .wppb-form-field input[type="search"],
 .wppb-form-field select,
 .wppb-form-field textarea,
@@ -209,7 +212,6 @@
 
 input#send_credentials_via_email{
 	float:none;
-	width:auto;
 	margin-right:10px
 }
 
@@ -228,6 +230,16 @@ input#send_credentials_via_email{
 .wppb-form-field > span.custom_field_html {
 	font-style: normal;
     font-size: 100%;
+}
+
+.wppb-form-field > span.select2-container {
+    font-style: normal;
+    font-size: 100%;
+    clear:none;
+}
+
+.wppb-repeater .wppb-select-cpt span.select2-container{
+    width:auto !important;
 }
 
 .wppb-form-field.wppb-timepicker > span.wppb-timepicker-separator {
@@ -250,6 +262,10 @@ input#send_credentials_via_email{
 	padding:0 20px 0 0;
 }
 
+.wppb-user-forms .wppb-checkboxes li.wppb-hidden{
+    padding: 0;
+}
+
 .wppb-form-field .wppb-checkboxes label,
 .wppb-form-field .wppb-radios label{
 	float:none;
@@ -264,7 +280,6 @@ input#send_credentials_via_email{
 .wppb-radios li input{
 	min-width:0;
 	float:none;
-	width:auto;
 }
 
 .wppb-edit-user .wppb-checkbox-terms-and-conditions {
@@ -285,15 +300,17 @@ input#send_credentials_via_email{
 
 .wppb-form-field.wppb-checkbox-terms-and-conditions input[type="checkbox"].custom_field_toa {
     float:none;
-    width:auto;
     margin-right:10px
 }
 
 
-.g-recaptcha{
+.wppb-recaptcha-element{
 	display: inline-block;
 }
-.g-recaptcha iframe{
+.wppb-recaptcha-element.wppb-invisible-recaptcha {
+    display: block !important;
+}
+.wppb-recaptcha-element iframe{
     margin-bottom: 0;
 }
 
@@ -327,11 +344,22 @@ label[for=blog-privacy]{
 }
 
 
+/* GDPR checkbox */
+.wppb-gdpr-checkbox.wppb-form-field label{
+    width:100%;
+    float:none;
+}
+
+.wppb-gdpr-checkbox.wppb-form-field #user_consent_gdpr{
+    float:none;
+    margin:0 10px 0 0;
+}
+
+
 /*--------------------------------------------------------------
 4.0 Errors & Notices
 --------------------------------------------------------------*/
 
-#wppb_general_top_error_message,
 .wppb-error,
 .wppb-warning {
     padding: 6px 9px;
@@ -343,16 +371,24 @@ label[for=blog-privacy]{
     border: 1px solid #C00;
 }
 
-#wppb_general_top_error_message,
 .wppb-error,
 .wppb-warning{
-    color:#222222;
+    color:#222222 !important;
 }
 
-#wppb_general_top_error_message a,
 .wppb-error a,
 .wppb-warning a{
-    color:#007acc;
+    color:#007acc !important;
+}
+
+.admin-bar #wppb_form_general_message{
+    padding-top:32px;
+}
+
+.wppb-error a:hover,
+.wppb-warning a:hover{
+    color:#007acc !important;
+    text-decoration: underline;
 }
 
 .wppb-required{
@@ -364,7 +400,6 @@ label[for=blog-privacy]{
     margin-left:5px;
 }
 
-#wppb_form_success_message,
 .wppb-success {
     padding: 6px 9px;
     margin: 0 auto 25px;
@@ -556,12 +591,12 @@ ul.wppb-faceted-list input[type="checkbox"]{
     margin-right: 5px;
 }
 
-.wppb-userlisting-container.spinner{
+.wppb-userlisting-container.wppb-spinner{
     position:relative;
     opacity: 0.5
 }
 
-.wppb-userlisting-container.spinner:after{
+.wppb-userlisting-container.wppb-spinner:after{
     content: '';
     position: absolute;
     top: 50%;
@@ -597,6 +632,10 @@ ul.wppb-faceted-list .hide-this{
     padding: 5px 0;
 }
 
+.wppb-userlisting-container .wppb-facet-select-multiple{
+    height:auto;
+}
+
 .wppb-userlisting-container:after {
     visibility: hidden;
     display: block;
@@ -624,6 +663,68 @@ ul.wppb-faceted-list .hide-this{
     max-width:300px;
 }
 
+li.wppb-facet-search{
+    position: relative;
+}
+
+.wppb-facet-search-wrap label {
+    display: inline-block;
+    position: relative;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wppb-facet-search{
+    width: 75% !important;
+    margin-right: 5px !important;
+}
+
+.wppb-facet-search .screen-reader-text{
+    display: none;
+}
+
+.wppb-facet-search,
+.wppb-search-submit {
+    box-sizing: border-box;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+
+.wppb-search-submit{
+    display: inline-block;
+    width: 20%;
+    height: 100%;
+    background: #4F5963;
+    position: absolute;
+    right: 0;
+
+    cursor: pointer;
+    border: 1px solid #444D57;
+    border-radius: 3px;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.wppb-search-submit:hover {
+    background: #fff;
+    color: #4F5963;
+}
+
+.wppb-search-submit::before{
+    content: "\26B2";
+    display: inline-block;
+    color: #fff;
+    font-size: 120%;
+
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.wppb-search-submit:hover::before{
+    color: #4F5963;
+}
 
 @media screen and ( max-width: 720px ) {
 
@@ -684,7 +785,8 @@ ul.wppb-faceted-list .hide-this{
 	}
 
 	.wppb-form-field input,
-	.wppb-form-field select,
+    .wppb-form-field input[type="text"], .wppb-form-field input[type="number"], .wppb-form-field input[type="email"], .wppb-form-field input[type="url"], .wppb-form-field input[type="password"], .wppb-form-field input[type="search"],
+    .wppb-form-field select,
 	.wppb-form-field textarea,
 	.wppb-checkboxes,
 	.wppb-radios,
@@ -699,18 +801,18 @@ ul.wppb-faceted-list .hide-this{
 		margin-left:0;
 	}
 
-	.wppb-checkboxes li label, 
+	.wppb-checkboxes li label,
 	.wppb-radios li label{
 		display:inline;
 	}
-	
+
 	.wppb-form-field .wppb-avatar-nofile,
 	.wppb-form-field .wppb-avatar-file,
 	.wppb-form-field .wppb-upload-nofile,
 	.wppb-form-field .wppb-upload-file{
 		margin-left:0;
 	}
-	
+
 }
 
 /*--------------------------------------------------------------
@@ -754,7 +856,6 @@ ul.wppb-faceted-list .hide-this{
 
 .wppb-form-field.wppb-subscription-plans input {
     display: inline-block;
-    width: auto;
     float: none;
     margin-right: 10px !important;
 }
@@ -770,6 +871,29 @@ ul.wppb-faceted-list .hide-this{
 /**************************************************/
 /* This is very weird: if in  the css there is a rule on table of border-collapse:collapse; then on FFox and Edge the Media upload won't open
 /**************************************************/
-table{
+.wppb-user-forms table{
     border-collapse:separate;
+}
+
+/**************************************************/
+/* Private Website CSS
+/**************************************************/
+.wppb-private-website.wppb-private-website-hide-menus .main-navigation{
+    display:none;
+}
+
+
+/* Map markers info */
+.marker-content-info {position: absolute; top: -400px; left: -400px; display: none;}
+.wppb-map-container .marker-content {min-width: 320px; max-width: 100%;}
+.wppb-map-container .marker-content .marker-info-avatar_or_gravatar {float: left; margin-right: 10px;}
+
+/**************************************************/
+/* Elementor Visual Editor CSS
+/**************************************************/
+.elementor-edit-mode .wppb-map-container {
+    width: 69.9%;
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }

@@ -20,6 +20,7 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         'number' => self::NUMBER_OF_ITEMS,
         'order' => 'likes',
         'time_range' => 'all',
+        'vote_time_range' => 'all',
         'title_length' => LIKEBTN_WIDGET_TITLE_LENGTH,
         'thumbnail_size' => 'thumbnail',
         'show_likes' => '',
@@ -31,13 +32,14 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         'show_author' => '',
         'show_button' => '',
         'show_button_use_entity' => '',
-        'voter' => ''
+        'voter' => '',
+        'empty_text' => 'No items liked yet.'
     );
 
     function __construct() {
-        load_plugin_textdomain(LIKEBTN_I18N_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
-        $widget_ops = array('description' => __('A list of the most liked posts, comments, etc', LIKEBTN_I18N_DOMAIN));
-        parent::__construct(false, __('(LikeBtn) Most Liked Content', LIKEBTN_I18N_DOMAIN), $widget_ops);
+        load_plugin_textdomain('likebtn-like-button', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        $widget_ops = array('description' => __('A list of the most liked posts, comments, etc', 'likebtn-like-button'));
+        parent::__construct(false, __('(LikeBtn) Most Liked Content', 'likebtn-like-button'), $widget_ops);
     }
 
     /** @see WP_Widget::widget */
@@ -56,14 +58,6 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
             return $html;
         }
     }
-
-    /*function update($new_instance, $old_instance) {
-        if ($new_instance['title'] == '') {
-            $new_instance['title'] = __('Most Liked Content', LIKEBTN_I18N_DOMAIN);
-        }
-
-        return $new_instance;
-    }*/
 
     function form($instance) {
         global $likebtn_entities;
@@ -84,39 +78,39 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         $likebtn_entities[LIKEBTN_ENTITY_CUSTOM_ITEM] = __('Custom item');
 
         $order_list = array(
-            'likes' => __('Likes', LIKEBTN_I18N_DOMAIN),
-            'dislikes' => __('Dislikes', LIKEBTN_I18N_DOMAIN),
-            'likes_minus_dislikes' => __('Likes minus dislikes', LIKEBTN_I18N_DOMAIN)
+            'likes' => __('Likes', 'likebtn-like-button'),
+            'dislikes' => __('Dislikes', 'likebtn-like-button'),
+            'likes_minus_dislikes' => __('Likes minus dislikes', 'likebtn-like-button')
         );
         if ($this->liked_by_user) {
-            $order_list = array('vote_date' => __('Vote date', LIKEBTN_I18N_DOMAIN)) + $order_list;
+            $order_list = array('vote_date' => __('Vote date', 'likebtn-like-button')) + $order_list;
         }
 
         $thumbnail_size_list = array(
-            'thumbnail' => __('Thumbnail', LIKEBTN_I18N_DOMAIN),
-            'medium' => __('Medium', LIKEBTN_I18N_DOMAIN),
-            'large' => __('Large', LIKEBTN_I18N_DOMAIN),
-            'full' => __('Full size', LIKEBTN_I18N_DOMAIN),
+            'thumbnail' => __('Thumbnail', 'likebtn-like-button'),
+            'medium' => __('Medium', 'likebtn-like-button'),
+            'large' => __('Large', 'likebtn-like-button'),
+            'full' => __('Full size', 'likebtn-like-button'),
         );
 
         $time_range_list = array(
-            'all' => __('All time', LIKEBTN_I18N_DOMAIN),
-            '1' => __('1 day', LIKEBTN_I18N_DOMAIN),
-            '2' => __('2 days', LIKEBTN_I18N_DOMAIN),
-            '3' => __('3 days', LIKEBTN_I18N_DOMAIN),
-            '7' => __('1 week', LIKEBTN_I18N_DOMAIN),
-            '14' => __('2 weeks', LIKEBTN_I18N_DOMAIN),
-            '21' => __('3 weeks', LIKEBTN_I18N_DOMAIN),
-            '1m' => __('1 month', LIKEBTN_I18N_DOMAIN),
-            '2m' => __('2 months', LIKEBTN_I18N_DOMAIN),
-            '3m' => __('3 months', LIKEBTN_I18N_DOMAIN),
-            '6m' => __('6 months', LIKEBTN_I18N_DOMAIN),
-            '1y' => __('1 year', LIKEBTN_I18N_DOMAIN)
+            'all' => __('All time', 'likebtn-like-button'),
+            '1' => __('1 day', 'likebtn-like-button'),
+            '2' => __('2 days', 'likebtn-like-button'),
+            '3' => __('3 days', 'likebtn-like-button'),
+            '7' => __('1 week', 'likebtn-like-button'),
+            '14' => __('2 weeks', 'likebtn-like-button'),
+            '21' => __('3 weeks', 'likebtn-like-button'),
+            '1m' => __('1 month', 'likebtn-like-button'),
+            '2m' => __('2 months', 'likebtn-like-button'),
+            '3m' => __('3 months', 'likebtn-like-button'),
+            '6m' => __('6 months', 'likebtn-like-button'),
+            '1y' => __('1 year', 'likebtn-like-button')
         );
         
         // Normalize instance
         if (!isset($instance['title'])) {
-            $instance['title'] = __(self::$instance_default['title'], LIKEBTN_I18N_DOMAIN);
+            $instance['title'] = __(self::$instance_default['title'], 'likebtn-like-button');
         }
         if (empty($instance['entity_name']) || !is_array($instance['entity_name'])) {
             $instance['entity_name'] = self::$instance_default['entity_name'];
@@ -136,38 +130,40 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         if (empty($instance['time_range'])) {
             $instance['time_range'] = self::$instance_default['time_range'];
         }
+        if (empty($instance['vote_time_range'])) {
+            $instance['vote_time_range'] = self::$instance_default['vote_time_range'];
+        }
         if (empty($instance['thumbnail_size'])) {
             $instance['thumbnail_size'] = self::$instance_default['thumbnail_size'];
         }
         if (empty($instance['title_length'])) {
             $instance['title_length'] = self::$instance_default['title_length'];
         }
+        if (empty($instance['empty_text'])) {
+            $instance['empty_text'] = __(self::$instance_default['empty_text'], 'likebtn-like-button');
+        }
 
         ?>
         <div id="likebtn_widget_<?php echo $widget_mnemonic; ?>">
             <?php if (!_likebtn_is_stat_enabled()): ?>
                 <p class="likebtn_error">
-                    <?php echo strtr(__('Synchronization is not enabled — widget will not be functioning. Please %a_begin%enable synchronization%a_end% in order to use the widget.', LIKEBTN_I18N_DOMAIN), 
+                    <?php echo strtr(__('Synchronization is not enabled — widget will not be functioning. Please %a_begin%enable synchronization%a_end% in order to use the widget.', 'likebtn-like-button'), 
                         array('%a_begin%'=>'<a href="'.admin_url().'admin.php?page=likebtn_settings">', '%a_end%'=>'</a>')); ?>
                 </p>
             <?php endif ?>
             <p>
-                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', LIKEBTN_I18N_DOMAIN); ?>:</label>
+                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'likebtn-like-button'); ?>:</label>
                 <input class="widefat" type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title']; ?>" data-property="title" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('entity_name'); ?>"><?php _e('Items to show', LIKEBTN_I18N_DOMAIN); ?>:</label><br/>
-                <?php /*<select name="<?php echo $this->get_field_name('entity_name'); ?>[]" id="<?php echo $this->get_field_id('entity_name'); ?>" multiple="multiple" size="6" style="height:auto !important;">
-                    <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                        <option value="<?php echo $entity_name_value; ?>" <?php echo (in_array($entity_name_value, $instance['entity_name']) ? 'selected="selected"' : ''); ?> ><?php _e($entity_title, LIKEBTN_I18N_DOMAIN); ?></option>
-                    <?php endforeach ?>
-                </select>*/ ?>
+                <label for="<?php echo $this->get_field_id('entity_name'); ?>"><?php _e('Items to show', 'likebtn-like-button'); ?>:</label><br/>
+
                 <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                    <input type="checkbox" name="<?php echo $this->get_field_name('entity_name'); ?>[]" id="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>" value="<?php echo $entity_name_value; ?>" <?php echo (in_array($entity_name_value, $instance['entity_name']) ? 'checked="checked"' : ''); ?> data-property="entity_name" /> <label for="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>"><?php _e($entity_title, LIKEBTN_I18N_DOMAIN); ?></label><br/>
+                    <input type="checkbox" name="<?php echo $this->get_field_name('entity_name'); ?>[]" id="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>" value="<?php echo $entity_name_value; ?>" <?php echo (in_array($entity_name_value, $instance['entity_name']) ? 'checked="checked"' : ''); ?> data-property="entity_name" /> <label for="<?php echo $this->get_field_id('entity_name'); ?>_<?php echo $entity_name_value ?>"><?php _e($entity_title, 'likebtn-like-button'); ?></label><br/>
                 <?php endforeach ?>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('include_categories'); ?>"><?php _e('Allow items by category', LIKEBTN_I18N_DOMAIN); ?>:</label><br/>
+                <label for="<?php echo $this->get_field_id('include_categories'); ?>"><?php _e('Allow items by category', 'likebtn-like-button'); ?>:</label><br/>
                 <select multiple="multiple" id="<?php echo $this->get_field_id('include_categories'); ?>" name="<?php echo $this->get_field_name('include_categories'); ?>[]" class="likebtn_include_categories widefat" data-property="include_categories" autocomplete="off">
                     <?php
                     $categories = _likebtn_get_categories();
@@ -184,7 +180,7 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('exclude_categories'); ?>"><?php _e('Exclude items by category', LIKEBTN_I18N_DOMAIN); ?>:</label><br/>
+                <label for="<?php echo $this->get_field_id('exclude_categories'); ?>"><?php _e('Exclude items by category', 'likebtn-like-button'); ?>:</label><br/>
                 <select multiple="multiple" id="<?php echo $this->get_field_id('exclude_categories'); ?>" name="<?php echo $this->get_field_name('exclude_categories'); ?>[]" class="likebtn_exclude_categories widefat" data-property="exclude_categories" autocomplete="off">
                     <?php
                     $categories = _likebtn_get_categories();
@@ -202,75 +198,87 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
             </p>
             <?php if (!$this->liked_by_user): ?>
                 <p>
-                    <label for="<?php echo $this->get_field_id('author'); ?>"><?php _e('Filter by author (comma separated IDs)', LIKEBTN_I18N_DOMAIN); ?>:</label><br/>
+                    <label for="<?php echo $this->get_field_id('author'); ?>"><?php _e('Filter by author (comma separated IDs)', 'likebtn-like-button'); ?>:</label><br/>
                     <input type="text" id="<?php echo $this->get_field_id('author'); ?>" name="<?php echo $this->get_field_name('author'); ?>" value="<?php echo $instance['author']; ?>" data-property="author" class="widefat"/>
                 </p>
             <?php endif ?>
             <p>
-                <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of items to show:', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of items to show:', 'likebtn-like-button'); ?></label>
                 <input type="number" id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" value="<?php echo $instance['number']; ?>" size="3" data-property="number" class="widefat" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order by:', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order by:', 'likebtn-like-button'); ?></label>
                 <select name="<?php echo $this->get_field_name('order'); ?>" id="<?php echo $this->get_field_id('order'); ?>" data-property="order" >
                     <?php foreach ($order_list as $order_value => $order_name): ?>
-                        <option value="<?php echo $order_value; ?>" <?php selected($order_value, $instance['order']); ?> ><?php _e($order_name, LIKEBTN_I18N_DOMAIN); ?></option>
+                        <option value="<?php echo $order_value; ?>" <?php selected($order_value, $instance['order']); ?> ><?php _e($order_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('time_range'); ?>"><?php _e('Time range:', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('time_range'); ?>"><?php _e('Item publication period:', 'likebtn-like-button'); ?></label>
                 <select name="<?php echo $this->get_field_name('time_range'); ?>" id="<?php echo $this->get_field_id('time_range'); ?>" data-property="time_range" >
                     <?php foreach ($time_range_list as $time_range_value => $time_range_name): ?>
-                        <option value="<?php echo $time_range_value; ?>" <?php selected($time_range_value, $instance['time_range']); ?> ><?php _e($time_range_name, LIKEBTN_I18N_DOMAIN); ?></option>
+                        <option value="<?php echo $time_range_value; ?>" <?php selected($time_range_value, $instance['time_range']); ?> ><?php _e($time_range_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Max title length', LIKEBTN_I18N_DOMAIN); ?>:</label>
+                <label for="<?php echo $this->get_field_id('vote_time_range'); ?>"><?php _e('Votes period:', 'likebtn-like-button'); ?></label>
+                <select name="<?php echo $this->get_field_name('vote_time_range'); ?>" id="<?php echo $this->get_field_id('vote_time_range'); ?>" data-property="vote_time_range" >
+                    <?php foreach ($time_range_list as $time_range_value => $time_range_name): ?>
+                        <option value="<?php echo $time_range_value; ?>" <?php selected($time_range_value, $instance['vote_time_range']); ?> ><?php _e($time_range_name, 'likebtn-like-button'); ?></option>
+                    <?php endforeach ?>
+                </select>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Max title length', 'likebtn-like-button'); ?>:</label>
                 <input type="number" id="<?php echo $this->get_field_id('title_length'); ?>" name="<?php echo $this->get_field_name('title_length'); ?>" value="<?php echo $instance['title_length']; ?>" data-property="title_length" class="widefat" />
             </p>
             <p>
                 <input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('show_likes'); ?>" name="<?php echo $this->get_field_name('show_likes'); ?>" value="1" <?php checked($instance['show_likes']); ?> data-property="show_likes" />
-                <label for="<?php echo $this->get_field_id('show_likes'); ?>"><?php _e('Display likes count', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_likes'); ?>"><?php _e('Display likes count', 'likebtn-like-button'); ?></label>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" id="<?php echo $this->get_field_id('show_dislikes'); ?>" name="<?php echo $this->get_field_name('show_dislikes'); ?>" value="1" <?php checked($instance['show_dislikes']); ?> data-property="show_dislikes" />
-                <label for="<?php echo $this->get_field_id('show_dislikes'); ?>"><?php _e('Display dislikes count', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_dislikes'); ?>"><?php _e('Display dislikes count', 'likebtn-like-button'); ?></label>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['show_thumbnail']); ?> id="<?php echo $this->get_field_id('show_thumbnail'); ?>" name="<?php echo $this->get_field_name('show_thumbnail'); ?>" value="1" data-property="show_thumbnail" />
-                <label for="<?php echo $this->get_field_id('show_thumbnail'); ?>"><?php _e('Display featured image', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_thumbnail'); ?>"><?php _e('Display featured image', 'likebtn-like-button'); ?></label>
                 <select name="<?php echo $this->get_field_name('thumbnail_size'); ?>" id="<?php echo $this->get_field_id('thumbnail_size'); ?>" data-property="thumbnail_size" class="widefat">
                     <?php foreach ($thumbnail_size_list as $thumbnail_size_value => $thumbnail_size_name): ?>
-                        <option value="<?php echo $thumbnail_size_value; ?>" <?php selected($thumbnail_size_value, $instance['thumbnail_size']); ?> ><?php _e($thumbnail_size_name, LIKEBTN_I18N_DOMAIN); ?></option>
+                        <option value="<?php echo $thumbnail_size_value; ?>" <?php selected($thumbnail_size_value, $instance['thumbnail_size']); ?> ><?php _e($thumbnail_size_name, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['show_excerpt']); ?> id="<?php echo $this->get_field_id('show_excerpt'); ?>" name="<?php echo $this->get_field_name('show_excerpt'); ?>" value="1" data-property="show_excerpt" />
-                <label for="<?php echo $this->get_field_id('show_excerpt'); ?>"><?php _e('Display excerpt', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_excerpt'); ?>"><?php _e('Display excerpt', 'likebtn-like-button'); ?></label>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['show_date']); ?> id="<?php echo $this->get_field_id('show_date'); ?>" name="<?php echo $this->get_field_name('show_date'); ?>" value="1" data-property="show_date" />
-                <label for="<?php echo $this->get_field_id('show_date'); ?>"><?php _e('Display item date', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_date'); ?>"><?php _e('Display item date', 'likebtn-like-button'); ?></label>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['show_author']); ?> id="<?php echo $this->get_field_id('show_author'); ?>" name="<?php echo $this->get_field_name('show_author'); ?>" value="1" data-property="show_author" />
-                <label for="<?php echo $this->get_field_id('show_author'); ?>"><?php _e('Display author', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_author'); ?>"><?php _e('Display author', 'likebtn-like-button'); ?></label>
             </p>
             <p>
                 <input class="checkbox" type="checkbox" <?php checked($instance['show_button']); ?> id="<?php echo $this->get_field_id('show_button'); ?>" name="<?php echo $this->get_field_name('show_button'); ?>" value="1" data-property="show_button" />
-                <label for="<?php echo $this->get_field_id('show_button'); ?>"><?php _e('Display button and use settings from', LIKEBTN_I18N_DOMAIN); ?></label>
+                <label for="<?php echo $this->get_field_id('show_button'); ?>"><?php _e('Display button and use settings from', 'likebtn-like-button'); ?></label>
                 <select name="<?php echo $this->get_field_name('show_button_use_entity'); ?>" id="<?php echo $this->get_field_id('show_button_use_entity'); ?>" data-property="show_button_use_entity" class="widefat">
                     <?php foreach ($likebtn_entities as $entity_name_value => $entity_title): ?>
-                        <option value="<?php echo $entity_name_value; ?>" <?php selected($entity_name_value, $instance['show_button_use_entity']); ?> ><?php _e($entity_title, LIKEBTN_I18N_DOMAIN); ?></option>
+                        <option value="<?php echo $entity_name_value; ?>" <?php selected($entity_name_value, $instance['show_button_use_entity']); ?> ><?php _e($entity_title, 'likebtn-like-button'); ?></option>
                     <?php endforeach ?>
                 </select>
             </p>
             <p>
-                <a href="javascript:likebtnPopup('<?php echo __('http://likebtn.com/en/', LIKEBTN_I18N_DOMAIN); ?>wordpress-like-button-plugin#most_liked_template');void(0);"><?php _e('Need a custom template?', LIKEBTN_I18N_DOMAIN); ?></a> | 
-                <a href="javascript:likebtnWidgetShortcode('<?php echo $widget_mnemonic; ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', LIKEBTN_I18N_DOMAIN); ?>')"><?php _e('Get shortcode', LIKEBTN_I18N_DOMAIN); ?></a> <small>▼</small>
+                <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Text when there are no items', 'likebtn-like-button'); ?>:</label>
+                <input class="widefat" type="text" id="<?php echo $this->get_field_id('empty_text'); ?>" name="<?php echo $this->get_field_name('empty_text'); ?>" value="<?php echo $instance['empty_text']; ?>" data-property="empty_text" />
+            </p>
+            <p>
+                <a href="javascript:likebtnPopup('<?php echo __('http://likebtn.com/en/', 'likebtn-like-button'); ?>wordpress-like-button-plugin#most_liked_template');void(0);"><?php _e('Need a custom template?', 'likebtn-like-button'); ?></a> | 
+                <a href="javascript:likebtnWidgetShortcode('<?php echo $widget_mnemonic; ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>')"><?php _e('Get shortcode', 'likebtn-like-button'); ?></a> <small>▼</small>
             </p>
             <p id="likebtn_sc_wr_<?php echo $widget_mnemonic; ?>" class="likebtn_sc_wr">
                 <textarea class="likebtn_input likebtn_disabled" rows="5" id="likebtn_sc_<?php echo $widget_mnemonic; ?>" readonly="readonly"></textarea>
@@ -279,7 +287,7 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         <script type="text/javascript">
             jQuery(document).ready(function() {
                 jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> :input").on("keyup change", function(event) {
-                    likebtnWidgetShortcode('<?php echo $widget_mnemonic ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', LIKEBTN_I18N_DOMAIN); ?>', true);
+                    likebtnWidgetShortcode('<?php echo $widget_mnemonic ?>', '<?php echo $this->shortcode; ?>', '<?php _e('Please save widget first', 'likebtn-like-button'); ?>', true);
                 });
                 jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> select.likebtn_include_categories:first").select2();
                 jQuery("#likebtn_widget_<?php echo $widget_mnemonic ?> select.likebtn_exclude_categories:first").select2();
@@ -296,10 +304,13 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
 
     public static function prepareInstanceStatic($instance, $instance_default)
     {
+        if (!is_array($instance)) {
+            return $instance;
+        }
         foreach ($instance_default as $field => $default_value) {
             if (!isset($instance[$field])) {
                 if ($field == 'title') {
-                    $instance['title'] = __($default_value, LIKEBTN_I18N_DOMAIN);
+                    $instance['title'] = __($default_value, 'likebtn-like-button');
                 } else {
                     $instance[$field] = '';
                 }
@@ -308,10 +319,6 @@ class LikeBtnLikeButtonMostLikedWidget extends WP_Widget {
         return $instance;
     }
 
-    /*public static function getField($instance, $field)
-    {
-        return isset($instance[$field]) ? $instance[$field] : '';
-    }*/
 }
 
 class LikeBtnLikeButtonMostLikedByUserWidget extends LikeBtnLikeButtonMostLikedWidget {
@@ -328,6 +335,7 @@ class LikeBtnLikeButtonMostLikedByUserWidget extends LikeBtnLikeButtonMostLikedW
         'number' => self::NUMBER_OF_ITEMS,
         'order' => 'vote_date',
         'time_range' => 'all',
+        'vote_time_range' => 'all',
         'title_length' => LIKEBTN_WIDGET_TITLE_LENGTH,
         'thumbnail_size' => 'thumbnail',
         'show_likes' => '',
@@ -343,9 +351,9 @@ class LikeBtnLikeButtonMostLikedByUserWidget extends LikeBtnLikeButtonMostLikedW
     );
 
     function __construct() {
-        load_plugin_textdomain(LIKEBTN_I18N_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/languages');
-        $widget_ops = array('description' => __('Content liked by the current authenticated user', LIKEBTN_I18N_DOMAIN));
-        WP_Widget::__construct(false, __('(LikeBtn) Liked by User', LIKEBTN_I18N_DOMAIN), $widget_ops);
+        load_plugin_textdomain('likebtn-like-button', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        $widget_ops = array('description' => __('Content liked by the current authenticated user', 'likebtn-like-button'));
+        WP_Widget::__construct(false, __('(LikeBtn) Liked by User', 'likebtn-like-button'), $widget_ops);
     }
 
     // Set default values
@@ -493,9 +501,7 @@ class LikeBtnLikeButtonMostLiked {
             }
             
             if ($query_exclude_categories) {
-                //              ".($query_exclude_categories ? " 
-                // LEFT JOIN {$wpdb->term_relationships} t_rel ON (t_rel.object_id = p.ID) 
-                // LEFT JOIN {$wpdb->term_taxonomy} t_tax ON (t_tax.term_taxonomy_id = t_rel.term_taxonomy_id)" : '')."
+
                 $query .= " AND NOT EXISTS (
                     SELECT t_tax.term_id
                     FROM {$wpdb->term_relationships} t_rel
@@ -708,7 +714,15 @@ class LikeBtnLikeButtonMostLiked {
         }
 
         // bbPress User
+        // UM User
+        $user_post_type = '';
         if (_likebtn_is_bbp_active() && in_array(LIKEBTN_ENTITY_BBP_USER, $instance['entity_name'])) {
+            $user_post_type = LIKEBTN_ENTITY_BBP_USER;
+        }
+        if (in_array(LIKEBTN_ENTITY_UM_USER, $instance['entity_name'])) {
+            $user_post_type = LIKEBTN_ENTITY_UM_USER;
+        }
+        if ($user_post_type) {
             if ($post_types_count > 0) {
                 $query .= " UNION ";
             }
@@ -720,7 +734,7 @@ class LikeBtnLikeButtonMostLiked {
                     CONVERT(pm_likes.meta_value, UNSIGNED INTEGER) as 'likes',
                     CONVERT(pm_dislikes.meta_value, UNSIGNED INTEGER) as 'dislikes',
                     CONVERT(pm_likes_minus_dislikes.meta_value, SIGNED INTEGER) as 'likes_minus_dislikes',
-                    '" . LIKEBTN_ENTITY_BBP_USER . "' as post_type,
+                    '" . $user_post_type . "' as post_type,
                     '' as post_mime_type,
                     '' as url
                  FROM {$wpdb->prefix}usermeta pm_likes
@@ -739,15 +753,46 @@ class LikeBtnLikeButtonMostLiked {
             $post_types_count++;
         }
 
-        if ($post_types_count > 1 || (int)$instance['voter']) {
+        if ((int)$instance['voter'] && !empty($instance['vote_time_range']) && $instance['vote_time_range'] != 'all') {
+        
+            $query = "
+                SELECT 
+                    post_id, post_title, post_date, post_type, post_mime_type, url,
+                    count(case v.type when 1 then 1 else null end) as likes,
+                    count(case v.type when -1 then 1 else null end) as dislikes,
+                    sum(v.type) as likes_minus_dislikes,
+                    v.created_at,
+                    v.type
+                FROM (".$query. ") main_query
+            ";
+            $query .= " 
+                    INNER JOIN ".$wpdb->prefix.LIKEBTN_TABLE_VOTE." v ON v.identifier = CONCAT(main_query.post_type, '_', main_query.post_id) AND v.user_id = ".(int)$instance['voter']. " AND v.created_at >= '" . $this->timeRangeToDateTime($instance['vote_time_range']) . "' 
+                    GROUP BY v.identifier
+                ";
+        } else if (!empty($instance['vote_time_range']) && $instance['vote_time_range'] != 'all') {
+        
+            $query = "
+                SELECT 
+                    post_id, post_title, post_date, post_type, post_mime_type, url,
+                    count(case v.type when 1 then 1 else null end) as likes,
+                    count(case v.type when -1 then 1 else null end) as dislikes,
+                    sum(v.type) as likes_minus_dislikes
+                FROM (".$query. ") main_query
+            ";
+            $query .= " 
+                    INNER JOIN ".$wpdb->prefix.LIKEBTN_TABLE_VOTE." v ON v.identifier = CONCAT(main_query.post_type, '_', main_query.post_id) AND v.created_at >= '" . $this->timeRangeToDateTime($instance['vote_time_range']) . "' 
+                    GROUP BY v.identifier
+                ";
+        } else if ((int)$instance['voter']) {
             $query = "SELECT * FROM (".$query. ") main_query";
-        }
-
-        if ((int)$instance['voter']) {
+            // WHERE (likes != 0 OR dislikes != 0)
             $query .= " 
                 INNER JOIN ".$wpdb->prefix.LIKEBTN_TABLE_VOTE." v ON v.identifier = CONCAT(main_query.post_type, '_', main_query.post_id) AND v.user_id = ".(int)$instance['voter']. " 
                 GROUP BY v.identifier
             ";
+        } else if ($post_types_count > 1) {
+            $query = "SELECT * FROM (".$query. ") main_query";
+            //$query .= " WHERE (likes != 0 OR dislikes != 0) ";
         }
 
         $query .= "
@@ -771,26 +816,42 @@ class LikeBtnLikeButtonMostLiked {
                 $query .= " v.created_at ";
                 break;
         }
+
         $query .= " DESC";
 
         $query .= " {$query_limit}";
 
-// if ($wpdb->last_error) {
-//     echo 'last_error';
-//     print_r($wpdb->last_error);
-// }
-// if ($this->type == self::WIDGET_TYPE_BY_UM_USER) {
-//     echo "<pre>";
-//     print_r($instance);
-//     print_r($query);
-//     exit();
-// }
+
         $posts = $wpdb->get_results($query);
 
+        if ($wpdb->last_error && strstr($wpdb->last_error, 'Illegal mix of collations')) {
+            // Try to change votes table collation.
+            $charset = '';
+            $collation = '';
+            $query_coll = "SHOW TABLE STATUS where name like '{$wpdb->prefix}posts'";
+            $coll = $wpdb->get_row($query_coll);
+
+            if (!empty($coll->Collation)) {
+                $collation = $coll->Collation;
+                $charset = preg_replace("/^([^_]+)_.*/", "$1", $collation);
+            }
+            if (!empty($charset) && !empty($collation)) {
+                $sql = "ALTER TABLE {$wpdb->prefix}".LIKEBTN_TABLE_VOTE." CONVERT TO CHARACTER SET $charset COLLATE '$collation';";
+                $wpdb->query($sql);
+
+                $posts = $wpdb->get_results($query);
+            }
+        }
+        
         $post_loop = array();
 
         if (count($posts) > 0) {
             foreach ($posts as $i=>$db_post) {
+                // Remove posts with zero values
+                if ($db_post->likes == 0 && $db_post->dislikes == 0) {
+                    continue;
+                }
+
                 $post = array(
                     'id' => $db_post->post_id,
                     'type' => $db_post->post_type,

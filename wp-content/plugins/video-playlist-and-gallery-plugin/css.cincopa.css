@@ -15,8 +15,13 @@
 	min-width: 100px;
 	min-height: 30px;
 
-	max-height: 300px;
-	overflow-y: scroll;
+	max-height: 600px;
+	resize: both;
+	overflow: auto;
+	display: flex;
+}
+.cincopa-gallery-block  > iframe {
+	flex: 1;
 }
 	.cincopa-gallery-block-visible {
 		top: 25px;
@@ -35,8 +40,13 @@
 .cincopa-login {
 	padding: 10px;
 }
+.cincopa-gallery-block .cincopa-login a{
+	  color: #0073aa;
+          text-decoration: underline;
+}
 
-#cincopa_button {
+
+/* #cincopa_button {
 	height: 24px;
 	box-sizing: border-box;
 	vertical-align: top;
@@ -66,7 +76,7 @@
 	background-image: -moz-linear-gradient(bottom,#f6f6f6,#e3e3e3);
 	background-image: -o-linear-gradient(bottom,#f6f6f6,#e3e3e3);
 	background-image: linear-gradient(to top,#f6f6f6,#e3e3e3);		
-}
+} */
 #cincopa_button, #cincopa_button .first, #cincopa_button .last, #cincopa_button a {
 	display: inline-block;
 }
@@ -87,4 +97,13 @@
 	height: 22px;
 	box-sizing: border-box;
 	vertical-align: top;
+}
+
+
+ .cp-library-editor{
+    width: 500px;
+    height: 500px;
+    z-index: 2;
+    max-width: 100%;
+    max-height: 100vh;
 }

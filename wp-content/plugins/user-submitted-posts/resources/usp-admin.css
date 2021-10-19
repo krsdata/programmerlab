@@ -28,13 +28,14 @@
 }
 
 /* General Styles */
-#mm-plugin-options h1 small { font-size: 60%; color: #777; }
+#mm-plugin-options h1 small { line-height: 12px; font-size: 12px; color: #bbb; }
 #mm-plugin-options h2 { margin: 0; padding: 12px 0 12px 15px; font-size: 16px; cursor: pointer; }
 #mm-plugin-options h3 { margin: 20px 15px; font-size: 14px; }
 #mm-plugin-options p { margin-left: 15px; }
 #mm-plugin-options ul { margin: 15px 15px 15px 40px; }
 #mm-plugin-options li { margin: 10px 0; list-style-type: disc; }
 #mm-plugin-options abbr[title] { cursor: help !important; border-bottom: 1px dotted #dfdfdf !important; text-decoration: none !important; }
+#mm-plugin-options pre { width: 90%; overflow: auto; margin: 15px; padding: 15px; font: 14px/18px Consolas,Monaco,monospace; color: #333; background-color: #fafae0; }
 
 /* Table Styles */
 .mm-table-wrap { margin: 15px; }
@@ -48,36 +49,43 @@
 
 /* Custom Form Info */
 #mm-plugin-options .usp-custom-form-info { padding: 0 0 0 30px; }
-#mm-plugin-options .usp-custom-form-info code { font-size: 11px; }
-#mm-plugin-options .usp-custom-form-info p { margin: 0; padding: 10px 0; font-size: 11px; }
-#mm-plugin-options .usp-custom-form-info ul { margin: 0 0 0 30px; padding: 0; font-size: 11px; }
-#mm-plugin-options .usp-custom-form-info li { margin: 3px 0; }
+#mm-plugin-options .usp-custom-form-info code { font-size: 12px; }
+#mm-plugin-options .usp-custom-form-info p { margin: 0; padding: 10px 0; font-size: 12px; }
+#mm-plugin-options .usp-custom-form-info ul { margin: 0 0 0 30px; padding: 0; font-size: 12px; }
+#mm-plugin-options .usp-custom-form-info li { margin: 3px 0; list-style-type: disc; }
 
 /* Form Controls */
-.mm-table-wrap input[type="text"] { width: 80%; font-size: 13px; }
+.mm-table-wrap input[type=text] { width: 80%; font-size: 13px; }
+.mm-table-wrap input[type=checkbox], .wp-admin p input[type=checkbox] { margin-top: -3px; }
 .mm-table-wrap textarea { width: 90%; font-size: 13px; }
-.mm-table-wrap .input-short[type="text"] { width: 77px; }
-.mm-radio-inputs { margin: 7px 0; }
-.mm-radio-inputs span { padding-left: 5px; }
-.mm-radio-inputs small { padding-left: 5px; color: #777; font-size: 11px; }
+.mm-table-wrap .input-short[type=text],
+.mm-table-wrap .small-text[type=number] { width: 100px; }
+.mm-radio-inputs, .mm-checkbox-inputs { margin: 7px 0; }
 
 /* Code & Captions */
-.mm-item-desc { font-size: 13px; color: #777; }
-.mm-item-caption { margin: 1px 0 0 3px; font-size: 11px; color: #777; }
-.mm-item-caption code { font-size: 10px; }
+.mm-item-desc { font-size: 14px; color: #777; }
+span.mm-item-desc { display: block; margin: 0 0 15px 0; }
+.mm-item-caption { margin: 3px 0 0 3px; font-size: 12px; color: #777; }
+.mm-table-wrap textarea + .mm-item-caption { margin: 0 0 0 3px; }
+.mm-table-wrap input[type=checkbox] + .mm-item-caption { margin: 0; }
+.mm-inline-block { display: inline-block; vertical-align: middle; }
+.mm-item-caption code { font-size: 11px; }
 .mm-code { padding: 5px; background-color: #fafae0; color: #333; font-size: 14px; }
 
 /* Misc. Styles */
 #mm-panel-toggle { margin: 5px 0; }
-#mm-credit-info { margin-top: -5px; }
-#setting-error-settings_updated p { margin-left: 0; }
+#mm-credit-info { margin: -10px 0 10px 5px; font-size: 12px; }
+#mm-plugin-options #setting-error-settings_updated { margin: 5px 0 15px 0; }
+#mm-plugin-options #setting-error-settings_updated p { margin: 7px 0 6px 0; }
 #mm-plugin-options .button-primary { margin: 0 0 15px 15px; }
 
-/* Updates & Info */
-#mm-iframe-wrap { width: 100%; height: 250px; overflow: hidden; }
-#mm-iframe-wrap iframe { width: 100%; height: 100%; overflow: hidden; margin: 0; padding: 0; }
+/* Category Menu */
+#mm-plugin-options p.usp-category-options-desc { margin: 10px 0 20px 0; }
+#mm-plugin-options ul.usp-category-options { list-style: none; margin: 20px; padding: 0; }
+#mm-plugin-options ul.usp-category-options ul { margin: 5px 0 5px 30px; list-style: none; } 
+#mm-plugin-options ul.usp-category-options li { margin: 5px 0; list-style: none; }
 
 /* Clearfix */
 .clear:before,
-.clear:after { content: ""; display: table; }
+.clear:after { content: ''; display: table; }
 .clear:after { clear: both; }

@@ -139,7 +139,7 @@ var fields 	=	{
 																						'meta_name_value'	: 'jabber'
 																					}
 																},
-		
+
 						'Default - Password':					{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-description',
@@ -199,6 +199,31 @@ var fields 	=	{
 																	}
 																},
 
+						'GDPR Checkbox':						{	'show_rows'	:	[
+																						'.row-field-title',
+																						'.row-meta-name',
+																						'.row-description',
+																						'.row-required',
+																						'.row-overwrite-existing'
+																					],
+																	'properties':	{
+																						'meta_name_value'	: 'user_consent_gdpr',
+																						'field_title'		: wppb_fields_strings.gdpr_title,
+																						'description'		: wppb_fields_strings.gdpr_description
+																					},
+																	'required'	:	[
+																						true
+																					]
+																},
+						'GDPR Delete Button':					{	'show_rows'	:	[
+																						'.row-field-title',
+																						'.row-description',
+																					],
+																	'properties':	{
+																						'meta_name_value'	: ''
+																					}
+																},
+
 						'Heading':								{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-description',
@@ -210,6 +235,38 @@ var fields 	=	{
                                                                 },
 
 						'Input':								{	'show_rows'	:	[
+																						'.row-field-title',
+																						'.row-meta-name',
+																						'.row-description',
+																						'.row-default-value',
+																						'.row-required',
+																						'.row-overwrite-existing'
+																					]
+																},
+
+						'Email':								{	'show_rows'	:	[
+																						'.row-field-title',
+																						'.row-meta-name',
+																						'.row-description',
+																						'.row-default-value',
+																						'.row-required',
+																						'.row-overwrite-existing'
+																					]
+																},
+						'Email Confirmation':					{	'show_rows'	:	[
+																						'.row-field-title',
+																						'.row-field',
+																						'.row-description',
+																						'.row-required'
+																					],
+																	'required'	:	[
+																		true
+																	],
+																	'properties':	{
+																		'meta_name_value'	: ''
+																	}
+																},
+						'URL':								{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-meta-name',
 																						'.row-description',
@@ -278,7 +335,7 @@ var fields 	=	{
 																						'.row-options',
 																						'.row-labels'
 																					]
-																},	
+																},
 						'Select (Multiple)':					{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-meta-name',
@@ -289,8 +346,8 @@ var fields 	=	{
 																						'.row-options',
 																						'.row-labels'
 																					]
-																},	
-			
+																},
+
 						'Select (Country)':						{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-meta-name',
@@ -329,9 +386,38 @@ var fields 	=	{
 																					'.row-cpt',
 																					'.row-required',
 																					'.row-overwrite-existing'
-																				]
+																					]
 																},
-
+						"Select2": 								{	'show_rows'	:	[
+																					'.row-field-title',
+																					'.row-meta-name',
+																					'.row-description',
+																					'.row-default-option',
+																					'.row-required',
+																					'.row-overwrite-existing',
+																					'.row-options',
+																					'.row-labels',
+																					'.row-visibility',
+																					'.row-user-role-visibility',
+																					'.row-location-visibility'
+																					]
+																},
+						"Select2 (Multiple)": 					{	'show_rows' :   [
+																					'.row-field-title',
+																					'.row-meta-name',
+																					'.row-description',
+																					'.row-default-options',
+																					'.row-required',
+																					'.row-overwrite-existing',
+																					'.row-options',
+																					'.row-labels',
+																					'.row-select2-multiple-limit',
+																					'.row-select2-multiple-tags',
+																					'.row-visibility',
+																					'.row-user-role-visibility',
+																					'.row-location-visibility'
+																					]
+																},
 						'Checkbox':								{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-meta-name',
@@ -372,6 +458,7 @@ var fields 	=	{
 																						'.row-field-title',
 																						'.row-meta-name',
 																						'.row-description',
+																						'.row-simple-upload',
 																						'.row-allowed-extensions',
 																						'.row-required',
 																						'.row-allowed-upload-extensions'
@@ -382,6 +469,7 @@ var fields 	=	{
 																						'.row-field-title',
 																						'.row-meta-name',
 																						'.row-description',
+																						'.row-simple-upload',
 																						'.row-allowed-image-extensions',
 																						'.row-avatar-size',
 																						'.row-required',
@@ -437,6 +525,7 @@ var fields 	=	{
 						'reCAPTCHA':							{	'show_rows'	:	[
 																						'.row-field-title',
 																						'.row-description',
+																						'.row-recaptcha-type',
 																						'.row-public-key',
 																						'.row-private-key',
                                                                                         '.row-captcha-pb-forms',
@@ -455,6 +544,7 @@ var fields 	=	{
                                                                                         '.row-field-title',
                                                                                         '.row-description',
                                                                                         '.row-user-roles',
+                                                                                        '.row-user-roles-on-edit-profile',
                                                                                         '.row-required'
                                                                                     ],
                                                                     'properties':	{
@@ -471,8 +561,14 @@ var fields 	=	{
                                                                                         '.row-map-default-lng',
                                                                                         '.row-map-default-zoom',
                                                                                         '.row-map-height',
+                                                                                        '.row-map-pins-load-type',
+                                                                                        '.row-map-pagination-number',
+                                                                                        '.row-map-bubble-fields',
                                                                                         '.row-required'
-                                                                                    ]
+                                                                                    ],
+																	'properties':	{
+																		'meta_name_value'	: 'map'
+																	}
                                                                 },
 						'HTML':              					{	'show_rows'	:	[
 																						'.row-field-title',
@@ -540,8 +636,8 @@ function wppb_disable_add_entry_button( container_name ){
 	jQuery( container_name + ' ' + '.mb-list-entry-fields .button-primary' ).each( function(){
 
 		//jQuery(this).data('myclick', this.onclick );
-		this.onclick = function(event) {			
-			if ( jQuery(this).attr( 'disabled' ) ) {			
+		this.onclick = function(event) {
+			if ( jQuery(this).attr( 'disabled' ) ) {
 				return false;
 			}
 			/* changed this in version 2.5.0 because the commented line generated stack exceeded error when multiple fields were opened with edit */
@@ -556,7 +652,7 @@ function wppb_disable_add_entry_button( container_name ){
 			//jQuery(this).data('myclick').call(this, event || window.event);
 		};
 	});
-	
+
 }
 
 
@@ -567,11 +663,11 @@ function wppb_edit_form_properties( container_name, element_id ){
 	field = jQuery( container_name + ' #' + element_id + ' ' + '#field' ).val();
 
 	if ( ( field in fields ) ){
-		var to_show = fields[jQuery.trim(field)]['show_rows'];
+		var to_show = fields[ field.trim() ]['show_rows'];
 		for (var key in to_show)
 			jQuery( container_name + ' #' + element_id + ' ' + to_show[key] ).show();
 
-        var properties = fields[ jQuery.trim(field) ]['properties'];
+        var properties = fields[ field.trim() ]['properties'];
         if( typeof properties !== 'undefined' && properties ) {
             for( var key in properties ) {
                 if( typeof properties['meta_name_value'] !== 'undefined' ) {
@@ -589,20 +685,26 @@ function wppb_edit_form_properties( container_name, element_id ){
 
 
 function wppb_display_needed_fields( index, container_name, current_field_select ){
-	var show_rows = fields[jQuery.trim(index)]['show_rows'];
+	var show_rows = fields[index.trim()]['show_rows'];
 	for (var key in show_rows) {
 		jQuery(  show_rows[key], jQuery( current_field_select ).parents( '.mb-list-entry-fields' ) ).show();
 	}
 
-	var properties = fields[jQuery.trim(index)]['properties'];
+	var properties = fields[index.trim()]['properties'];
 	if ( ( ( typeof properties !== 'undefined' ) && ( properties ) ) ) { //the extra (second) condition is a particular case since only the username is defined in our global array that has no meta-name
 		for (var key in properties) {
 			if ( ( typeof properties['meta_name_value'] !== 'undefined' ) ){
 				jQuery( container_name + ' ' + '#meta-name' ).val( properties['meta_name_value'] );
 				jQuery( container_name + ' ' + '#meta-name' ).attr( 'readonly', true );
 			}
+			if ( ( typeof properties['field_title'] !== 'undefined' ) ){
+				jQuery( container_name + ' ' + '#field-title' ).val( properties['field_title'] );
+			}
+			if ( ( typeof properties['description'] !== 'undefined' ) ){
+				jQuery( container_name + ' ' + '#description' ).val( properties['description'] );
+			}
 		}
-		
+
 	}else{
         /* meta value when editing a field shouldn't change so we take it from the current entered value which is displayed above the edit form */
         if( jQuery( current_field_select).parents('.update_container_wppb_manage_fields').length != 0 ){
@@ -647,17 +749,17 @@ function wppb_display_needed_fields( index, container_name, current_field_select
 
     //Handle user role sorting
     wppb_handle_user_role_field( container_name );
-	
-	var set_required = fields[jQuery.trim(index)]['required'];
+
+	var set_required = fields[index.trim()]['required'];
 	if ( ( typeof set_required !== 'undefined' ) && ( set_required ) ){
 		jQuery( container_name + ' ' + '#required' ).val( 'Yes' );
 		jQuery( container_name + ' ' + '#required' ).attr( 'disabled', true );
-		
+
 	}else{
 		jQuery( container_name + ' ' + '#required' ).val( 'No' );
 		jQuery( container_name + ' ' + '#required' ).attr( 'disabled', false );
 	}
-	
+
 	jQuery( container_name + ' ' + '.mb-list-entry-fields .button-primary' ).removeAttr( 'disabled' );
 }
 
@@ -720,7 +822,7 @@ function wppb_handle_user_role_field( container_name ) {
 
 function wppb_initialize_live_select( container_name ){
 	wppb_hide_all( container_name );
-	jQuery(document).on( 'change', container_name + ' ' + '.mb-list-entry-fields #field', function () {
+    jQuery(document).on( 'change', container_name + ' ' + '.mb-list-entry-fields #field', function () {
 		field = jQuery(this).val();
 
 		if ( field != ''){
@@ -732,10 +834,116 @@ function wppb_initialize_live_select( container_name ){
 	});
 }
 
+
+function wppb_enable_select2(container_name){
+    // Select2 initialization on manage fields.
+
+    jQuery( container_name + ' #field').select2({
+        placeholder: 'Select an option',
+        allowClear: true
+    })
+
+    var $eventSelect = jQuery( container_name + ' #field');
+    $eventSelect.on("select2:open", function (e) {
+        jQuery('#wppb_select2_overlay').fadeIn('100')
+    });
+    $eventSelect.on("select2:close", function (e) {
+        jQuery('#wppb_select2_overlay').hide();
+    });
+}
+
+
 jQuery(function(){
  	wppb_initialize_live_select ( '#wppb_manage_fields' );
 	wppb_initialize_live_select ( '#container_wppb_manage_fields' );
 
 	wppb_hide_properties_for_already_added_fields( '#container_wppb_manage_fields' );
 	wppb_disable_add_entry_button ( '#wppb_manage_fields' );
+
+    var overlay = jQuery('<div id="wppb_select2_overlay"> </div>')
+    overlay.appendTo(document.body)
+
+    wppb_enable_select2('#wppb_manage_fields');
+
 });
+
+// Custom functionality for sorting options (see the Map POIs attributes).
+(function ($) {
+	window.SortSelCheck = {
+		// Initiate the events and triggers.
+		init: function () {
+			SortSelCheck.assess();
+			SortSelCheck.listen();
+		},
+
+		// Listen for events.
+		listen: function () {
+			// Listen for the new element setup and trigger the expected custom event.
+			$('.wck-add-form').on('change', function() {
+				SortSelCheck.assess('wck-add-form');
+			});
+		},
+
+		// Assess the potential elements and configure these when possible.
+		assess: function (elem) {
+			var $elem = $('.wppb_sortable_checkboxes_wrap');
+			// console.log('assess triggerer ' + elem, $elem);
+			$elem.each(function() {
+				$rows = SortSelCheck.remake($(this));
+				SortSelCheck.attach($(this), $rows);
+			});
+		},
+
+		// Configure the elements that form the sortable checkboxes options.
+		remake: function ($field) {
+			var $rows = $field.children('.wck-checkboxes');
+			if (!$rows.length) {
+				$field.prepend('<div class="wck-checkboxes"> </div>');
+				var $rows = $field.children('.wck-checkboxes');
+			}
+			if ($rows.length) {
+				SortSelCheck.sortable($rows);
+			}
+			return $rows;
+		},
+
+		// Attach the custom dropdown options as sortable checkboxes options.
+		attach: function ($field, $rows) {
+			var $ddwn = $field.children('.wppb_selector_for_sortable_checkbox');
+			if ($ddwn.length) {
+				$ddwn.on('change', function() {
+					var val = $(this).val();
+					if ('' !== val) {
+						$rows.append('<div><label><input type="checkbox" name="' + $(this).data('list') + '" id="' + $(this).data('list') + '_' + val + '" value="' + val + '" checked="checked" class="mb-checkbox mb-field">' + $(this).children('option').filter(':selected').text() + '</label></div>');
+						$(this).children('option').filter(':selected').remove();
+						SortSelCheck.sortable($rows);
+					}
+				});
+			}
+		},
+
+		// Make sortable items from the list.
+		sortable: function ($list) {
+			var $items = $list.children('div');
+			$items.addClass('wppb_manage_fields_sortables');
+			$items.remove('em');
+			$items.prepend('<em class="dashicons dashicons-menu"></em> ');
+			$list.sortable({
+				items: '> div',
+				classes: {'ui-sortable': 'highlight'}
+			});
+		},
+
+	};
+
+	$(document).ready(function () {
+		// Initialize the custom functionality.
+		SortSelCheck.init('init');
+
+		// Bind the event to the custom functionality.
+		$('html').on('wpbFormMetaLoaded', function(e, elem) {
+			SortSelCheck.assess(elem);
+		});
+	});
+
+})(jQuery);

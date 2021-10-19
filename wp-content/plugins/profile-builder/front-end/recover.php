@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Function that checks if a user is approved before reseting the password
  *
@@ -6,22 +8,19 @@
  * @param string $what what field we query for when getting the user
  */
 function wppb_check_for_unapproved_user( $data, $what ){
-	$retMessage = '';
-	$messageNo = '';
+	$message = '';
 
 	$wppb_generalSettings = get_option( 'wppb_general_settings' );
-	if( !empty( $wppb_generalSettings['adminApproval'] ) && $wppb_generalSettings['adminApproval'] == 'yes' ){
+	if( wppb_get_admin_approval_option_value() === 'yes' ){
 		$user = ( ( $what == 'user_email' ) ? get_user_by( 'email', $data ) : get_user_by( 'login', $data ) );
 
 		if ( wp_get_object_terms( $user->data->ID, 'user_status' ) ){
-			$retMessage = '<strong>'. __('ERROR', 'profile-builder') . '</strong>: ' . __('Your account has to be confirmed by an administrator before you can use the "Password Reset" feature.', 'profile-builder');
-			$retMessage = apply_filters('wppb_recover_password_unapporved_user', $retMessage);
-
-			$messageNo = '6';
+            $message = '<strong>'. __('ERROR', 'profile-builder') . '</strong>: ' . __('Your account has to be confirmed by an administrator before you can use the "Password Reset" feature.', 'profile-builder');
+            $message = apply_filters('wppb_recover_password_unapporved_user', $message);
 		}
 	}
 
-	return array( $retMessage, $messageNo );
+	return $message;
 }
 
 /**
@@ -56,7 +55,7 @@ function wppb_retrieve_activation_key( $requested_user_login ){
  */
 function wppb_create_recover_password_form( $user, $post_data ){
 	?>
-	<form enctype="multipart/form-data" method="post" id="wppb-recover-password" class="wppb-user-forms" action="<?php echo esc_url( add_query_arg( 'finalAction', 'yes', wppb_curpageurl() ) ); ?>">
+	<form enctype="multipart/form-data" method="post" id="wppb-recover-password" class="wppb-user-forms" action="<?php echo esc_url( wppb_curpageurl() ); ?>">
 		<ul>
 	<?php
 
@@ -77,6 +76,7 @@ function wppb_create_recover_password_form( $user, $post_data ){
 			<li class="wppb-form-field passw1">
 				<label for="passw1">'. $password_label .'</label>
 				<input class="password" name="passw1" type="password" id="passw1" value="" autocomplete="off" title="'. wppb_password_length_text() .'" '. apply_filters( 'wppb_recover_password_extra_attr', '', $password_label, 'password' ) .' />
+				<span class="wppb-description-delimiter">'. wppb_password_length_text() .' '. wppb_password_strength_description() .'</span>
 			</li><!-- .passw1 -->
 			<input type="hidden" name="userData" value="'.$user->ID.'"/>
 			<li class="wppb-form-field passw2">
@@ -92,8 +92,9 @@ function wppb_create_recover_password_form( $user, $post_data ){
 		</ul>
 		<p class="form-submit">
 			<?php $button_name = __('Reset Password', 'profile-builder'); ?>
-			<input name="recover_password2" type="submit" id="wppb-recover-password-button" class="<?php echo apply_filters( 'wppb_recover_submit_class', "submit button" );?>" value="<?php echo apply_filters('wppb_recover_password_button_name1', $button_name); ?>" />
+			<input name="recover_password2" type="submit" id="wppb-recover-password-button" class="<?php echo apply_filters( 'wppb_recover_submit_class', "submit button" ); ?>" value="<?php echo apply_filters('wppb_recover_password_button_name1', $button_name); ?>" />
 			<input name="action2" type="hidden" id="action2" value="recover_password2" />
+			<input name="key" type="hidden" id="key" value="<?php echo esc_attr( $_GET['key'] ) ?>" />
 		</p><!-- .form-submit -->
 		<?php wp_nonce_field( 'verify_true_password_recovery2_'.$user->ID, 'password_recovery_nonce_field2' ); ?>
 	</form><!-- #recover_password -->
@@ -109,15 +110,23 @@ function wppb_create_recover_password_form( $user, $post_data ){
  */
  function wppb_create_generate_password_form( $post_data ){
 	?>
-	<form enctype="multipart/form-data" method="post" id="wppb-recover-password" class="wppb-user-forms" action="<?php echo esc_url( add_query_arg( 'submitted', 'yes', wppb_curpageurl() ) ); ?>">
+	<form enctype="multipart/form-data" method="post" id="wppb-recover-password" class="wppb-user-forms" action="<?php echo esc_url( wppb_curpageurl() ); ?>">
 	<?php
-	$recover_notification = '<p>' . __( 'Please enter your username or email address.', 'profile-builder' );
+	$wppb_generalSettings = get_option( 'wppb_general_settings' );
+
+	if( !empty( $wppb_generalSettings['loginWith'] ) && $wppb_generalSettings['loginWith'] == 'email' ){
+		$recover_notification = '<p>' . __( 'Please enter your email address.', 'profile-builder' );
+		$username_email_label = __( 'Email', 'profile-builder' );
+	}
+	else{
+		$recover_notification = '<p>' . __( 'Please enter your username or email address.', 'profile-builder' );
+		$username_email_label = __( 'Username or Email', 'profile-builder' );
+	}
+
 	$recover_notification .= '<br/>'.__( 'You will receive a link to create a new password via email.', 'profile-builder' ).'</p>';
 	echo apply_filters( 'wppb_recover_password_message1', $recover_notification );
 
 	$username_email = ( isset( $post_data['username_email'] ) ? $post_data['username_email'] : '' );
-
-	$username_email_label = __( 'Username or E-mail', 'profile-builder' );
 
 	$recover_input = '<ul>
 			<li class="wppb-form-field wppb-username-email">
@@ -128,12 +137,111 @@ function wppb_create_recover_password_form( $user, $post_data ){
 		?>
 	<p class="form-submit">
 		<?php $button_name = __('Get New Password', 'profile-builder'); ?>
-		<input name="recover_password" type="submit" id="wppb-recover-password-button" class="submit button" value="<?php echo apply_filters('wppb_recover_password_button_name3', $button_name); ?>" />
+		<input name="recover_password" type="submit" id="wppb-recover-password-button" class="<?php echo apply_filters( 'wppb_recover_submit_class', "submit button" );?>" value="<?php echo apply_filters('wppb_recover_password_button_name3', $button_name); ?>" />
 		<input name="action" type="hidden" id="action" value="recover_password" />
 	</p>
 	<?php wp_nonce_field( 'verify_true_password_recovery', 'password_recovery_nonce_field' ); ?>
 	</form>
 	<?php
+}
+
+/**
+ * Determine based on the PB login settings what to display in the email sent on password reset: username or email
+ * @param $user
+ * @return mixed
+ */
+function wppb_get_email_display_username($user){
+    //Get general settings
+    $wppb_generalSettings = get_option( 'wppb_general_settings' );
+
+    if( $wppb_generalSettings['loginWith'] == 'username' || $wppb_generalSettings['loginWith'] == 'usernameemail' )
+        $display_username_email = $user->user_login;
+    else
+        $display_username_email = $user->user_email;
+
+    return $display_username_email;
+}
+
+/**
+ * Send the email for the password recovery request
+ * @param $user
+ * @return bool|string|void
+ */
+function wppb_send_recovery_email( $user, $success ){
+
+    if ( $success == 'wppb_recaptcha_error')
+        return false;
+
+    $requested_user_id = $user->ID;
+    $requested_user_login = $user->user_login;
+    $requested_user_email = $user->user_email;
+
+    //search if there is already an activation key present, if not create one
+    $key = wppb_retrieve_activation_key( $requested_user_login );
+
+    $display_username_email = wppb_get_email_display_username($user);
+
+    //send primary email message
+    $recovery_email_message  = sprintf( __('Someone requested that the password be reset for the following account: <b>%1$s</b><br/>If this was a mistake, just ignore this email and nothing will happen.<br/>To reset your password, visit the following link:%2$s', 'profile-builder'), $display_username_email, '<a href="'.esc_url( add_query_arg( array( 'key' => $key ), wppb_curpageurl() ) ).'">'.esc_url( add_query_arg( array( 'key' => $key ), wppb_curpageurl() ) ).'</a>' );
+    $recovery_email_message  = apply_filters( 'wppb_recover_password_message_content_sent_to_user1', $recovery_email_message, $requested_user_id, $requested_user_login, $requested_user_email );
+
+    $recovery_email_message_title = sprintf(__('Password Reset from "%1$s"', 'profile-builder'), $blogname = get_option('blogname') );
+    $recovery_email_message_title = apply_filters('wppb_recover_password_message_title_sent_to_user1', $recovery_email_message_title, $requested_user_login);
+
+    $recovery_email_from = apply_filters ( 'wppb_recover_password_notification_email_from_field', get_bloginfo( 'name' ) );
+    $recovery_email_context = 'email_user_recover';
+
+
+    $sent = false;
+    //send mail to the user notifying him of the reset request
+    if (trim($recovery_email_message_title) != '') {
+        $sent = wppb_mail($requested_user_email, $recovery_email_message_title, $recovery_email_message, $recovery_email_from, $recovery_email_context);
+    }
+
+    return $sent;
+
+}
+
+/**
+ * Function that sends the successful password reset email to the user
+ * @param $user
+ * @param $new_pass
+ */
+function wppb_send_successful_password_reset_email( $user, $new_pass ){
+
+    $display_username_email = wppb_get_email_display_username($user);
+
+    //send secondary mail to the user containing the username and the new password
+    $recovery_email_message  = __( 'You have successfully reset your password.', 'profile-builder' );
+    $recovery_email_message  = apply_filters( 'wppb_recover_password_message_content_sent_to_user2', $recovery_email_message, $display_username_email, $new_pass, $user->ID );
+    $recovery_email_message_title = sprintf( __('Password Successfully Reset for %1$s on "%2$s"', 'profile-builder' ), $display_username_email, $blogname = get_option('blogname') );
+    $recovery_email_message_title = apply_filters( 'wppb_recover_password_message_title_sent_to_user2', $recovery_email_message_title, $display_username_email );
+    $recovery_email_from = apply_filters ( 'wppb_recover_password_success_notification_email_from_field', get_bloginfo( 'name' ) );
+    $recovery_email_context = 'email_user_recover_success';
+    //send mail to the user notifying him of the reset request
+    if ( trim( $recovery_email_message_title ) != '' )
+        wppb_mail( $user->user_email, $recovery_email_message_title, $recovery_email_message, $recovery_email_from, $recovery_email_context );
+}
+
+/**
+ * Function that sends an email to the admin after the password was reset
+ * we disable the feature to send the admin a notification mail but can be still used using filters
+ * @param $user
+ */
+function wppb_send_admin_password_reset_email( $user ){
+
+    $display_username_email = wppb_get_email_display_username($user);
+
+    $recovery_admin_email_message = sprintf( __( '%1$s has requested a password change via the password reset feature.<br/>His/her new password is:%2$s', 'profile-builder' ), $display_username_email, '' );
+    $recovery_admin_email_message = apply_filters( 'wppb_recover_password_message_content_sent_to_admin', $recovery_admin_email_message, $display_username_email, '', $user->ID );
+    //we disable the feature to send the admin a notification mail but can be still used using filters
+    $recovery_admin_email_title = '';
+    $recovery_admin_email_title = apply_filters( 'wppb_recover_password_message_title_sent_to_admin', $recovery_admin_email_title, $display_username_email );
+    $recovery_email_from = apply_filters ( 'wppb_recover_password_success_notification_email_from_field', get_bloginfo( 'name' ) );
+    $recovery_admin_email_context = 'email_admin_recover_success';
+    //send mail to the admin notifying him of of a user with a password reset request
+    if (trim($recovery_admin_email_title) != '')
+        wppb_mail(get_option('admin_email'), $recovery_admin_email_title, $recovery_admin_email_message, $recovery_email_from, $recovery_admin_email_context);
 }
 
 /**
@@ -143,248 +251,224 @@ function wppb_create_recover_password_form( $user, $post_data ){
 function wppb_front_end_password_recovery(){
     global $wppb_shortcode_on_front;
     $wppb_shortcode_on_front = true;
-	$message = $messageNo = $message2 = $messageNo2 = $linkLoginName = $linkKey = '';
+    $password_email_sent = false;
+    $password_changed_success = false;
 
-	global $wpdb;
+    $output = '<div class="wppb_holder" id="wppb-recover-password-container">';
 
-	ob_start();
+    global $wpdb;
+
+    // check if the form is being displayed in the Elementor editor
+    $is_elementor_edit_mode = false;
+    if( class_exists ( '\Elementor\Plugin' ) ){
+        $is_elementor_edit_mode = \Elementor\Plugin::$instance->editor->is_edit_mode();
+    }
+
+    if( is_user_logged_in() && !$is_elementor_edit_mode ) {
+        return apply_filters('wppb_recover_password_already_logged_in', __('You are already logged in. You can change your password on the edit profile form.', 'profile-builder'));
+    }
 
     //Get general settings
     $wppb_generalSettings = get_option( 'wppb_general_settings' );
 
-	// If the user entered an email/username, process the request
-	if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == 'recover_password' && wp_verify_nonce($_POST['password_recovery_nonce_field'],'verify_true_password_recovery') ) {
-		// filter must be applied on the $_POST variable so that the value returned to the form can be corrected too
-		$_POST['username_email'] = apply_filters( 'wppb_before_processing_email_from_forms', $_POST['username_email'] );	//we get the raw data
-		$postedData = $_POST['username_email'];
-		//check to see if it's an e-mail (and if this is valid/present in the database) or is a username
+    // If the user entered an email/username, process the request
+    if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == 'recover_password' && wp_verify_nonce($_POST['password_recovery_nonce_field'],'verify_true_password_recovery') ) {
+        // filter must be applied on the $_POST variable so that the value returned to the form can be corrected too
+        $username_email = apply_filters( 'wppb_before_processing_email_from_forms', $_POST['username_email'] );	//we get the raw data
 
+        //check to see if it's an e-mail (and if this is valid/present in the database) or is a username
 
-		// if we do not have an email in the posted date we try to get the email for that user
-		if( !is_email( $postedData ) ){
-			if (username_exists($postedData)){
-				$query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login= %s", $postedData ) );
-				if( !empty( $query[0] ) ){
-					$postedData = $query[0]->user_email;
-				}
-			}
-			else{
-				$message = __( 'The username entered wasn\'t found in the database!', 'profile-builder').'<br/>'.__('Please check that you entered the correct username.', 'profile-builder' );
-				$message = apply_filters( 'wppb_recover_password_sent_message4', $message );
-				$messageNo = '4';
-			}
-		}
-
-		// we should have an email by this point
-		if ( is_email( $postedData ) ){
-			if ( email_exists( $postedData ) ){
-				$retVal = wppb_check_for_unapproved_user($postedData, 'user_email');
-				if ($retVal[0] != ''){
-					$message = $retVal[0];
-					$messageNo = $retVal [1];
-
-				}else{
-					$message = sprintf( __( 'Check your e-mail for the confirmation link.', 'profile-builder'), $postedData );
-					$message = apply_filters( 'wppb_recover_password_sent_message1', $message, $postedData );
-					$messageNo = '1';
-
-				}
-
-			}elseif ( !email_exists( $postedData ) ){
-				$message = __('The email address entered wasn\'t found in the database!', 'profile-builder').'<br/>'.__('Please check that you entered the correct email address.', 'profile-builder');
-				$message = apply_filters('wppb_recover_password_sent_message2', $message);
-				$messageNo = '2';
-			}
-		}
-
-        // For some extra validations you can filter messageNo
-        $messageNo = apply_filters( 'wppb_recover_password_message_no', $messageNo );
-
-        if( $messageNo == '1' ) {
-
-            //verify e-mail validity
-            $query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_email= %s", $postedData ) );
-            if( !empty( $query[0] ) ){
-                $requestedUserID = $query[0]->ID;
-                $requestedUserLogin = $query[0]->user_login;
-                $requestedUserEmail = $query[0]->user_email;
-                $requestedUserNicename = $query[0]->user_nicename;
-
-                if( $wppb_generalSettings['loginWith'] == 'username' )
-                    $display_username_email = $query[0]->user_login;
-                else
-                    $display_username_email = $query[0]->user_email;
-
-                //search if there is already an activation key present, if not create one
-                $key = wppb_retrieve_activation_key( $requestedUserLogin );
-
-                //send primary email message
-                $recoveruserMailMessage1  = sprintf( __('Someone requested that the password be reset for the following account: <b>%1$s</b><br/>If this was a mistake, just ignore this email and nothing will happen.<br/>To reset your password, visit the following link:%2$s', 'profile-builder'), $display_username_email, '<a href="'.esc_url( add_query_arg( array( 'loginName' => $requestedUserNicename, 'key' => $key ), wppb_curpageurl() ) ).'">'.esc_url( add_query_arg( array( 'loginName' => $requestedUserNicename, 'key' => $key ), wppb_curpageurl() ) ).'</a>');
-                $recoveruserMailMessage1  = apply_filters( 'wppb_recover_password_message_content_sent_to_user1', $recoveruserMailMessage1, $requestedUserID, $requestedUserLogin, $requestedUserEmail );
-
-                $recoveruserMailMessageTitle1 = sprintf(__('Password Reset from "%1$s"', 'profile-builder'), $blogname = get_option('blogname') );
-                $recoveruserMailMessageTitle1 = apply_filters('wppb_recover_password_message_title_sent_to_user1', $recoveruserMailMessageTitle1, $requestedUserLogin);
-
-                //send mail to the user notifying him of the reset request
-                if (trim($recoveruserMailMessageTitle1) != ''){
-                    $sent = wppb_mail($requestedUserEmail, $recoveruserMailMessageTitle1, $recoveruserMailMessage1);
-                    if ($sent === false){
-                        $message = '<b>'. __( 'ERROR', 'profile-builder' ) .': </b>' . sprintf( __( 'There was an error while trying to send the activation link to %1$s!', 'profile-builder' ), $postedData );
-                        $message = apply_filters( 'wppb_recover_password_sent_message_error_sending', $message );
-                        $messageNo = '5';
-                    }
+        // if we do not have an email in the posted date we try to get the email for that user
+        if( !is_email( $username_email ) ){
+            /* make sure it is a username */
+            $username = sanitize_user( $username_email );
+            if ( username_exists($username) ){
+                $query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_login= %s", $username ) );
+                if( !empty( $query[0] ) ){
+                    $username_email = $query[0]->user_email;
                 }
             }
-
+            else{
+                $warning = __( 'The username entered wasn\'t found in the database!', 'profile-builder').'<br/>'.__('Please check that you entered the correct username.', 'profile-builder' );
+                $warning = apply_filters( 'wppb_recover_password_sent_message4', $warning );
+                $output .= wppb_password_recovery_warning( $warning, 'wppb_recover_password_displayed_message1' );
+            }
         }
 
-	}
-	// If the user used the correct key-code, update his/her password
-	elseif ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action2'] ) && $_POST['action2'] == 'recover_password2' && wp_verify_nonce( $_POST['password_recovery_nonce_field2'], 'verify_true_password_recovery2_'.$_POST['userData'] ) ) {
+        // we should have an email by this point
+        if ( is_email( $username_email ) ){
+            if ( email_exists( $username_email ) ){
+                $warning = wppb_check_for_unapproved_user($username_email, 'user_email');
+                if ($warning != ''){
+                    $output .= wppb_password_recovery_warning( $warning, 'wppb_recover_password_displayed_message1' );
+                }else{
+                    $success = sprintf( __( 'Check your email for the confirmation link.', 'profile-builder'), $username_email );
+                    $success = apply_filters( 'wppb_recover_password_sent_message1', $success, $username_email );
 
-        if( ( $_POST['passw1'] == $_POST['passw2'] ) && ( !empty( $_POST['passw1'] ) && !empty( $_POST['passw2'] ) ) ){
+                    if ( $success != 'wppb_recaptcha_error')
+                        $output .= wppb_password_recovery_success( $success, 'wppb_recover_password_displayed_message2' );
+
+                    //verify e-mail validity
+                    $query = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_email= %s", sanitize_email( $username_email ) ) );
+                    if( !empty( $query[0] ) ){
+                        $user = $query[0];
+
+                        //send mail to the user notifying him of the reset request
+                        $sent = wppb_send_recovery_email( $user, $success );
+                        if ($sent === false){
+                            $warning = '<b>'. __( 'ERROR', 'profile-builder' ) .': </b>' . sprintf( __( 'There was an error while trying to send the activation link to %1$s!', 'profile-builder' ), $username_email );
+                            $warning = apply_filters( 'wppb_recover_password_sent_message_error_sending', $warning );
+                            $output .= wppb_password_recovery_warning( $warning, 'wppb_recover_password_displayed_message1' );
+                        }
+                        else
+                            $password_email_sent = true;
+
+                    }
+
+                }
+            }elseif ( !email_exists( $username_email ) ){
+                // check reCAPTCHA
+                $output = wppb_password_recovery_warning( '', 'wppb_recover_password_displayed_message1' );
+
+                // if there is no reCAPTCHA error show the invalid email address error
+                if( $output === '' ) {
+                    $warning = __('The email address entered wasn\'t found in the database!', 'profile-builder').'<br/>'.__('Please check that you entered the correct email address.', 'profile-builder');
+                    $warning = apply_filters('wppb_recover_password_sent_message2', $warning);
+                    $output .= '<p class="wppb-warning">'.$warning.'</p>';
+                }
+            }
+        }
+    }
+    // If the user used the correct key-code, update his/her password
+    elseif ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action2'] ) && $_POST['action2'] === 'recover_password2' && wp_verify_nonce( $_POST['password_recovery_nonce_field2'], 'verify_true_password_recovery2_'.absint( $_POST['userData'] ) ) ) {
+
+        $password_change_message = '';
+
+        if( ( !empty( $_POST['passw1'] ) && !empty( $_POST['passw2'] ) ) ){
+
+            //get the login name and key and verify if they match the ones in the database
+            $key = sanitize_text_field( $_POST['key'] );
+            $user_object = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_activation_key = %s", $key ) );
+            if( empty( $user_object ) || ( !empty( $user_object ) && $user_object->ID === absint( $_POST['userData'] ) ) ){
+                $password_change_message = __('Invalid key!', 'profile-builder');
+                $output .= wppb_password_recovery_error( $password_change_message, 'wppb_recover_password_password_changed_message2' );
+            }
+
+            if( $_POST['passw1'] != $_POST['passw2'] ) {
+                $password_change_message = __('The entered passwords don\'t match!', 'profile-builder');
+                $output .= wppb_password_recovery_error( $password_change_message, 'wppb_recover_password_password_changed_message2' );
+            }
+
             if( !empty( $wppb_generalSettings['minimum_password_length'] ) || ( isset( $_POST['wppb_password_strength'] ) && !empty( $wppb_generalSettings['minimum_password_strength'] ) ) ){
-                $message2 = '';
                 if( wppb_check_password_length( $_POST['passw1'] ) ){
-                    $message2 .= '<br/>' . sprintf( __( "The password must have the minimum length of %s characters", "profile-builder" ), $wppb_generalSettings['minimum_password_length'] ) . '<br/>';
-                    $messageNo2 = '2';
+                    $password_change_message = sprintf( __( "The password must have the minimum length of %s characters", "profile-builder" ), $wppb_generalSettings['minimum_password_length'] ) . '<br/>';
+                    $output .= wppb_password_recovery_error( $password_change_message, 'wppb_recover_password_password_changed_message2' );
                 }
                 if( wppb_check_password_strength() ){
-                    $message2 .= '<br/>'. sprintf( __( "The password must have a minimum strength of %s", "profile-builder" ), wppb_check_password_strength() );
-                    $messageNo2 = '2';
+                    $password_change_message = sprintf( __( "The password must have a minimum strength of %s", "profile-builder" ), wppb_check_password_strength() );
+                    $output .= wppb_password_recovery_error( $password_change_message, 'wppb_recover_password_password_changed_message2' );
                 }
             }
 
-            if( $messageNo2 != 2 ){
+            if( empty($password_change_message) ){
 
-                $message2 = __( 'Your password has been successfully changed!', 'profile-builder' );
-                $messageNo2 = '1';
+                $password_change_message = __( 'Your password has been successfully changed!', 'profile-builder' );
+                $output .= wppb_password_recovery_success( $password_change_message, 'wppb_recover_password_password_changed_message1' );
+                $password_changed_success = true;
 
-                $userID = $_POST['userData'];
-                $new_pass = $_POST['passw1'];
+
+
+                $userID = absint( $_POST['userData'] );
+                $new_pass = $_POST['passw1']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
                 //update the new password and delete the key
                 do_action( 'wppb_password_reset', $userID, $new_pass );
-
                 wp_set_password( $new_pass, $userID );
+
+                /* log out of all sessions on password reset */
+                $sessions = WP_Session_Tokens::get_instance( $userID );
+                $sessions->destroy_all();
 
                 $user_info = get_userdata( $userID );
 
-                if( $wppb_generalSettings['loginWith'] == 'username' )
-                    $display_username_email = $user_info->user_login;
-                else
-                    $display_username_email = $user_info->user_email;
-
-                //send secondary mail to the user containing the username and the new password
-                $recoveruserMailMessage2  = sprintf( __( 'You have successfully reset your password to: %1$s', 'profile-builder' ), $new_pass );
-                $recoveruserMailMessage2  = apply_filters( 'wppb_recover_password_message_content_sent_to_user2', $recoveruserMailMessage2, $display_username_email, $new_pass, $userID );
-
-                $recoveruserMailMessageTitle2 = sprintf( __('Password Successfully Reset for %1$s on "%2$s"', 'profile-builder' ), $display_username_email, $blogname = get_option('blogname') );
-                $recoveruserMailMessageTitle2 = apply_filters( 'wppb_recover_password_message_title_sent_to_user2', $recoveruserMailMessageTitle2, $display_username_email );
-
-                //send mail to the user notifying him of the reset request
-                if ( trim( $recoveruserMailMessageTitle2 ) != '' )
-                    wppb_mail( $user_info->user_email, $recoveruserMailMessageTitle2, $recoveruserMailMessage2 );
+                //send email to user
+                wppb_send_successful_password_reset_email( $user_info, $new_pass );
 
                 //send email to admin
-                $recoveradminMailMessage = sprintf( __( '%1$s has requested a password change via the password reset feature.<br/>His/her new password is:%2$s', 'profile-builder' ), $display_username_email, $_POST['passw1'] );
-                $recoveradminMailMessage = apply_filters( 'wppb_recover_password_message_content_sent_to_admin', $recoveradminMailMessage, $display_username_email, $_POST['passw1'], $userID );
+                wppb_send_admin_password_reset_email( $user_info );
 
-                $recoveradminMailMessageTitle = sprintf( __( 'Password Successfully Reset for %1$s on "%2$s"', 'profile-builder' ), $display_username_email, $blogname = get_option('blogname'), ENT_QUOTES );
-                $recoveradminMailMessageTitle = apply_filters( 'wppb_recover_password_message_title_sent_to_admin', $recoveradminMailMessageTitle, $display_username_email );
+                // CHECK FOR REDIRECT
+                $redirect_url = wppb_get_redirect_url( 'normal', 'after_success_password_reset', '', sanitize_user( $user_info->user_login ) );
+                $redirect_delay = apply_filters( 'wppb_success_password_reset_redirect_delay', 3, sanitize_user( $user_info->user_login ) );
+                $redirect_message = wppb_build_redirect( $redirect_url, $redirect_delay, 'after_success_password_reset' );
 
-
-                //we disable the feature to send the admin a notification mail but can be still used using filters
-                $recoveradminMailMessageTitle = '';
-                $recoveradminMailMessageTitle = apply_filters( 'wppb_recover_password_message_title_sent_to_admin', $recoveradminMailMessageTitle, $display_username_email );
-
-                //send mail to the admin notifying him of of a user with a password reset request
-                if (trim($recoveradminMailMessageTitle) != '')
-                    wppb_mail(get_option('admin_email'), $recoveradminMailMessageTitle, $recoveradminMailMessage);
+                if( isset( $redirect_message ) && ! empty( $redirect_message ) ) {
+                    $output .= '<p>' . $redirect_message . '</p>';
+                }
             }
-		}
-        else{
-            $message2 = __( 'The entered passwords don\'t match!', 'profile-builder' );
-            $messageNo2 = '2';
         }
+        else{
+            $password_change_message .= __( "The password must not be empty!", "profile-builder" );
+            $output .= wppb_password_recovery_error( $password_change_message, 'wppb_recover_password_password_changed_message2' );
+        }
+    }
 
-	}
+    // use this action hook to add extra content before the password recovery form
+    do_action( 'wppb_before_recover_password_fields' );
 
-?>
 
-	<div class="wppb_holder" id="wppb-recover-password-container">
+    //this is the part that shows the forms
+    if( isset( $_GET['key'] ) && !empty( $_GET['key'] ) ){
 
-<?php
-			// use this action hook to add extra content before the password recovery form
-			do_action( 'wppb_before_recover_password_fields' );
+        if( !$password_changed_success ) {
 
-			//this is the part that handles the actual recovery
-			if( isset( $_GET['submitted'] ) && isset( $_GET['loginName'] ) && isset( $_GET['key'] ) && !empty( $_GET['key'] ) ){
-				//get the login name and key and verify if they match the ones in the database
+            //get the login name and key and verify if they match the ones in the database
+            $key = sanitize_text_field( $_GET['key'] );
+            $user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_activation_key = %s", $key ) );
 
-				$key = $_GET['key'];
-				$login_nicename = $_GET['loginName'];
+            if( !empty( $user ) ) {
+                ob_start();
+                wppb_create_recover_password_form($user, $_POST);
+                $output .= ob_get_contents();
+                ob_end_clean();
+            }
+            else {
+                $output .= wppb_password_recovery_error('<b>' . __('ERROR:', 'profile-builder') . '</b>' . __('Invalid key!', 'profile-builder'), 'wppb_recover_password_invalid_key_message');
+            }
 
-				$user = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE user_activation_key = %s AND user_nicename = %s", $key, $login_nicename ) );
+        }
+    }
+    else{
+        if( !$password_email_sent ) {
+            ob_start();
+            wppb_create_generate_password_form($_POST);
+            $output .= ob_get_contents();
+            ob_end_clean();
+        }
+    }
 
-				if( !empty( $user ) ){
-					//check if the "finalAction" variable is not in the address bar, if it is, don't display the form anymore
-					if( isset( $_GET['finalAction'] ) && ( $_GET['finalAction'] == 'yes' ) ){
-						if( $messageNo2 == '2' ){
-							echo apply_filters( 'wppb_recover_password_password_changed_message2', '<p class="wppb-error">'.$message2.'</p>', $message2 );
+    // use this action hook to add extra content after the password recovery form.
+    do_action( 'wppb_after_recover_password_fields' );
 
-							wppb_create_recover_password_form( $user, $_POST );
-
-						}elseif( $messageNo2 == '1' )
-							echo apply_filters( 'wppb_recover_password_password_changed_message1', '<p class="wppb-success">'.$message2.'</p>', $message2 );
-
-					}else{
-						wppb_create_recover_password_form( $user, $_POST );
-					}
-				}else{
-					if( $messageNo2 == '1' ) {
-					    // CHECK FOR REDIRECT
-                        $redirect_url = wppb_get_redirect_url( 'normal', 'after_success_password_reset', '', $_GET['loginName'] );
-						$redirect_delay = apply_filters( 'wppb_success_password_reset_redirect_delay', 3, $_GET['loginName'] );
-                        $redirect_message = wppb_build_redirect( $redirect_url, $redirect_delay, 'after_success_password_reset' );
-
-						echo apply_filters( 'wppb_recover_password_password_changed_message1', '<p class="wppb-success">' . $message2 . '</p>', $message2 );
-
-						if( isset( $redirect_message ) && ! empty( $redirect_message ) ) {
-							echo '<p>' . $redirect_message . '</p>';
-						}
-					}
-
-					elseif( $messageNo2 == '2' )
-						echo apply_filters( 'wppb_recover_password_password_changed_message2', '<p class="wppb-error">'.$message2.'</p>', $message2 );
-
-					else
-						echo apply_filters( 'wppb_recover_password_invalid_key_message', '<p class="wppb-warning"><b>'.__( 'ERROR:', 'profile-builder' ).'</b>'.__( 'Invalid key!', 'profile-builder' ).'</p>' );
-				}
-
-			}else{
-				//display error message and the form
-				if (($messageNo == '') || ($messageNo == '2') || ($messageNo == '4')){
-                    if( !empty( $message ) )
-					    echo apply_filters( 'wppb_recover_password_displayed_message1', '<p class="wppb-warning">'.$message.'</p>' );
-
-					wppb_create_generate_password_form( $_POST );
-
-				}elseif (($messageNo == '5')  || ($messageNo == '6'))
-					echo  apply_filters( 'wppb_recover_password_displayed_message1', '<p class="wppb-warning">'.$message.'</p>' );
-
-				else
-					echo apply_filters( 'wppb_recover_password_displayed_message2', '<p class="wppb-success">'.$message.'</p>' ); //display success message
-			}
-
-			// use this action hook to add extra content after the password recovery form.
-			do_action( 'wppb_after_recover_password_fields' );
-?>
-	</div>
-
-<?php
-	$output = ob_get_contents();
-    ob_end_clean();
-
+    $output .= '</div>';
     return $output;
+}
+
+/* function for displaying success messages on the recover password page */
+function wppb_password_recovery_success( $message, $filter ){
+    return apply_filters( $filter, '<p class="wppb-success">'.$message.'</p>', $message );
+}
+
+/* function for displaying warning messages on the recover password page */
+function wppb_password_recovery_warning( $message, $filter ){
+    if( $message !== '' ) {
+        return apply_filters( $filter, '<p class="wppb-warning">'.$message.'</p>', $message );
+    } else {
+        return apply_filters( $filter, '', $message );
+    }
+}
+
+/* function for displaying error messages on the recover password page */
+function wppb_password_recovery_error( $message, $filter ){
+    return apply_filters( $filter, '<p class="wppb-error">'.$message.'</p>', $message );
 }

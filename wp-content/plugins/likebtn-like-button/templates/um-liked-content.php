@@ -9,7 +9,7 @@ if ( !defined('ABSPATH') )
 ?>
 
 <?php if (count($post_loop) > 0): ?>
-    <div class="um-profile-note" style="display: block;"><span><?php echo __('Liked Content', LIKEBTN_I18N_DOMAIN); ?></span></div>
+    <div class="um-profile-note" style="display: block;"><span><?php echo __('Liked Content', 'likebtn-like-button'); ?></span></div>
 
     <?php foreach ($post_loop as $post): ?>
         <div class="um-item">
@@ -36,7 +36,7 @@ if ( !defined('ABSPATH') )
         </div>
     <?php endforeach; ?>
 <?php else: // No items ?>
-    <div class="um-profile-note" style="display: block;"><span><?php echo __('No Content Liked Yet', LIKEBTN_I18N_DOMAIN); ?></span></div>
+    <div class="um-profile-note" style="display: block;"><span><?php echo __('No Content Liked Yet', 'likebtn-like-button'); ?></span></div>
 <?php
 endif;
 ?>

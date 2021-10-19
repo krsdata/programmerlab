@@ -44,7 +44,7 @@ class LikeBtnLikeButton {
         if (!$last_sync_time) {
             update_option('likebtn_last_sync_time', $now);
             self::$synchronized = true;
-            return true;
+            return false;
         } else {
 
             if ($last_sync_time + $sync_period > $now) {
@@ -69,23 +69,38 @@ class LikeBtnLikeButton {
         $likebtn_version = LIKEBTN_VERSION;
         $php_version = phpversion();
         $useragent = "WordPress $wp_version; likebtn plugin $likebtn_version; PHP $php_version";
+        $direct_url = str_replace('http://', 'http://direct.', $url);
 
         try {
             $http = new WP_Http();
             $response = $http->request($url, array('headers' => array("User-Agent" => $useragent)));
         } catch (Exception $e) {
-            return json_encode(array(
-                'result' => 'error',
-                'message' => $this->prepareCurlError($e->getMesssage())
-            ));
+            try {
+                $response = $http->request($direct_url, array('headers' => array("User-Agent" => $useragent)));
+            } catch (Exception $e) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($e->getMesssage())
+                ));
+            }
         }
 
         // Error occured
         if (is_wp_error($response)) {
-            return json_encode(array(
-                'result' => 'error',
-                'message' => $this->prepareCurlError($response->get_error_message())
-            ));
+            try {
+                $response = $http->request($direct_url, array('headers' => array("User-Agent" => $useragent)));
+            } catch (Exception $e) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($e->getMesssage())
+                ));
+            }
+            if (is_wp_error($response)) {
+                return json_encode(array(
+                    'result' => 'error',
+                    'message' => $this->prepareCurlError($response->get_error_message())
+                ));
+            }
         }
 
         if (is_array($response) && !empty($response['body'])) {
@@ -103,7 +118,7 @@ class LikeBtnLikeButton {
     public function prepareCurlError($text)
     {
         if (strstr(strtolower($text), 'name lookup timed out')) {
-            $text .= '. '.__('Please install http://wordpress.org/extend/plugins/core-control/ plugin, open the Core Control settings page, activate the HTTP Module and click the Disable Transport link for cURL.', LIKEBTN_I18N_DOMAIN);
+            $text .= '. '.__('Please install http://wordpress.org/extend/plugins/core-control/ plugin, open the Core Control settings page, activate the HTTP Module and click the Disable Transport link for cURL.', 'likebtn-like-button');
         }
         return $text;
     }
@@ -262,14 +277,8 @@ class LikeBtnLikeButton {
         list($entity_name, $entity_id) = $this->parseIdentifier($identifier);
 
         $likes = (int)$likes;
-        /*if ($likes < 0) {
-            $likes = 0;
-        }*/
         $dislikes = (int)$dislikes;
-        /*if ($dislikes < 0) {
-            $dislikes = 0;
-        }*/
-        
+
         $likes_minus_dislikes = null;
         if ($likes != -1 && $dislikes != -1) {
             $likes_minus_dislikes = $likes - $dislikes;
@@ -323,20 +332,16 @@ class LikeBtnLikeButton {
                         break;
                     }
                     // BuddyPress Activity
-                    /*$bp_activity_list = bp_activity_get(array(
-                        'show_hidden'  => true,
-                        'spam'  => 'all',
-                        //'in'           => array((int)$entity_id)
-                    ));*/
-                    $bp_activity = $wpdb->get_row("
+                    $bp_activity = $wpdb->get_row($wpdb->prepare("
                         SELECT id
                         FROM ".$wpdb->prefix."bp_activity
-                        WHERE id = {$entity_id}
-                    ");
+                        WHERE id = %d
+                    ", $entity_id));
 
-                    if (!empty($bp_activity)) {
+                    if (!empty($bp_activity) && function_exists('bp_activity_get_meta')) {
                         if ($likes != -1) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_LIKES, $likes, true);
                             } else {
@@ -344,7 +349,8 @@ class LikeBtnLikeButton {
                             }
                         }
                         if ($dislikes != -1) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_DISLIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_DISLIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_DISLIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_DISLIKES, $dislikes, true);
                             } else {
@@ -352,7 +358,8 @@ class LikeBtnLikeButton {
                             }
                         }
                         if ($likes_minus_dislikes !== null) {
-                            if (count(bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES)) > 1) {
+                            $meta_value = bp_activity_get_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
+                            if (is_array($meta_value) && count($meta_value) > 1) {
                                 bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
                                 bp_activity_add_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES, $likes_minus_dislikes, true);
                             } else {
@@ -387,30 +394,25 @@ class LikeBtnLikeButton {
 
                     // check if post exists and is not revision
                     if (!empty($post) && !empty($post->post_type) && $post->post_type != 'revision') {
-                        if ($likes != -1) {
-                            if (count(get_post_meta($entity_id, LIKEBTN_META_KEY_LIKES)) > 1) {
-                                delete_post_meta($entity_id, LIKEBTN_META_KEY_LIKES);
-                                add_post_meta($entity_id, LIKEBTN_META_KEY_LIKES, $likes, true);
-                            } else {
-                                update_post_meta($entity_id, LIKEBTN_META_KEY_LIKES, $likes);
+                        
+                        likebtn_set_post_votes($entity_id, $likes, $dislikes, $likes_minus_dislikes);
+
+                        // WPML
+                        if (($entity_name == LIKEBTN_ENTITY_POST || $entity_name == LIKEBTN_ENTITY_PAGE) && likebtn_is_wpml_active()) {
+                            global $sitepress;
+                            $trid = $sitepress->get_element_trid($entity_id, 'post_'.$entity_name);
+                            //$translations = $sitepress->get_element_translations($trid,'post_'.$entity_name);
+                            $translations = $wpdb->get_results($wpdb->prepare("
+                                SELECT element_id
+                                FROM {$wpdb->prefix}icl_translations
+                                WHERE trid = %d 
+                                AND element_type = 'post_{$entity_name}' 
+                            ", $trid));
+                            foreach ($translations as $langkey => $translation) {
+                                likebtn_set_post_votes($translation->element_id, $likes, $dislikes, $likes_minus_dislikes);
                             }
                         }
-                        if ($dislikes != -1) {
-                            if (count(get_post_meta($entity_id, LIKEBTN_META_KEY_DISLIKES)) > 1) {
-                                delete_post_meta($entity_id, LIKEBTN_META_KEY_DISLIKES);
-                                add_post_meta($entity_id, LIKEBTN_META_KEY_DISLIKES, $dislikes, true);
-                            } else {
-                                update_post_meta($entity_id, LIKEBTN_META_KEY_DISLIKES, $dislikes);
-                            }
-                        }
-                        if ($likes_minus_dislikes !== null) {
-                            if (count(get_post_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES)) > 1) {
-                                delete_post_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES);
-                                add_post_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES, $likes_minus_dislikes, true);
-                            } else {
-                                update_post_meta($entity_id, LIKEBTN_META_KEY_LIKES_MINUS_DISLIKES, $likes_minus_dislikes);
-                            }
-                        }
+
                         $entity_updated = true;
                     }
                     break;
@@ -527,11 +529,11 @@ class LikeBtnLikeButton {
                     if (!_likebtn_is_bp_active()) {
                         break;
                     }
-                    $bp_activity = $wpdb->get_row("
+                    $bp_activity = $wpdb->get_row($wpdb->prepare("
                         SELECT id
                         FROM ".$wpdb->prefix."bp_activity
-                        WHERE id = {$entity_id}
-                    ");
+                        WHERE id = %d
+                    ", $entity_id));
 
                     if (!empty($bp_activity)) {
                         bp_activity_delete_meta($entity_id, LIKEBTN_META_KEY_LIKES);
@@ -767,6 +769,25 @@ class LikeBtnLikeButton {
     public function setIpvi($value) {
         $url = "value=".(int)$value;
         $response = $this->apiRequest('ipvi', $url);
+
+        return $response;
+    }
+
+    /**
+     * Get site
+     */
+    // public function getSite() {
+    //     $response = $this->apiRequest('site');
+
+    //     return $response;
+    // }
+
+    /**
+     * Set IP vote interval
+     */
+    public function setInitL($from, $to) {
+        $url = "init_l_from=".(int)$from.'&init_l_to='.$to;
+        $response = $this->apiRequest('init_l', $url);
 
         return $response;
     }

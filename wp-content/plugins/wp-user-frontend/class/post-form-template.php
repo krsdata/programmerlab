@@ -10,7 +10,7 @@ abstract class WPUF_Post_Form_Template {
     /**
      * If the form is enabled
      *
-     * @var boolean
+     * @var bool
      */
     public $enabled = true;
 
@@ -27,6 +27,13 @@ abstract class WPUF_Post_Form_Template {
      * @var string
      */
     public $description;
+
+    /**
+     * Form Template Image
+     *
+     * @var string
+     */
+    public $image;
 
     /**
      * Conditional logic
@@ -49,14 +56,23 @@ abstract class WPUF_Post_Form_Template {
      */
     protected $form_settings;
 
+    /**
+     * Form notifications
+     *
+     * @since 2.5.2
+     *
+     * @var array
+     */
+    protected $form_notifications;
+
     public function __construct() {
-        $this->conditionals = array(
+        $this->conditionals = [
             'condition_status' => 'no',
-            'cond_field'       => array(),
-            'cond_operator'    => array( '=' ),
-            'cond_option'      => array( '- select -' ),
-            'cond_logic'       => 'all'
-        );
+            'cond_field'       => [],
+            'cond_operator'    => [ '=' ],
+            'cond_option'      => [ '- select -' ],
+            'cond_logic'       => 'all',
+        ];
     }
 
     /**
@@ -96,9 +112,20 @@ abstract class WPUF_Post_Form_Template {
     }
 
     /**
+     * Get form notifications
+     *
+     * @since 2.5.2
+     *
+     * @return array
+     */
+    public function get_form_notifications() {
+        return apply_filters( 'wpuf_post_form_template_form_notifications', $this->form_notifications, $this );
+    }
+
+    /**
      * Check if the template is enabled
      *
-     * @return boolean
+     * @return bool
      */
     public function is_enabled() {
         return $this->enabled;
@@ -107,22 +134,38 @@ abstract class WPUF_Post_Form_Template {
     /**
      * Run necessary processing after new post insert
      *
-     * @param  int   $post_id
-     * @param  int   $form_id
-     * @param  array $form_settings
+     * @param int   $post_id
+     * @param int   $form_id
+     * @param array $form_settings
      *
      * @return void
      */
-    public function after_insert( $post_id, $form_id, $form_settings ) {}
+    public function after_insert( $post_id, $form_id, $form_settings ) {
+    }
 
     /**
      * Run necessary processing after editing a post
      *
-     * @param  int   $post_id
-     * @param  int   $form_id
-     * @param  array $form_settings
+     * @param int   $post_id
+     * @param int   $form_id
+     * @param array $form_settings
      *
      * @return void
      */
-    public function after_update( $post_id, $form_id, $form_settings ) {}
+    public function after_update( $post_id, $form_id, $form_settings ) {
+    }
+
+    /**
+     * wpuf_visibility property for all fields
+     *
+     * @since 2.6
+     *
+     * @return array
+     */
+    public function get_default_visibility_prop( $default = 'everyone' ) {
+        return [
+            'selected' => $default,
+            'choices'  => [],
+        ];
+    }
 }

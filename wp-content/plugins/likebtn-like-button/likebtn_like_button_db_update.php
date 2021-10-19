@@ -135,11 +135,11 @@ function likebtn_db_update_4() {
             $new_option_name = 'likebtn_settings_'.$option_name.'_'.$entity_name;
             $old_option_name = str_replace('likebtn_', 'likebtn_like_button_', $new_option_name);
 
-            $option_exists = $wpdb->get_row("
+            $option_exists = $wpdb->get_row($wpdb->prepare("
                 SELECT option_value
                 FROM ".$wpdb->prefix."options
-                WHERE option_name = '{$old_option_name}'
-            ");
+                WHERE option_name = %s
+            ", $old_option_name));
             if ($option_exists) {
                 update_option($new_option_name, get_option($old_option_name));
                 delete_option($old_option_name);
@@ -163,11 +163,11 @@ function likebtn_db_update_5() {
 
         $option_name = 'likebtn_settings_voting_enabled_'.$entity_name;
 
-        $option_exists = $wpdb->get_row("
+        $option_exists = $wpdb->get_row($wpdb->prepare("
             SELECT option_value
             FROM ".$wpdb->prefix."options
-            WHERE option_name = '{$option_name}'
-        ");
+            WHERE option_name = %s
+        ", $option_name));
         if ($option_exists) {
             update_option($option_name, '1');
         }
@@ -196,11 +196,11 @@ function likebtn_db_update_7() {
 
         $option_name = 'likebtn_settings_popup_enabled_'.$entity_name;
 
-        $option_exists = $wpdb->get_row("
+        $option_exists = $wpdb->get_row($wpdb->prepare("
             SELECT option_value
             FROM ".$wpdb->prefix."options
-            WHERE option_name = '{$option_name}'
-        ");
+            WHERE option_name = %s
+        ", $option_name));
         if ($option_exists) {
             if ((int)$option_exists->option_value != 1) {
                 update_option('likebtn_settings_popup_disabled_'.$entity_name, '1');
@@ -362,7 +362,6 @@ function likebtn_db_update_14() {
     update_option('likebtn_ipvi_hash', LIKEBTN_IP_VOTE_INTERVAL);
 }
 
-
 // database update function
 function likebtn_db_update_15() {
     global $wpdb;
@@ -373,4 +372,38 @@ function likebtn_db_update_15() {
         $sql = "ALTER TABLE {$table_name} ADD country varchar(2) DEFAULT NULL;";
         $wpdb->query($sql);
     }
+}
+
+// database update function
+function likebtn_db_update_16() {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . LIKEBTN_TABLE_VOTE;
+
+    if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}'") == $table_name) {
+        $sql = "ALTER TABLE {$table_name} ADD country varchar(2) DEFAULT NULL;";
+        $wpdb->query($sql);
+    }
+}
+
+// New options
+function likebtn_db_update_17() {
+    update_option('likebtn_notify_to', get_option('admin_email'));
+    update_option('likebtn_notify_from', likebtn_default_notify_from());
+    update_option('likebtn_notify_subject', '♥ '.__('New {vote_type} on {domain}', 'likebtn-like-button'));
+    update_option('likebtn_notify_text', likebtn_default_notify_text());
+}
+
+// New options
+function likebtn_db_update_18() {
+    update_option('likebtn_gdpr', '1');
+}
+
+// New options
+function likebtn_db_update_19() {
+    update_option('likebtn_bp_filter', '1');
+}
+
+function likebtn_db_update_20() {
+    update_option('likebtn_info_message', '1');
 }

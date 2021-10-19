@@ -46,20 +46,6 @@ function _likebtn_set_post_type_hooks()
 // Test whether the metabox should be hidden either by choice of the admin or because
 // the post type is not a public post type
 function _likebtn_is_metabox_hidden($post_type = null) {
-	/*if (!isset($post_type) && $get_post_type = filter_input(INPUT_GET, 'post_type')) {
-		$post_type = sanitize_text_field($get_post_type);
-	}
-
-	if (isset($post_type)) {
-		// Don't make static as post_types may still be added during the run.
-		$cpts = _likebtn_get_entities(true, false, false, 'keys');
-		if (in_array($post_type, $cpts)) {
-			return false;
-		}
-		// $options = get_option('titles');
-
-		// return ((isset($options[ 'hideeditbox-' . $post_type ]) && $options[ 'hideeditbox-' . $post_type ] === true) || in_array($post_type, $cpts) === false);
-	}*/
 
 	return false;
 }
@@ -70,9 +56,9 @@ function likebtn_column_heading($columns) {
 	}
 
 	return array_merge($columns, array(
-		LIKEBTN_COLUMN_LIKES => __('Likes', LIKEBTN_I18N_DOMAIN),
-		LIKEBTN_COLUMN_DISLIKES => __('Dislikes', LIKEBTN_I18N_DOMAIN),
-		LIKEBTN_COLUMN_LMD => __('Likes minus dislikes', LIKEBTN_I18N_DOMAIN),
+		LIKEBTN_COLUMN_LIKES => __('Likes', 'likebtn-like-button'),
+		LIKEBTN_COLUMN_DISLIKES => __('Dislikes', 'likebtn-like-button'),
+		LIKEBTN_COLUMN_LMD => __('Likes minus dislikes', 'likebtn-like-button'),
 	));
 }
 

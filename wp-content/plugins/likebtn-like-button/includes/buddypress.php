@@ -28,7 +28,7 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
 	$return = '';
 
     // Parse action
-    preg_match("/likebtn_(.*)_(like|dislike)/", $action, $m);
+    preg_match("/likebtn_(.*?)(?:_\d+)?_(like|dislike)/", $action, $m);
 
     if (count($m) == 3) {
 
@@ -40,9 +40,9 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
     	$entity_type_name = _likebtn_get_entity_name_title($entity_name, true);
 
     	if ($type == 'like') {
-    		$type_name = __('liked', LIKEBTN_I18N_DOMAIN);
+    		$type_name = __('liked', 'likebtn-like-button');
     	} else {
-    		$type_name = __('disliked', LIKEBTN_I18N_DOMAIN);
+    		$type_name = __('disliked', 'likebtn-like-button');
     	}
 
     	$author_name = bp_core_get_user_displayname($voter_id);
@@ -61,9 +61,9 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
         $link = wp_nonce_url(add_query_arg(array('action'=>'likebtn_bp_mark_read', 'likebtn_bp_params'=>base64_encode($likebtn_bp_params)), $link), $none_name);
 
         if ($entity_name == LIKEBTN_ENTITY_USER) {
-            $pattern = __('%author% %action% your profile', LIKEBTN_I18N_DOMAIN);
+            $pattern = __('%author% %action% your profile', 'likebtn-like-button');
         } else {
-            $pattern = __('%author% %action% your %entity_name% "%entity_title%"', LIKEBTN_I18N_DOMAIN);
+            $pattern = __('%author% %action% your %entity_name% "%entity_title%"', 'likebtn-like-button');
         }
         $text  = strtr($pattern, array(
             '%author%' => $author_name,
@@ -85,12 +85,14 @@ function likebtn_notifications_get_notifications_for_user($action, $item_id, $se
         }
 
         // We modify global wp_filter to call our bbPress wrapper function
-        if (isset($wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'])) {
-            if (version_compare($wp_version, '4.7', '>=' )) {
-                // https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
-                $wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
-            } else {
-                $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+        if ( function_exists('bbp_get_version') && version_compare( bbp_get_version(), '2.6.0' , '<') ) {
+            if (isset($wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications'])) {
+                if (version_compare($wp_version, '4.7', '>=' )) {
+                    // https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
+                    $wp_filter['bp_notifications_get_notifications_for_user']->callbacks[10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+                } else {
+                    $wp_filter['bp_notifications_get_notifications_for_user'][10]['bbp_format_buddypress_notifications']['function'] = 'likebtn_bbp_format_buddypress_notifications';
+                }
             }
         }
 
@@ -121,15 +123,19 @@ function _likebtn_bp_notifications_add_notification($entity_name, $entity_id, $v
 	if (!$author_id || $author_id == $voter_id) {
 		return false;
 	}
-    bp_notifications_add_notification(array(
+    $args = array(
         'user_id'           => $author_id,
         'item_id'           => $entity_id,
         'secondary_item_id' => $voter_id,
         'component_name'    => LIKEBTN_BP_COMPONENT_NAME,
-        'component_action'  => 'likebtn_'.$entity_name.'_'.$action,
+        // BuddyPress is grouping notifications by this field in the top counter
+        //'component_action'  => 'likebtn_'.$entity_name.'_'.$action,
+        'component_action'  => 'likebtn_'.$entity_name.'_'.$entity_id.'_'.$action,
         'date_notified'     => bp_core_current_time(),
         'is_new'            => 1,
-    ));
+    );
+
+    bp_notifications_add_notification($args);
     // bp_notifications_add_meta($notification_id, 'entity_name', $entity_name, true)
 }
 
@@ -153,6 +159,7 @@ function likebtn_bbp_buddypress_mark_notifications()
         $action = $_GET['action'];
     }
 
+    // Sanitizing:
     // Bail if action is not for this function
     if ('likebtn_bp_mark_read' !== $action ) {
         return;
@@ -162,7 +169,9 @@ function likebtn_bbp_buddypress_mark_notifications()
         return;
     }
 
-    $params = json_decode(base64_decode($_GET['likebtn_bp_params']), true);
+    // Sanitising is not needed here as likebtn_bp_params are used  only in md5() function
+    // and bp_notifications_mark_notifications_by_item_id() which performs it's own sanitizing
+    $params = base64_decode($_GET['likebtn_bp_params']);
 
     if (empty($params['item_id']) || empty($params['secondary_item_id']) || empty($params['component_action'])) {
         return;
@@ -184,7 +193,7 @@ function likebtn_bbp_buddypress_mark_notifications()
     // Bail if we have errors
     if (!$errors) {
         // Attempt to clear notifications for the current user from this topic
-        $success = bp_notifications_mark_notifications_by_item_id( $user_id, $params['item_id'], LIKEBTN_BP_COMPONENT_NAME, $params['component_action'], $params['secondary_item_id']);
+        $success = bp_notifications_mark_notifications_by_item_id( $user_id, sanitize_text_field($params['item_id']), LIKEBTN_BP_COMPONENT_NAME, sanitize_text_field($params['component_action']), sanitize_text_field($params['secondary_item_id']));
     }
 
     // Redirect url
@@ -213,13 +222,13 @@ function _likebtn_bp_activity_add($entity_name, $entity_id, $voter_id, $vote_typ
         return false;
     }
     if ($vote_type == LIKEBTN_VOTE_LIKE) {
-        $type_name = __('liked', LIKEBTN_I18N_DOMAIN);
+        $type_name = __('liked', 'likebtn-like-button');
     } else {
-        $type_name = __('disliked', LIKEBTN_I18N_DOMAIN);
+        $type_name = __('disliked', 'likebtn-like-button');
     }
     $primary_link = _likebtn_get_entity_url($entity_name, $entity_id);
 
-    $pattern = __('<a href="%user_url%" title="%user_name%">%user_name%</a> %type_name% %entity_name%, <a href="%entity_url%">%entity_title%</a>', LIKEBTN_I18N_DOMAIN);
+    $pattern = __('<a href="%user_url%" title="%user_name%">%user_name%</a> %type_name% %entity_name%, <a href="%entity_url%">%entity_title%</a>', 'likebtn-like-button');
 
     $title = _likebtn_get_entity_title($entity_name, $entity_id);
 
@@ -251,12 +260,17 @@ function _likebtn_bp_activity_add($entity_name, $entity_id, $voter_id, $vote_typ
             $entity_content = _likebtn_get_entity_content($entity_name, $entity_id);
         }
 
-        $snippet_html = strtr($snippet_html, array(
-            '%image_thumbnail%' => $image_thumbnail,
-            '%title%' => $title,
-            '%excerpt%' => $excerpt,
-            '%content%' => $entity_content,
-        ));
+        // Some hostings or plugins redirect to 404 (options.php) if there is "%text%" in one of the post fields.
+        $symbols = array('%', '@');
+
+        foreach ($symbols as $symbol) {
+            $snippet_html = strtr($snippet_html, array(
+                $symbol.'image_thumbnail'.$symbol => $image_thumbnail,
+                $symbol.'title'.$symbol           => $title,
+                $symbol.'excerpt'.$symbol         => $excerpt,
+                $symbol.'content'.$symbol         => $entity_content,
+            ));
+        }
 
         $content .= $snippet_html;
 
@@ -325,24 +339,13 @@ function _likebtn_bp_activity_add($entity_name, $entity_id, $voter_id, $vote_typ
     ));
 }
 
-/*function likebtn_before_activity_add_parse_args($cpt)
-{
-    echo "<pre>";
-     print_r($cpt);
-     exit(); 
-    if ( 'new_book' === $cpt['type'] ) {
-        $cpt['content'] = 'what you need';
-    }
- 
-    return $cpt;
-}
-add_filter('bp_before_activity_add_parse_args', 'likebtn_before_activity_add_parse_args');*/
-
 // Display and option in BuddyPress activity filter
 function likebtn_activity_filter_options() {
-    ?>
-    <option value="<?php echo LIKEBTN_BP_ACTIVITY_TYPE; ?>"><?php _e('Votes'); ?></option>
-    <?php
+    if (get_option('likebtn_bp_filter') == '1') {
+        ?>
+        <option value="<?php echo LIKEBTN_BP_ACTIVITY_TYPE; ?>"><?php _e('Votes'); ?></option>
+        <?php
+    }
 }
  
 // Activity Directory
@@ -425,57 +428,3 @@ if (get_option('likebtn_bp_act_sort')) {
     add_filter('bp_activity_get_user_join_filter', 'likebtn_bp_activity_get_user_join_filter', 10, 6 );
     add_filter('bp_activity_total_activities_sql', 'likebtn_bp_activity_total_activities_sql', 10, 3 );
 }
-
-
-// function bp_plugin_activity_actions() {
-//     $bp = buddypress();
- 
-//     *************************************************************************
-//        for the purpose of this tutorial we arbitrary set the $bp->component->id
-//        !important you have to use the BP_Component class to do so
-//        See : https://codex.buddypress.org/bp_component/
-//     **************************************************************************
-//     $bp->bp_plugin = new stdClass();
-//     $bp->bp_plugin->id = 'bp_plugin';
- 
-//     // Bail if activity is not active
-//     if (!bp_is_active( 'activity')) {
-//         return false;
-//     }
- 
-//     bp_activity_set_action( $bp->bp_plugin->id, 'bp_plugin_update', __( 'BP plugin update' ) );
-// }
- 
-// add_action( 'bp_register_activity_actions', 'bp_plugin_activity_actions' );
-
-// function bp_plugin_activity_actions() {
-//     $bp = buddypress();
- 
-//     /**************************************************************************
-//        for the purpose of this tutorial we arbitrary set the $bp->component->id
-//        !important you have to use the BP_Component class to do so
-//        See : https://codex.buddypress.org/bp_component/
-//     ***************************************************************************/
-//     $bp->bp_plugin = new stdClass();
-//     $bp->bp_plugin->id = 'bp_plugin';
- 
-//     bp_activity_set_action(
-//         $bp->bp_plugin->id,                        // The unique string ID of the component the activity action is attached to
-//         'bp_plugin_update',                        // the action type
-//         __( 'BP plugin update', 'plugin-domain' ), // the action description used in Activity Administration screens dropdown filters
-//         'bp_plugin_format_bp_plugin_update',       // A callable function for formatting the action string
-//         __( 'BP plugin update', 'plugin-domain' ), // the action label of the activity front-end dropdown filters
-//         array( 'activity', 'member' )              // Activity stream contexts where the filter should appear
-//     );
-// }
-// add_action( 'bp_register_activity_actions', 'bp_plugin_activity_actions' );
- 
-/**
- * Callable function for formatting the action string
- * Since 2.0 activity action strings are generated dynamically, for a better compatibility with multilingual sites
- */
-// function bp_plugin_format_bp_plugin_update( $action = '', $activity = null ) {
-//     $action = sprintf( __( '%s shared a new BP plugin update', 'plugin-domain' ), bp_core_get_userlink( $activity->user_id ) );
- 
-//     return $action;
-// }

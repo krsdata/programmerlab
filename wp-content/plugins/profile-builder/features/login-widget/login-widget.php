@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 function wppb_register_login_widget() {
 	register_widget( 'wppb_login_widget' );
 }
@@ -17,7 +19,7 @@ class wppb_login_widget extends WP_Widget {
 	}
 
 	function widget( $args, $instance ) {
-		extract( $args );
+        extract( $args );
 
 		$title = apply_filters( 'wppb_login_widget_title', ( isset( $instance['title'] ) ? $instance['title'] : '' ) );
 		$redirect = ( isset( $instance['redirect'] ) ? trim( $instance['redirect'] ) : '' );
@@ -29,7 +31,7 @@ class wppb_login_widget extends WP_Widget {
 		if ( ! empty( $title ) )
 			echo $before_title . $title . $after_title;
 
-		echo do_shortcode('[wppb-login display="false" register_url="'.$register.'" lostpassword_url="'.$lostpass.'" redirect="'.$redirect.'"]');
+		echo do_shortcode('[wppb-login display="false" register_url="'.$register.'" lostpassword_url="'.$lostpass.'" redirect_url="'.$redirect.'"]');
 
 		do_action( 'wppb_login_widget_display', $args, $instance);
 			
@@ -66,17 +68,17 @@ class wppb_login_widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'redirect' ); ?>"><?php _e( 'After login redirect URL (optional):', 'profile-builder' ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'redirect' ); ?>" class="widefat" type="url" name="<?php echo $this->get_field_name( 'redirect' ); ?>" value="<?php echo $instance['redirect']; ?>" style="width:100%;" />
+			<input id="<?php echo $this->get_field_id( 'redirect' ); ?>" class="widefat wppb-widget-url-field" type="url" name="<?php echo $this->get_field_name( 'redirect' ); ?>" value="<?php echo $instance['redirect']; ?>" style="width:100%;" />
 		</p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id( 'register' ); ?>"><?php _e( 'Register page URL (optional):', 'profile-builder' ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'register' ); ?>" class="widefat" type="url" name="<?php echo $this->get_field_name( 'register' ); ?>" value="<?php echo $instance['register']; ?>" style="width:100%;" />
+			<input id="<?php echo $this->get_field_id( 'register' ); ?>" class="widefat wppb-widget-url-field" type="url" name="<?php echo $this->get_field_name( 'register' ); ?>" value="<?php echo $instance['register']; ?>" style="width:100%;" />
 		</p>		
 		
 		<p>
 			<label for="<?php echo $this->get_field_id( 'lostpass' ); ?>"><?php _e( 'Password Recovery page URL (optional):', 'profile-builder' ); ?></label>
-			<input id="<?php echo $this->get_field_id( 'lostpass' ); ?>" class="widefat" type="url" name="<?php echo $this->get_field_name( 'lostpass' ); ?>" value="<?php echo $instance['lostpass']; ?>" style="width:100%;" />
+			<input id="<?php echo $this->get_field_id( 'lostpass' ); ?>" class="widefat wppb-widget-url-field" type="url" name="<?php echo $this->get_field_name( 'lostpass' ); ?>" value="<?php echo $instance['lostpass']; ?>" style="width:100%;" />
 		</p>
 
 	<?php

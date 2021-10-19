@@ -7,234 +7,221 @@
  */
 
 /** WordPress Administration Bootstrap */
-require_once( dirname( __FILE__ ) . '/admin.php' );
+require_once __DIR__ . '/admin.php';
 
-if ( ! wp_is_mobile() ) {
-	wp_enqueue_style( 'wp-mediaelement' );
-	wp_enqueue_script( 'wp-mediaelement' );
-	wp_localize_script( 'mediaelement', '_wpmejsSettings', array(
-		'pluginPath'        => includes_url( 'js/mediaelement/', 'relative' ),
-		'pauseOtherPlayers' => '',
-	) );
-}
+wp_enqueue_script( 'wp-components' );
+wp_enqueue_style( 'wp-components' );
 
-$video_url = 'https://videopress.com/embed/AHz0Ca46?hd=true';
-$lang_code = str_replace( '_', '-', get_user_locale() );
-list( $lang_code ) = explode( '-', $lang_code );
-if ( 'en' !== $lang_code ) {
-	$video_url = add_query_arg( 'defaultLangCode', $lang_code, $video_url );
-}
-
-$title = __( 'About' );
+/* translators: Page title of the About WordPress page in the admin. */
+$title = _x( 'About', 'page title' );
 
 list( $display_version ) = explode( '-', get_bloginfo( 'version' ) );
 
-include( ABSPATH . 'wp-admin/admin-header.php' );
+require_once ABSPATH . 'wp-admin/admin-header.php';
 ?>
-	<div class="wrap about-wrap">
-		<h1><?php printf( __( 'Welcome to WordPress&nbsp;%s' ), $display_version ); ?></h1>
+	<div class="wrap about__container">
 
-		<p class="about-text"><?php printf( __( 'Thank you for updating to the latest version! WordPress %s helps you get your site set up the way you want it.' ), $display_version ); ?></p>
-		<div class="wp-badge"><?php printf( __( 'Version %s' ), $display_version ); ?></div>
-
-		<h2 class="nav-tab-wrapper wp-clearfix">
-			<a href="about.php" class="nav-tab nav-tab-active"><?php _e( 'What&#8217;s New' ); ?></a>
-			<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
-			<a href="freedoms.php" class="nav-tab"><?php _e( 'Freedoms' ); ?></a>
-		</h2>
-
-		<div class="changelog point-releases">
-			<h3><?php _e( 'Maintenance and Security Releases' ); ?></h3>
-			<p><?php printf( __( '<strong>Version %s</strong> addressed some security issues.' ), '4.7.2' ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.2' ); ?>
-			</p>
-			<p><?php printf( _n( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
-					'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.', 62 ), '4.7.1', number_format_i18n( 62 ) ); ?>
-				<?php printf( __( 'For more information, see <a href="%s">the release notes</a>.' ), 'https://codex.wordpress.org/Version_4.7.1' ); ?>
-			</p>
-		</div>
-
-		<div class="headline-feature feature-video">
-			<iframe width="1050" height="591" src="<?php echo esc_url( $video_url ); ?>" frameborder="0" allowfullscreen></iframe>
-			<script src="https://videopress.com/videopress-iframe.js"></script>
-		</div>
-
-		<hr />
-
-		<div class="feature-section one-col">
-			<h2><?php _e( 'Presenting Twenty Seventeen' ); ?></h2>
-			<p class="lead-description"><?php _e( 'A brand new default theme brings your site to life with immersive featured images and video headers.' ); ?></p>
-			<picture>
-				<source media="(min-width: 450px)" srcset="https://s.w.org/images/core/4.7/twenty-seventeen-1600.jpg?v2 1600w, https://s.w.org/images/core/4.7/twenty-seventeen-493.jpg?v2 493w, https://s.w.org/images/core/4.7/twenty-seventeen-663.jpg?v2 663w, https://s.w.org/images/core/4.7/twenty-seventeen-804.jpg?v2 804w, https://s.w.org/images/core/4.7/twenty-seventeen-928.jpg?v2 928w, https://s.w.org/images/core/4.7/twenty-seventeen-1058.jpg?v2 1058w, https://s.w.org/images/core/4.7/twenty-seventeen-1173.jpg?v2 1173w, https://s.w.org/images/core/4.7/twenty-seventeen-1299.jpg?v2 1299w, https://s.w.org/images/core/4.7/twenty-seventeen-1410.jpg?v2 1410w, https://s.w.org/images/core/4.7/twenty-seventeen-1513.jpg?v2 1513w, https://s.w.org/images/core/4.7/twenty-seventeen-1595.jpg?v2 1595w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px">
-				<source srcset="https://s.w.org/images/core/4.7/twenty-seventeen-mobile-564.jpg?v2 564w, https://s.w.org/images/core/4.7/twenty-seventeen-mobile-280.jpg?v2 280w, https://s.w.org/images/core/4.7/twenty-seventeen-mobile-372.jpg?v2 372w, https://s.w.org/images/core/4.7/twenty-seventeen-mobile-454.jpg?v2 454w, https://s.w.org/images/core/4.7/twenty-seventeen-mobile-541.jpg?v2 541w" sizes="calc(100vw - 40px)">
-				<img src="https://s.w.org/images/core/4.7/twenty-seventeen-1600.jpg?v2" srcset="https://s.w.org/images/core/4.7/twenty-seventeen-1600.jpg?v2 1600w, https://s.w.org/images/core/4.7/twenty-seventeen-280.jpg?v2 280w, https://s.w.org/images/core/4.7/twenty-seventeen-493.jpg?v2 493w, https://s.w.org/images/core/4.7/twenty-seventeen-663.jpg?v2 663w, https://s.w.org/images/core/4.7/twenty-seventeen-804.jpg?v2 804w, https://s.w.org/images/core/4.7/twenty-seventeen-928.jpg?v2 928w, https://s.w.org/images/core/4.7/twenty-seventeen-1058.jpg?v2 1058w, https://s.w.org/images/core/4.7/twenty-seventeen-1173.jpg?v2 1173w, https://s.w.org/images/core/4.7/twenty-seventeen-1299.jpg?v2 1299w, https://s.w.org/images/core/4.7/twenty-seventeen-1410.jpg?v2 1410w, https://s.w.org/images/core/4.7/twenty-seventeen-1513.jpg?v2 1513w, https://s.w.org/images/core/4.7/twenty-seventeen-1595.jpg?v2 1595w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" alt="" />
-			</picture>
-			<p><?php _e( 'Twenty Seventeen focuses on business sites and features a customizable front page with multiple sections. Personalize it with widgets, navigation, social menus, a logo, custom colors, and more. Our default theme for 2017 works great in many languages, on any device, and for a wide range of users.' ); ?></p>
-		</div>
-
-		<hr />
-
-		<div class="feature-section one-col">
-			<h2><?php _e( 'Your Site, Your Way' ); ?></h2>
-			<p class="lead-description"><?php _e( 'WordPress 4.7 adds new features to the customizer to help take you through the initial setup of a theme, with non-destructive live previews of all your changes in one uninterrupted workflow.' ); ?></p>
-		</div>
-
-		<div class="feature-section two-col">
-			<div class="col">
-				<h3><?php _e( 'Theme Starter Content' ); ?></h3>
-				<p><?php _e( 'To help give you a solid base to build from, individual themes can provide starter content that appears when you go to customize your brand new site. This can range from placing a business information widget in the best location to providing a sample menu with social icon links to a static front page complete with beautiful images. Don&#8217;t worry - nothing new will appear on the live site until you&#8217;re ready to save and publish your initial theme setup.' ); ?></p>
+		<div class="about__header">
+			<div class="about__header-image">
+				<img alt="<?php _e( 'Code is Poetry' ); ?>" src="<?php echo admin_url( 'images/about-badge.svg' ); ?>" />
 			</div>
-			<div class="col">
-				<?php
-				echo wp_video_shortcode( array(
-					'mp4'      => 'https://s.w.org/images/core/4.7/starter-content-v1.mp4',
-					'poster'   => 'https://s.w.org/images/core/4.7/starter-content.jpg?v2',
-					'loop'     => true,
-					'autoplay' => true,
-					'width'    => 1140,
-					'height'   => 624,
-					// 'class'    => 'wp-video-shortcode feature-video',
-				) );
-				?>
+
+			<div class="about__header-title">
+				<p>
+					<?php _e( 'WordPress' ); ?>
+					<?php echo $display_version; ?>
+				</p>
+			</div>
+
+			<div class="about__header-text">
+				<?php _e( 'Jazz up your stories in an editor that’s cleaner, crisper, and does more to get out of your way.' ); ?>
+			</div>
+
+			<nav class="about__header-navigation nav-tab-wrapper wp-clearfix" aria-label="<?php esc_attr_e( 'Secondary menu' ); ?>">
+				<a href="about.php" class="nav-tab nav-tab-active" aria-current="page"><?php _e( 'What&#8217;s New' ); ?></a>
+				<a href="credits.php" class="nav-tab"><?php _e( 'Credits' ); ?></a>
+				<a href="freedoms.php" class="nav-tab"><?php _e( 'Freedoms' ); ?></a>
+				<a href="privacy.php" class="nav-tab"><?php _e( 'Privacy' ); ?></a>
+			</nav>
+		</div>
+
+		<div class="about__section is-feature has-subtle-background-color">
+			<div class="column">
+				<h1 class="is-smaller-heading">
+					<?php
+					printf(
+						/* translators: %s: The current WordPress version number. */
+						__( 'Step into WordPress %s.' ),
+						$display_version
+					);
+					?>
+				</h1>
+				<p>
+					<?php
+					_e( 'With this new version, WordPress brings you fresh colors. The editor helps you work in a few places you couldn’t before—at least, not without getting into code or hiring a pro. The controls you use most, like changing font sizes, are in more places—right where you need them. And layout changes that should be simple, like full-height images, are even simpler to make.' );
+					?>
+				</p>
 			</div>
 		</div>
 
-		<div class="feature-section two-col">
-			<div class="col">
-				<h3><?php _e( 'Edit Shortcuts' ); ?></h3>
-				<?php
-				echo wp_video_shortcode( array(
-					'mp4'      => 'https://s.w.org/images/core/4.7/edit-shortcuts-v1.mp4',
-					'poster'   => 'https://s.w.org/images/core/4.7/edit-shortcuts.jpg?v2',
-					'loop'     => true,
-					'autoplay' => true,
-					'width'    => 2520,
-					'height'   => 1454,
-					// 'class'    => 'wp-video-shortcode feature-video',
-				) );
-				?>
-				<p><?php _e( 'Visible icons appear to show you which parts of your site can be customized while live previewing. Click on a shortcut and get straight to editing. Paired with starter content, getting started with customizing your site is faster than ever.' );?></p>
+		<hr class="is-large" />
+
+		<div class="about__section has-2-columns">
+			<h2 class="is-section-header is-smaller-heading">
+				<?php _e( 'Now the editor is easier to use' ); ?>
+			</h2>
+			<div class="column">
+				<p>
+					<?php
+					_e( '<strong>Font-size adjustment in more places:</strong> now, font-size controls are right where you need them in the List and Code blocks. No more trekking to another screen to make that single change!' );
+					?>
+				</p>
+				<p>
+					<?php
+					_e( '<strong>Reusable blocks:</strong> several enhancements make reusable blocks more stable and easier to use. And now they save automatically with the post when you click the Update button.' );
+					?>
+				</p>
+				<p>
+					<?php
+					_e( '<strong>Inserter drag-and-drop:</strong> drag blocks and block patterns from the inserter right into your post.' );
+					?>
+				</p>
 			</div>
-			<div class="col">
-				<h3><?php _e( 'Video Headers' ); ?></h3>
-				<?php
-				echo wp_video_shortcode( array(
-					'mp4'      => 'https://s.w.org/images/core/4.7/header-video-v1.mp4',
-					'poster'   => 'https://s.w.org/images/core/4.7/header-video.jpg?v2',
-					'loop'     => true,
-					'autoplay' => true,
-					'width'    => 2520,
-					'height'   => 1454,
-					// 'class'    => 'wp-video-shortcode feature-video',
-				) );
-				?>
-				<p><?php _e( 'Sometimes a big atmospheric video as a moving header image is just what you need to showcase your wares; go ahead and try it out with Twenty Seventeen. Need some video inspiration? Try searching for sites with video headers available for download and use.' ); ?></p>
+			<div class="column about__image">
+				<video controls>
+					<source src="https://s.w.org/images/core/5.7/about-57-drag-drop-image.mp4" type="video/mp4" />
+					<source src="https://s.w.org/images/core/5.7/about-57-drag-drop-image.webm" type="video/webm" />
+				</video>
 			</div>
 		</div>
 
-		<div class="feature-section two-col">
-			<div class="col">
-				<h3><?php _e( 'Smoother Menu Building' ); ?></h3>
-				<img src="https://s.w.org/images/core/4.7/nav-menus-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/nav-menus-760.jpg?v2 760w, https://s.w.org/images/core/4.7/nav-menus-280.jpg?v2 280w, https://s.w.org/images/core/4.7/nav-menus-536.jpg?v2 536w, https://s.w.org/images/core/4.7/nav-menus-745.jpg?v2 745w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
-				<p><?php _e( 'Many menus for sites contain links to the pages of your site, but what happens when you don&#8217;t have any pages yet? Now you can add new pages while building menus instead of leaving the customizer and abandoning your changes. Once you&#8217;ve published your customizations, you&#8217;ll have new pages ready for you to fill with content.' );?></p>
+		<div class="about__section has-2-columns">
+			<h2 class="is-section-header is-smaller-heading">
+				<?php _e( 'You can do more without writing custom code' ); ?>
+			</h2>
+			<div class="column">
+				<p>
+					<?php
+					_e( '<strong>Full-height alignment:</strong> have you ever wanted to make a block, like the Cover block, fill the whole window? Now you can.' );
+					?>
+				</p>
+				<p>
+					<?php
+					_e( '<strong>Buttons block:</strong> now you can choose a vertical or a horizontal layout. And you can set the width of a button to a preset percentage.' );
+					?>
+				</p>
+				<p>
+					<?php
+					_e( '<strong>Social Icons block:</strong> now you can change the size of the icons.' );
+					?>
+				</p>
 			</div>
-			<div class="col">
-				<h3><?php _e( 'Custom CSS' ); ?></h3>
-				<img src="https://s.w.org/images/core/4.7/css-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/css-760.jpg?v2 760w, https://s.w.org/images/core/4.7/css-280.jpg?v2 280w, https://s.w.org/images/core/4.7/css-547.jpg?v2 547w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
-				<p><?php _e( 'Sometimes you just need a few visual tweaks to make your site perfect. WordPress 4.7 allows you to add custom CSS and instantly see how your changes affect your site. The live preview allows you to work quickly without page refreshes slowing you down.' ); ?></p>
+			<div class="column about__image">
+				<img src="https://s.w.org/images/core/5.7/about-57-cover.jpg" alt="" />
 			</div>
 		</div>
 
 		<hr />
 
-		<div class="feature-section no-heading two-col">
-			<div class="col">
-				<h3><?php _e( 'PDF Thumbnail Previews' ); ?></h3>
-				<img src="https://s.w.org/images/core/4.7/pdf-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/pdf-760.jpg?v2 760w, https://s.w.org/images/core/4.7/pdf-280.jpg?v2 280w, https://s.w.org/images/core/4.7/pdf-412.jpg?v2 412w, https://s.w.org/images/core/4.7/pdf-516.jpg?v2 516w, https://s.w.org/images/core/4.7/pdf-615.jpg?v2 615w, https://s.w.org/images/core/4.7/pdf-716.jpg?v2 716w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
-				<p><?php _e( 'Managing your document collection is easier with WordPress 4.7. Uploading PDFs will generate thumbnail images so you can more easily distinguish between all your documents.' ); ?></p>
+		<div class="about__section has-subtle-background-color">
+			<div class="column">
+				<h2 class="is-smaller-heading"><?php _e( 'A Simpler Default Color Palette' ); ?></h2>
 			</div>
-			<div class="col">
-				<h3><?php _e( 'Dashboard in your language' ); ?></h3>
-				<img src="https://s.w.org/images/core/4.7/language-760.jpg?v2" srcset="https://s.w.org/images/core/4.7/language-760.jpg?v2 760w, https://s.w.org/images/core/4.7/language-280.jpg?v2 280w, https://s.w.org/images/core/4.7/language-568.jpg?v2 568w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 781px) calc((100vw - 70px) * .466), (max-width: 959px) calc((100vw - 116px) * .469), (max-width: 1290px) calc((100vw - 240px) * .472), 496px" alt="" />
-				<p><?php _e( 'Just because your site is in one language doesn&#8217;t mean that everybody helping manage it prefers that language for their admin. Add more languages to your site and a user language option will show up in your user&#8217;s profiles.' );?></p>
+		</div>
+
+		<div class="about__section has-subtle-background-color">
+			<figure class="column about__image" id="about-image-comparison">
+				<div class="about__image-comparison no-js">
+					<img src="https://s.w.org/images/core/5.7/about-57-color-old.png" alt="<?php esc_attr_e( 'Dashboard with old color scheme.' ); ?>" />
+					<div class="about__image-comparison-resize">
+						<img src="https://s.w.org/images/core/5.7/about-57-color-new.png" alt="<?php esc_attr_e( 'Dashboard with new color scheme.' ); ?>" />
+					</div>
+				</div>
+				<figcaption><?php _e( 'Above, the Dashboard before and after the color update in 5.7.' ); ?></figcaption>
+			</figure>
+		</div>
+
+		<div class="about__section has-2-columns has-subtle-background-color">
+			<div class="column">
+				<p>
+					<?php
+					printf(
+						/* translators: %s: WCAG information link. */
+						__( 'This new streamlined color palette collapses all the colors that used to be in the WordPress source code down to seven core colors and a range of 56 shades that meet the <a href="%s">WCAG 2.0 AA recommended contrast ratio</a> against white or black.' ),
+						'https://www.w3.org/WAI/WCAG2AAA-Conformance'
+					);
+					?>
+				</p>
+				<p>
+					<?php
+					_e( 'The colors are perceptually uniform from light to dark in each range, which means they start at white and get darker by the same amount with each step.' );
+					?>
+				</p>
+			</div>
+			<div class="column">
+				<p>
+					<?php
+					_e( 'Half the range has a 4.5 or higher contrast ratio against black, and the other half maintains the same contrast against white.' );
+					?>
+				</p>
+				<p>
+					<?php
+					printf(
+						/* translators: %s: Color palette dev note link. */
+						__( 'Find the new palette in the default WordPress Dashboard color scheme, and use it when you’re building themes, plugins, or any other components. For all the details, <a href="%s">check out the Color Palette dev note</a>.' ),
+						'https://make.wordpress.org/core/2021/02/23/standardization-of-wp-admin-colors-in-wordpress-5-7'
+					);
+					?>
+				</p>
+			</div>
+		</div>
+
+		<div class="about__section has-subtle-background-color">
+			<div class="column about__image">
+				<picture>
+					<source media="(max-width: 600px)" srcset="<?php echo admin_url( 'images/about-color-palette-vert.svg' ); ?>" />
+					<img alt="" src="<?php echo admin_url( 'images/about-color-palette.svg' ); ?>" />
+				</picture>
 			</div>
 		</div>
 
 		<hr />
 
-		<div class="rest-api feature-section one-col">
-			<h2><?php _e( 'Introducing REST API Content Endpoints' ); ?></h2>
-			<p class="lead-description"><?php _e( 'WordPress 4.7 comes with REST API endpoints for posts, comments, terms, users, meta, and settings.' ); ?></p>
-			<img src="https://s.w.org/images/core/4.7/api-1559.jpg?v2" srcset="https://s.w.org/images/core/4.7/api-2100.jpg?v2 2100w, https://s.w.org/images/core/4.7/api-280.jpg?v2 280w, https://s.w.org/images/core/4.7/api-1034.jpg?v2 1034w, https://s.w.org/images/core/4.7/api-1559.jpg?v2 1559w, https://s.w.org/images/core/4.7/api-2032.jpg?v2 2032w" sizes="(max-width: 500px) calc(100vw - 40px), (max-width: 782px) calc(100vw - 70px), (max-width: 959px) calc(100vw - 116px), (max-width: 1290px) calc(100vw - 240px), 1050px" alt="" />
-			<p><?php
-				printf(
-					/* translators: %s: https://developer.wordpress.org/rest-api/  */
-					__( 'Content endpoints provide machine-readable external access to your WordPress site with a clear, standards-driven interface, paving the way for new and innovative methods of interacting with sites through plugins, themes, apps, and beyond. Ready to get started with development? <a href="%s">Check out the REST API reference.</a>' ),
-					'https://developer.wordpress.org/rest-api/reference/'
-				);
-			?></p>
+		<div class="about__section has-2-columns">
+			<div class="column">
+				<h3><?php _e( 'From HTTP to HTTPS in a single click' ); ?></h3>
+				<p><?php _e( 'Starting now, switching a site from HTTP to HTTPS is a one-click move. WordPress will automatically update database URLs when you make the switch. No more hunting and guessing!' ); ?></p>
+				<h3><?php _e( 'New Robots API' ); ?></h3>
+				<p>
+					<?php
+					_e( 'The new Robots API lets you include the filter directives in the robots meta tag, and the API includes the <code>max-image-preview: large</code> directive by default. That means search engines can show bigger image previews, which can boost your traffic (unless the site is marked <em>not-public</em>).' );
+					?>
+				</p>
+			</div>
+			<div class="column">
+				<h3><?php _e( 'Ongoing cleanup after update to jQuery 3.5.1' ); ?></h3>
+				<p><?php _e( 'For years jQuery helped make things move on the screen in ways the basic tools couldn’t—but that keeps changing, and so does jQuery.' ); ?></p>
+				<p><?php _e( 'In 5.7, jQuery gets more focused and less intrusive, with fewer messages in the console.' ); ?></p>
+				<h3><?php _e( 'Lazy-load your iframes' ); ?></h3>
+				<p><?php _e( 'Now it’s simple to let iframes lazy-load. By default, WordPress will add a <code>loading="lazy"</code> attribute to iframe tags when both width and height are specified.' ); ?></p>
+			</div>
 		</div>
 
-		<hr />
+		<hr class="is-small" />
 
-		<div class="changelog">
-			<h2><?php
-				printf(
-					/* translators: %s: smiling face with smiling eyes emoji */
-					__( 'Even More Developer Happiness %s' ),
-					'&#x1F60A'
-				);
-			?></h2>
-
-			<div class="under-the-hood three-col">
-				<div class="col">
-					<h3><a href="https://make.wordpress.org/core/2016/11/03/post-type-templates-in-4-7/"><?php _e( 'Post Type Templates' ); ?></a></h3>
-					<p><?php _e( 'By opening up the page template functionality to all post types, theme developers have even more flexibility with the WordPress template hierarchy.' ); ?></p>
-				</div>
-				<div class="col">
-					<h3><?php _e( 'More Theme API Goodies' ); ?></h3>
-					<p><?php
-						printf(
-							/* translators: %s: https://make.wordpress.org/core/2016/09/09/new-functions-hooks-and-behaviour-for-theme-developers-in-wordpress-4-7/  */
-							__( 'WordPress 4.7 includes <a href="%s">new functions, hooks, and behavior</a> for theme developers.' ),
-							'https://make.wordpress.org/core/2016/09/09/new-functions-hooks-and-behaviour-for-theme-developers-in-wordpress-4-7/'
-						);
-					?></p>
-				</div>
-				<div class="col">
-					<h3><a href="https://make.wordpress.org/core/2016/10/04/custom-bulk-actions/"><?php _e( 'Custom Bulk Actions' ); ?></a></h3>
-					<p><?php _e( 'List tables, now with more than bulk edit and delete.' ); ?></p>
-				</div>
+		<div class="about__section">
+			<div class="column">
+				<h3><?php _e( 'Check the Field Guide for more!' ); ?></h3>
+				<p>
+					<?php
+					printf(
+						/* translators: %s: WordPress 5.7 Field Guide link. */
+						__( 'Check out the latest version of the WordPress Field Guide. It highlights developer notes for each change you may want to be aware of. <a href="%s">WordPress 5.7 Field Guide.</a>' ),
+						'https://make.wordpress.org/core/2021/02/23/wordpress-5-7-field-guide'
+					);
+					?>
+				</p>
 			</div>
-
-			<div class="under-the-hood three-col">
-				<div class="col">
-					<h3><a href="https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/"><code>WP_Hook</code></a></h3>
-					<p><?php
-						printf(
-							/* translators: %s: https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/  */
-							__( 'The code that lies beneath actions and filters has been overhauled and modernized, fixing bugs along the way.' ),
-							'https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/'
-						);
-					?></p>
-				</div>
-				<div class="col">
-					<h3><?php _e( 'Settings Registration API' ); ?></h3>
-					<p><?php
-						printf(
-							/* translators: 1: register_setting(), 2: https://make.wordpress.org/core/2016/10/26/registering-your-settings-in-wordpress-4-7/ */
-							__( '%1$s <a href="%2$s">has been enhanced</a> to include type, description, and REST API visibility.' ),
-							'<code>register_setting()</code>',
-							'https://make.wordpress.org/core/2016/10/26/registering-your-settings-in-wordpress-4-7/'
-						);
-					?></p>
-				</div>
-				<div class="col">
-					<h3><a href="https://make.wordpress.org/core/2016/10/12/customize-changesets-technical-design-decisions/"><?php _e( 'Customize Changesets' ); ?></a></h3>
-					<p><?php _e( 'Customize changesets make changes in the customizer persistent, like autosave drafts. They also make exciting new features like starter content possible.' ); ?></p>
-				</div>
-			</div>
-
 		</div>
 
 		<hr />
@@ -242,16 +229,93 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 		<div class="return-to-dashboard">
 			<?php if ( current_user_can( 'update_core' ) && isset( $_GET['updated'] ) ) : ?>
 				<a href="<?php echo esc_url( self_admin_url( 'update-core.php' ) ); ?>">
-					<?php is_multisite() ? _e( 'Return to Updates' ) : _e( 'Return to Dashboard &rarr; Updates' ); ?>
+					<?php is_multisite() ? _e( 'Go to Updates' ) : _e( 'Go to Dashboard &rarr; Updates' ); ?>
 				</a> |
 			<?php endif; ?>
 			<a href="<?php echo esc_url( self_admin_url() ); ?>"><?php is_blog_admin() ? _e( 'Go to Dashboard &rarr; Home' ) : _e( 'Go to Dashboard' ); ?></a>
 		</div>
-
 	</div>
-<?php
 
-include( ABSPATH . 'wp-admin/admin-footer.php' );
+<?php require_once ABSPATH . 'wp-admin/admin-footer.php'; ?>
+
+<script>
+	window.addEventListener( 'load', function() {
+		var createElement = wp.element.createElement;
+		var Fragment = wp.element.Fragment;
+		var render = wp.element.render;
+		var useState = wp.element.useState;
+		var ResizableBox = wp.components.ResizableBox;
+
+		var container = document.getElementById( 'about-image-comparison' );
+		var images = container ? container.querySelectorAll( 'img' ) : [];
+		if ( ! images.length ) {
+			// Something's wrong, return early.
+			return;
+		}
+
+		var beforeImage = images.item( 0 );
+		var afterImage = images.item( 1 );
+		var caption = container.querySelector( 'figcaption' ).innerText;
+
+		function ImageComparison( props ) {
+			var stateHelper = useState( props.width );
+			var width = stateHelper[0];
+			var setWidth = stateHelper[1];
+
+			return createElement(
+				'div',
+				{
+					className: 'about__image-comparison'
+				},
+				createElement( 'img', { src: beforeImage.src, alt: beforeImage.alt } ),
+				createElement(
+					ResizableBox,
+					{
+						size: {
+							width: width,
+							height: props.height
+						},
+						onResizeStop: function( event, direction, elt, delta ) {
+							setWidth( parseInt( width + delta.width, 10 ) );
+						},
+						showHandle: true,
+						enable: {
+							top: false,
+							right: ! wp.i18n.isRTL(),
+							bottom: false,
+							left: wp.i18n.isRTL(),
+						},
+						className: 'about__image-comparison-resize'
+					},
+					createElement(
+						'div',
+						{
+							style: { width: '100%', height: '100%', overflow: 'hidden' }
+						},
+						createElement('img', { src: afterImage.src, alt: afterImage.alt } )
+					)
+				)
+			);
+		}
+
+		render(
+			createElement(
+				Fragment,
+				{},
+				createElement(
+					ImageComparison,
+					{
+						width: beforeImage.clientWidth / 2,
+						height: beforeImage.clientHeight
+					}
+				),
+				createElement( 'figcaption', {}, caption )
+			),
+			container
+		);
+	} );
+</script>
+<?php
 
 // These are strings we may use to describe maintenance/security releases, where we aim for no new strings.
 return;
@@ -265,22 +329,28 @@ __( 'Security Releases' );
 __( 'Maintenance and Security Release' );
 __( 'Maintenance and Security Releases' );
 
-/* translators: %s: WordPress version number */
+/* translators: %s: WordPress version number. */
 __( '<strong>Version %s</strong> addressed one security issue.' );
-/* translators: %s: WordPress version number */
+/* translators: %s: WordPress version number. */
 __( '<strong>Version %s</strong> addressed some security issues.' );
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. */
-_n_noop( '<strong>Version %1$s</strong> addressed %2$s bug.',
-         '<strong>Version %1$s</strong> addressed %2$s bugs.' );
+/* translators: 1: WordPress version number, 2: Plural number of bugs. */
+_n_noop(
+	'<strong>Version %1$s</strong> addressed %2$s bug.',
+	'<strong>Version %1$s</strong> addressed %2$s bugs.'
+);
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. Singular security issue. */
-_n_noop( '<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug.',
-         '<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs.' );
+/* translators: 1: WordPress version number, 2: Plural number of bugs. Singular security issue. */
+_n_noop(
+	'<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug.',
+	'<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs.'
+);
 
-/* translators: 1: WordPress version number, 2: plural number of bugs. More than one security issue. */
-_n_noop( '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
-         '<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.' );
+/* translators: 1: WordPress version number, 2: Plural number of bugs. More than one security issue. */
+_n_noop(
+	'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.',
+	'<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.'
+);
 
-/* translators: %s: Codex URL */
+/* translators: %s: Documentation URL. */
 __( 'For more information, see <a href="%s">the release notes</a>.' );

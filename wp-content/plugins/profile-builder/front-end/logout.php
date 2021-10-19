@@ -1,4 +1,5 @@
 <?php
+    if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
     /*
      * Function that returns a front-end logout message from the wppb-logout shortcode
@@ -12,7 +13,7 @@
 
         $current_user = get_userdata( get_current_user_id() );
 
-        extract( shortcode_atts( array( 'text' => sprintf( __('You are currently logged in as %s. ','profile-builder') ,$current_user->user_login) , 'redirect' => '', 'redirect_url' => wppb_curpageurl(), 'redirect_priority' => 'normal', 'link_text' => __('Log out &raquo;','profile-builder')), $atts ) );
+        extract( shortcode_atts( array( 'text' => sprintf( __('You are currently logged in as %s. ','profile-builder') ,$current_user->user_login) , 'redirect' => '', 'redirect_url' => wppb_curpageurl(), 'redirect_priority' => 'normal', 'link_text' => __('Log out &raquo;','profile-builder'), 'url_only' => '' ), $atts ) );
 
         if( ! empty( $redirect ) ) {
             $redirect_url = $redirect;
@@ -21,6 +22,9 @@
         // CHECK FOR REDIRECT
         $redirect_url = wppb_get_redirect_url( $redirect_priority, 'after_logout', $redirect_url, $current_user );
         $redirect_url = apply_filters( 'wppb_after_logout_redirect_url', $redirect_url );
+
+        if( isset( $url_only ) && $url_only == 'yes' )
+            return wp_logout_url( $redirect_url );
 
         $logout_link = '<a href="' . wp_logout_url( $redirect_url ) . '" class="wppb-logout-url" title="' . __( 'Log out of this account', 'profile-builder' ) . '">' . $link_text . '</a>';
 

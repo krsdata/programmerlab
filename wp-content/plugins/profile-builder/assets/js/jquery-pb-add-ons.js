@@ -7,12 +7,6 @@ jQuery('.wppb-add-on .button').on( 'click', function(e) {
         return false;
     }
 
-    // Download add-on
-    if( jQuery(this).hasClass('wppb-add-on-download') ) {
-        e.preventDefault();
-        wppb_add_on_download_and_install( jQuery(this) );
-    }
-
     // Activate add-on
     if( jQuery(this).hasClass('wppb-add-on-activate') ) {
         e.preventDefault();
@@ -30,7 +24,7 @@ jQuery('.wppb-add-on .button').on( 'click', function(e) {
 /*
  * Make deactivate button from Add-On is Active message button
  */
-jQuery('.wppb-add-on').on( 'hover', function() {
+jQuery('.wppb-add-on').on( 'mouseenter mouseleave', function() {
 
     $button = jQuery(this).find('.wppb-add-on-deactivate');
 
@@ -56,99 +50,6 @@ jQuery('.wppb-add-on').on( 'mouseleave', function() {
             }, 100);
     }
 });
-
-
-/*
- * Download Add-On from Cozmoslabs on click
- */
-function wppb_add_on_download_and_install( $button ) {
-    $download_button = $button;
-
-    var fade_in_out_speed = 300;
-    var download_url = $download_button.attr('href');
-    var file_name = $download_button.attr('data-add-on-slug') + '.zip';
-    var add_on_name = $download_button.attr('data-add-on-name');
-    var add_on_index = $download_button.parents('.wppb-add-on').index('.wppb-add-on');
-    var nonce = $download_button.data('nonce');
-
-    $download_button
-        .attr('disabled', true);
-
-    $spinner = $download_button.siblings('.spinner');
-
-    $spinner.animate({
-        opacity: 0.7
-    }, 100);
-
-    // Remove the current displayed message
-    wppb_add_on_remove_status_message( $download_button, fade_in_out_speed );
-
-    // Set status confirmation message
-    wppb_add_on_set_status_message( $download_button, 'dashicons-download', jQuery('#wppb-add-on-downloading-message-text').text(), fade_in_out_speed, fade_in_out_speed );
-
-
-    jQuery.post( ajaxurl, { action: 'wppb_add_on_download_zip_file', wppb_add_on_download_url: download_url, wppb_add_on_zip_name: file_name, wppb_add_on_name: add_on_name, wppb_add_on_index: add_on_index, nonce: nonce }, function( response ) {
-
-        // Check if we have any errors and display a message to the user
-        if( response.indexOf('error') === 0 ) {
-            response = response.split('-');
-            add_on_index = response[1];
-
-            $download_button = jQuery('.wppb-add-on').eq( add_on_index ).find('.button');
-            $error_message = jQuery('.wppb-add-on').eq( add_on_index).find('.wppb-error-manual-install');
-
-            $download_button
-                .blur()
-                .removeAttr('disabled')
-                .text( jQuery('#wppb-add-on-activated-error-button-text').text() );
-
-            $spinner = $download_button.siblings('.spinner');
-            $spinner.animate({
-                opacity: 0
-            }, 0);
-
-            // Remove the current displayed message
-            wppb_add_on_remove_status_message( $download_button, fade_in_out_speed);
-
-            // Set status confirmation message
-            wppb_add_on_set_status_message( $download_button, 'dashicons-no-alt', $error_message.html(), fade_in_out_speed, fade_in_out_speed, false );
-
-            return false;
-        }
-
-        // If everything goes well go ahead and
-        var add_on_index = response;
-        jQuery.post( ajaxurl, { action: 'wppb_add_on_get_new_plugin_data', wppb_add_on_name: add_on_name }, function( plugin_path ) {
-
-            $download_button = jQuery('.wppb-add-on').eq( add_on_index ).find('.button');
-
-            $download_button
-                .blur()
-                .removeClass('wppb-add-on-download')
-                .addClass('wppb-add-on-activate')
-                .attr('href', plugin_path )
-                .removeAttr('disabled')
-                .text( jQuery('#wppb-add-on-activate-button-text').text() );
-
-            $spinner = $download_button.siblings('.spinner');
-            $spinner.animate({
-                opacity: 0
-            }, 0);
-
-            // Remove the current displayed message
-            wppb_add_on_remove_status_message( $download_button, fade_in_out_speed);
-
-            // Set status confirmation message
-            wppb_add_on_set_status_message( $download_button, 'dashicons-yes', jQuery('#wppb-add-on-download-finished-message-text').text(), fade_in_out_speed, fade_in_out_speed, true );
-
-            /* For PMS as we are trying to increase active installs activate it automatically */
-            if( add_on_name == 'Paid Member Subscriptions' ){
-                wppb_add_on_activate( $download_button );
-            }
-        });
-
-    });
-}
 
 
 /*

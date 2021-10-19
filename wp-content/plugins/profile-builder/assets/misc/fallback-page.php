@@ -1,14 +1,16 @@
 <?php
+define( 'ABSPATH', __DIR__ . '/' );//added this because we actually need to access this page directly, sorry about this :)
 /*
 //load WP if needed
 $path_to_wp_install_dir = '';
 include_once ( $path_to_wp_install_dir.'wp-load.php' );
 */
 
-$activation_key = ( isset( $_GET['activation_key'] ) ? urldecode( $_GET['activation_key'] ) : '' );
-$site_name = ( isset( $_GET['site_name'] ) ? urldecode( $_GET['site_name'] ) : '' );
-$site_url = ( isset( $_GET['site_url'] ) ? urldecode( $_GET['site_url'] ) : '' );
-$message = ( isset( $_GET['message'] ) ? urldecode( $_GET['message'] ) : '' );
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+$site_name = ( isset( $_GET['site_name'] ) ? filter_var ( urldecode( $_GET['site_name'] ), FILTER_SANITIZE_STRING ) : '' );
+$site_url = ( isset( $_GET['site_url'] ) ? filter_var (urldecode( $_GET['site_url'] ), FILTER_SANITIZE_STRING ) : '' );
+$message = ( isset( $_GET['message'] ) ? filter_var (urldecode( $_GET['message'] ), FILTER_SANITIZE_STRING ) : '' );
 ?> 	
 			
 <html>

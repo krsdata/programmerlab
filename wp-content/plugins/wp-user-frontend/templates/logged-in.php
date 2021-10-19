@@ -4,9 +4,8 @@
 		<?php echo get_avatar( $user->ID ); ?>
 	</span>
 
-	<ul>
-		<li><?php printf( __( 'Hello %s', 'wpuf' ), $user->display_name ); ?></li>
-	</ul>
+    <br>
+    <h3> <?php printf( esc_html( __( 'Hello, %s', 'wp-user-frontend' ) ), esc_html( $user->display_name  ) ); ?> </h3>
 
-	<?php printf( __( 'You are currently logged in! %s?', 'wpuf' ), wp_loginout( '', false ) ) ?>
+    <?php printf( esc_html( __( 'You are currently logged in! %s?', 'wp-user-frontend' ) ), wp_loginout( '', false )  ); ?>
 </div>

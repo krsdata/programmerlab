@@ -70,7 +70,7 @@ if ( !defined('ABSPATH') )
 	</ul>
 <?php else: // No items ?>
 	<div class="likebtn-mlw-no-items">
-		<p><?php _e('No items liked yet.', LIKEBTN_I18N_DOMAIN); ?></p>
+		<p><?php _e('No items liked yet.', 'likebtn-like-button'); ?></p>
 	</div>
 <?php
 endif;

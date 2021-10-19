@@ -2,19 +2,19 @@
 Contributors: nicashmu
 Tags: cincopa, responsive, photos, video, html5, slideshow, images, podcast, video portal, gallery, media, admin, post, WPtouch, photo-albums, pictures, widget, photo, picture, video hosting, s3, music, playlists, playlist, sidebar, ajax, video, vidavee, iphone, cms, ipod, smooth gallery, nextgen, javascript, embed, menus, analytics, media library, itunes, mu, podpress, lightbox, podpress, flowplayer, jw player, comments, twitter, page, google, links, image
 Requires at least: 2.0.2
-Tested up to: 4.6.1
+Tested up to: 5.7
 
-Post your videos, photo galleries/flash slideshows, music and playlists easily and in seconds.
+Post your videos, photo galleries, slideshows, music and playlists easily and in seconds.
 
 == Description ==
 
-No need for multiple plugins for your WordPress media. Cincopa is **The only plugin you need for all your media needs**. Use Cincopa to easily add videos, photo galleries, slideshows, music and playlists and much more. Enjoy more than 40 designed skins for slideshows, video players, Cooliris, Lightbox and many more.
+No need for multiple plugins for your WordPress media. Cincopa is **The only plugin you need for all your media needs**. Use Cincopa to easily add videos, photo galleries, slideshows, music and playlists and much more. Enjoy more than 100 designed templates for slideshows, video players, Cooliris, Lightbox and many more.
 
 * **HASSLE-FREE** WordPress media support for your site, include **Videos**, **Slideshows**, **Image Galleries**, **Audio playlists and podcasts**. 
 
 * **Responsive design and HTML5** to ensure compatibility with mobile phones, tablets as well as desktops. Your audience is mobile more than ever, our technology will make sure that they can access your content anywhere and any time.
 
-* **Fully Managed** to ensure high speed, scalability, security and reliability of your media. [Read more](//www.cincopa.com/media-platform/services/what-is-a-cdn)
+* **SEO Boost** Our unique JSON-LD support will expose and boost your content ranking in Google SERP,  [Read more](//www.cincopa.com/learn/smarter-seo-with-cincopas-json-ld/)
 
 * **Expert WordPress Support** - full [technical support](//help.cincopa.com/home), many [tutorials](//help.cincopa.com/categories/9559-media-platform-guides-tutorials) and [video tutorials](//help.cincopa.com/forums/376513-video-tutorials) to get you started.
 
@@ -22,12 +22,12 @@ No need for multiple plugins for your WordPress media. Cincopa is **The only plu
 Read more about [Cincopa WordPress Media Plugin](//www.cincopa.com/media-platform/wordpress-plugin.aspx)
 
 
-[youtube https://www.youtube.com/watch?v=kC7CYWplmiU]
+[youtube https://www.youtube.com/watch?v=TfIAr00SLys]
 
 
 = Features =
 
-* **[more than 100 skins](//www.cincopa.com/media-platform/skins)** - slideshows, video players, playlists, flash, full-screen, Cooliris, lightbox, wedding skins and many more
+* **[more than 100 templates](//www.cincopa.com/media-platform/skins)** - slideshows, video players, playlists, full-screen, Cooliris, lightbox, wedding templates and many more
 * Many customization options: size, colors, text and more
 * Simple media management directly from your WordPress dashboard
 * Automatic **resizing of photos**
@@ -94,7 +94,7 @@ None, You don't need any space on your server, your files will be stored on Cinc
 
 A lot, really.
 
-= What is a style/skin ? =
+= What is a template ? =
 
 After you select photos and videos for your post you need to select the style of how to display them, there are a lot of styles available, some good for playing many videos, some good for slideshows, some for music playlists etc.
 
@@ -117,10 +117,10 @@ If you are using one of those low cost shared hosting solution then you better l
 
 == Screenshots ==
 
-1. Image gallery
-2. Image list pinterest
-3. Image list preview
-4. Audio mobile
+1. Video Player - full solution to play video and playlists
+2. Image gallery - support images and videos in same gallery
+3. Image list pinterest - styled gallery with lightbox - support video players
+4. Audio mobile - compatible with mobile and tablets - ipad, iphone, android etc
 5. Audio playlist
 6. Ligthbox
 7. Start page
@@ -128,3 +128,4 @@ If you are using one of those low cost shared hosting solution then you better l
 9. Video playlist
 10. Cincopa fast access button
 11. Cincopa fast access menu
+12. Image list preview

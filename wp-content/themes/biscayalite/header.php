@@ -20,7 +20,6 @@
 					<a class="text-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr(get_bloginfo('name')); ?>">
 						<?php echo esc_attr(get_bloginfo('name')); ?>
 					</a>
-					<div class="navbar-text"><?php echo esc_attr( get_bloginfo( 'description') ); ?></div>
 				<?php endif; ?>
 				</div>
 			</div>

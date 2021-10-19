@@ -85,7 +85,7 @@
     display: inline-block;
     text-transform: uppercase;
     color: #fff;
-    margin-top: 110px;
+    margin-top: 115px;
     font-size: 90%;
 }
 
@@ -109,7 +109,11 @@
 #container_wppb_ul_faceted_settings .facet_type_checkboxes .row-facet-behaviour,
 #container_wppb_ul_faceted_settings .facet_type_checkboxes .row-facet-limit,
 #container_wppb_ul_faceted_settings .update_container_wppb_ul_faceted_settings.facet_checkboxes .row-facet-behaviour,
-#container_wppb_ul_faceted_settings .update_container_wppb_ul_faceted_settings.facet_checkboxes .row-facet-limit{
+#container_wppb_ul_faceted_settings .update_container_wppb_ul_faceted_settings.facet_checkboxes .row-facet-limit,
+#container_wppb_ul_faceted_settings .facet_type_select_multiple .row-facet-behaviour,
+#container_wppb_ul_faceted_settings .facet_type_select_multiple .row-facet-limit,
+#container_wppb_ul_faceted_settings .update_container_wppb_ul_faceted_settings.facet_select_multiple .row-facet-behaviour,
+#container_wppb_ul_faceted_settings .update_container_wppb_ul_faceted_settings.facet_select_multiple .row-facet-limit{
     display:block;
 }
 
@@ -327,16 +331,31 @@
 	width: 67%;
 	margin:0;
 }
+
+.wppb-2-1-col > div {
+    float:left;
+    width:67%;
+    margin-right:5%;
+}
+.wppb-2-1-col > div:last-child{
+    float:right;
+    width: 28%;
+    margin:0;
+}
 /* Extra Form Styles */
 .wppb-text{
     min-width: 16.4em;
 }
-.wppb-select {
+.wppb-select, .wppb-textarea {
 	min-width:18em;
 }
 
+.wppb-select.wppb-disabled, .wppb-disabled .select2-selection--single, .wppb-disabled .select2-selection--multiple, .wppb-textarea.wppb-disabled{
+    background-color: #eee;
+}
+
 .wppb-wrap .form-table th {
-	width: 400px;
+	width: 330px;
 }
 
 .wppb-metabox label{
@@ -345,6 +364,11 @@
 }
 
 /* Admin Bar Page */
+
+.wppb-admin-bar > .description{
+    margin-top:23px;
+}
+
 .wppb-admin-bar label{
 	margin-right:30px;
 	padding:5px;
@@ -542,13 +566,27 @@
 }
 
 .wppb-recommended-plugin{
-    width:100%;
-    margin:0 8px 16px 0;
+    width:49%;
+    margin:0 0 16px 0;
 }
 
-@media screen and (min-width: 1600px){
+.wppb-recommended-plugin.plugin-card:nth-child(odd){
+    clear:none;
+    float:right;
+    margin-right: 0;
+}
+
+.wppb-recommended-plugin.plugin-card:nth-child(even){
+    clear:none;
+}
+
+.wppb-recommended-plugin .wppb-add-on-description{
+    min-height: 38px;
+}
+
+@media screen and (max-width: 768px){
     .wppb-recommended-plugin{
-        width:66%;
+        width:100%;
     }
 }
 
@@ -644,4 +682,234 @@ p .wppb-button-free {
 #wppb_ul_search_settings .wck-checkboxes > div{
     display: inline-block;
     margin-left:7px;
+}
+
+.mb-table-container .wck-state-highlight{
+    height:45px;
+}
+
+/**************************************************/
+/* Extra styling for admin notices
+/**************************************************/
+div.wppb-notice {
+    position: relative;
+}
+
+div.wppb-notice:after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+div.wppb-notice.wppb-narrow {
+    max-width: 825px;
+}
+
+div.wppb-notice .notice-dismiss {
+    text-decoration: none;
+}
+
+.wrap div.wppb-admin-notice {
+    margin-bottom: 0;
+}
+
+
+/**************************************************/
+/* Extra styling for select 2 manage fields
+/**************************************************/
+
+.profile-builder_page_manage-fields select#field{
+    width: 100%;
+}
+/* maybe take this out after a while. we need to keep it because of translatepress but after the tp update it is not required */
+.profile-builder_page_manage-fields span.select2-container{
+    width:100% !important;
+}
+
+.profile-builder_page_manage-fields .select2-selection.select2-selection--single{
+    outline: 0;
+}
+
+#wppb_select2_overlay{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+    z-index: 1000;
+}
+
+.profile-builder_page_manage-fields .select2-container{
+    z-index: 1051;
+}
+
+.profile-builder_page_manage-fields .select2-container--default .select2-selection--single .select2-selection__placeholder{
+    color: #111;
+    font-size: 15px;
+}
+.profile-builder_page_manage-fields .select2-container .select2-selection--single{
+    height: 38px;
+}
+.profile-builder_page_manage-fields .select2-container .select2-selection--single .select2-selection__rendered{
+    line-height: 38px;
+}
+.profile-builder_page_manage-fields .select2-container--default .select2-selection--single .select2-selection__arrow{
+    height: 38px;
+}
+
+@media screen and ( min-width: 800px ) {
+
+    .profile-builder_page_manage-fields .select2-results__option[role="group"] {
+        width: 48%;
+        margin: 0 1%;
+        float: left;
+    }
+
+    .profile-builder_page_manage-fields .select2-container--default .select2-results > .select2-results__options,
+    .profile-builder_page_manage-fields .select2-results{
+        max-height: 800px;
+    }
+}
+@media screen and ( min-width: 1280px ) {
+
+    .profile-builder_page_manage-fields .select2-results__option[role="group"] {
+        width: 23%;
+        margin: 0 1%;
+        float: left;
+    }
+
+    .profile-builder_page_manage-fields .select2-container--default .select2-results > .select2-results__options,
+    .profile-builder_page_manage-fields .select2-results{
+        max-height: 800px;
+    }
+}
+
+.wppb-auto-form-creation{
+    margin:50px 0 30px;
+    padding:20px;
+    background-color: #fff9e8;
+    border: 1px solid #ffba00;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.wppb-auto-form-creation.wppb-forms-created{
+    background-color: #edffe8;
+    border: 1px solid #46b450;
+}
+
+.wppb-auto-form-creation a.button{
+    margin-top: 5px;
+}
+
+.wppb-subtabs{
+    padding:7px 0 8px;
+    float:none;
+}
+
+.wppb-subtabs li{
+    padding:0 5px;
+    border-right:1px solid #ddd;
+}
+
+.wppb-subtabs li:last-child{
+    border-right:none;
+}
+
+.wppb-subtabs a{
+    letter-spacing:0 !important;
+    font-size:14px;
+}
+
+.profile-builder_page_user-email-customizer #poststuff, .profile-builder_page_admin-email-customizer  #poststuff{
+    padding:0;
+}
+
+/* Sortable options */
+.wppb_manage_fields_sortables {display: block; border: 1px solid #EEE; margin: 0px 0px 5px 32px; padding: 5px;}
+.wppb_manage_fields_sortables:hover {cursor: pointer; background-color: #EEE;}
+.wppb_manage_fields_sortables label {background: transparent !important;}
+.wppb_manage_fields_sortables > .dashicons {color: #f4f4f4; position: absolute; margin-left: -32px;}
+.wppb_manage_fields_sortables:hover > .dashicons {color: #000;}
+.wppb_selector_for_sortable_checkbox {margin-left: 32px; width: calc(100% - 32px);}
+
+
+/**
+Advanced Settings or Toolbox (legacy addon)
+ */
+.wppb-toolbox-list {
+    margin-top: 0;
+}
+
+.wppb-toolbox-list li {
+    list-style-type: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.wppb-toolbox-list .toolbox-label {
+    width: 140px;
+}
+
+.wppb-toolbox-list .toolbox-select2-container {
+    width: 100%;
+    max-width: 350px;
+}
+
+.wppb-toolbox-list #toolbox-restricted-email-domains-message {
+    width: 100%;
+    max-width: 350px;
+}
+
+.wppb-toolbox-list input[type="text"] {
+    width: 100%;
+}
+
+.wppb-toolbox-list--margin {
+    margin-top: 14px;
+}
+
+.form-table td {
+    padding-top: 20px;
+}
+
+.wppb-toolbox-accordion {
+    display: none;
+}
+
+.wppb-toolbox-wrap #setting-error-settings_updated p {
+    font-size: 13px;
+}
+
+.wppb-toolbox-admin-emails{
+    width: 75%;
+}
+
+/* select 2 field */
+.wppb-select2 span.select2-container,
+.wppb-select2 div.select2-container{	/* compatibility with WooCommerce which loads Select2 v.3.5.3 */
+    width: 15em !important;
+}
+
+@media screen and (max-width: 782px){
+    .wppb-select2 span.select2-container,
+    .wppb-select2 div.select2-container{ /* compatibility with WooCommerce which loads Select2 v.3.5.3 */
+        width: 100% !important;
+    }
+    .wppb-select2 span.select2-selection,
+    .wppb-select2 div.select2-selection{ /* compatibility with WooCommerce which loads Select2 v.3.5.3 */
+        height: 40px !important;
+        font-size: 16px;
+        line-height: 1.5;
+        padding-top: 7px;
+        padding-right: 10px;
+        padding-bottom: 7px;
+        padding-left: 10px;
+    }
 }

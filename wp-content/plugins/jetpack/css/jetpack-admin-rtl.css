@@ -70,47 +70,41 @@
   }
 }
 
-@-webkit-keyframes "candy" {
+@keyframes jetpack-candy {
   0% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
   20% {
-    -webkit-transform: scale(1.15);
-            transform: scale(1.15);
+    transform: scale(1.15);
   }
   60% {
-    -webkit-transform: scale(0.95);
-            transform: scale(0.95);
+    transform: scale(0.95);
   }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
 }
 
-@keyframes "candy" {
+@keyframes jetpack-loading-fade {
   0% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    opacity: .5;
   }
-  20% {
-    -webkit-transform: scale(1.15);
-            transform: scale(1.15);
-  }
-  60% {
-    -webkit-transform: scale(0.95);
-            transform: scale(0.95);
+  50% {
+    opacity: 1;
   }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    opacity: .5;
+  }
+}
+
+@keyframes jetpack-rotate {
+  to {
+    transform: rotate(-1turn);
   }
 }
 
 .button,
 .download-jetpack {
-  -webkit-transition: all .1s ease-in-out;
   transition: all .1s ease-in-out;
 }
 
@@ -245,6 +239,35 @@
   }
 }
 
+.jp-spinner {
+  display: flex;
+  align-items: center;
+}
+
+.jp-spinner__inner,
+.jp-spinner__outer {
+  margin: auto;
+  box-sizing: border-box;
+  border: .1em solid transparent;
+  border-radius: 50%;
+  border-top-color: #00aadc;
+  animation: 3s linear infinite;
+  animation-name: jetpack-rotate;
+}
+
+.jp-spinner__outer {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.jp-spinner__inner {
+  width: 100%;
+  height: 100%;
+  border-left-color: #00aadc;
+  opacity: .4;
+}
+
 @font-face {
   font-family: 'automatticons';
   src: url("../_inc/fonts/automatticons/automatticons.eot");
@@ -300,7 +323,7 @@
 
 @media (max-width: 1147px) {
   .wrap.inner {
-    background: #f9f9f9;
+    background: #f6f7f7;
     padding: 15px;
   }
 }
@@ -318,14 +341,14 @@
 
 @media (max-width: 1147px) {
   .page-content.about {
-    background: #f9f9f9;
+    background: #f6f7f7;
     padding: 15px;
   }
 }
 
 @media (max-width: 1147px) {
   .page-content.configure {
-    background: #f9f9f9;
+    background: #f6f7f7;
   }
 }
 
@@ -448,12 +471,12 @@
 }
 
 .modal .close:hover {
-  background: #eee;
+  background: #f0f0f1;
   opacity: 0.8;
 }
 
 .modal .close:active {
-  background: #eee;
+  background: #f0f0f1;
   opacity: 0.4;
 }
 
@@ -502,7 +525,7 @@
   bottom: 0;
   width: 100%;
   padding: 12px 20px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #dcdcde;
   background: #fff;
   text-align: left;
 }
@@ -554,7 +577,7 @@
 }
 
 .jp-info-img img {
-  border: 1px solid #ddd;
+  border: 1px solid #dcdcde;
   max-width: 100%;
   height: auto;
 }
@@ -701,7 +724,7 @@
 
 .primary {
   padding: 25px 15px 10px 15px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f1;
 }
 
 .secondary-footer {
@@ -716,7 +739,7 @@
   .secondary-footer {
     padding: 8px 15px 10px;
     margin-bottom: 30px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f1;
   }
 }
 
@@ -741,7 +764,7 @@
     font-weight: 400;
   }
   .secondary-footer a {
-    border-top: 1px solid #eee;
+    border-top: 1px solid #f0f0f1;
   }
 }
 
@@ -775,14 +798,13 @@
 }
 
 .footer .a8c-attribution a:hover:after {
-  -webkit-animation: candy .4s ease-in-out;
-          animation: candy .4s ease-in-out;
+  animation: jetpack-candy .4s ease-in-out;
 }
 
 @media (min-width: 782px) {
   .secondary {
     padding: 0 15px 10px 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f1;
   }
 }
 
@@ -955,7 +977,7 @@
 }
 
 .configure .frame.top.fixed {
-  background: #f9f9f9;
+  background: #f6f7f7;
   border-bottom: 1px solid #e9e9e9;
   padding-right: 160px;
   margin-top: -6px;
@@ -964,7 +986,7 @@
   top: 32px;
   width: 100%;
   z-index: 4;
-  box-shadow: 0 2px 2px -2px #eee;
+  box-shadow: 0 2px 2px -2px #f0f0f1;
 }
 
 @media (max-width: 782px) {
@@ -1070,6 +1092,7 @@
   float: left;
   padding: 0 0 1px;
   visibility: visible;
+  position: static;
 }
 
 .table-bordered.jetpack-modules tr.jetpack-module td .row-actions span {
@@ -1090,24 +1113,16 @@
   }
 }
 
+.table-bordered.jetpack-modules tr.jetpack-module td .row-actions span.unavailable_reason {
+  color: #000;
+}
+
 .table-bordered.jetpack-modules.with-transparency tr.jetpack-module:hover td .row-actions span a {
   opacity: 1;
 }
 
 .table-bordered.jetpack-modules.with-transparency tr.jetpack-module.unavailable {
   opacity: 0.3;
-}
-
-.table-bordered.jetpack-modules.with-transparency tr.jetpack-module#vaultpress {
-  opacity: 1;
-}
-
-.table-bordered.jetpack-modules.with-transparency tr.jetpack-module td .row-actions span a {
-  opacity: 0;
-}
-
-.table-bordered.jetpack-modules.with-transparency tr.jetpack-module td .row-actions span a:focus {
-  opacity: 1;
 }
 
 .table-bordered.jetpack-modules > thead > tr > th {
@@ -1375,7 +1390,7 @@
   margin-top: 10px;
   background: #fff;
   padding: 10px;
-  border: 1px #ddd solid;
+  border: 1px #dcdcde solid;
   font-size: 16px;
   color: #000;
   max-width: 100%;
@@ -1420,144 +1435,6 @@
 }
 
 /* end < 400px */
-#jetpack-disconnect-content {
-  display: none;
-  text-align: center;
-}
-
-#jetpack-disconnect-content .cancel-disconnect {
-  display: block;
-  margin-top: 10px;
-}
-
-.connection-details {
-  border: 1px #ddd solid;
-}
-
-.connection-details.local-user {
-  margin-bottom: 10px;
-}
-
-.connection-details .user-01,
-.connection-details .wpuser-02,
-.connection-details .action-btns {
-  padding: 10px;
-}
-
-.connection-details .user-01 .button, .connection-details .user-01 select,
-.connection-details .wpuser-02 .button,
-.connection-details .wpuser-02 select,
-.connection-details .action-btns .button,
-.connection-details .action-btns select {
-  margin-top: 5px;
-}
-
-.connection-details .wpuser-02 {
-  margin-top: 10px;
-}
-
-.connection-details h3 {
-  padding: 10px;
-  margin: 0;
-  background: #eee;
-  border-bottom: 1px #ddd solid;
-  font-size: 14px;
-}
-
-.jp-user img {
-  margin-left: 10px;
-  border-radius: 50%;
-}
-
-.jp-user div,
-.wp-user div,
-.wp-action div {
-  display: inline-block;
-  width: 100%;
-}
-
-.j-col.jp-user,
-.j-col.wp-user,
-.j-col.wp-action {
-  padding: 0;
-}
-
-.my-jetpack-actions select {
-  max-width: 150px;
-}
-
-.j-actions .button:nth-child(3) {
-  margin-left: 5px;
-}
-
-.j-row.disconnect {
-  text-align: center;
-}
-
-.j-row.disconnect .button {
-  margin: 0 auto;
-}
-
-a.what-is-primary {
-  color: #b4b9be;
-  margin-right: 4px;
-}
-
-@media (max-width: 782px) {
-  .wp-action {
-    border-top: 1px #ddd solid;
-  }
-  .wp-action h3 {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .connection-details {
-    font-size: 11px;
-  }
-  .connection-details h3 {
-    font-size: 12px;
-    padding: 5px;
-  }
-  .connection-details .user-01,
-  .connection-details .wpuser-02 {
-    padding: 6px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px;
-  }
-  .connection-details .action-btns {
-    text-align: center;
-  }
-}
-
-@media (max-width: 530px) {
-  .connection-details .wpuser-02 {
-    margin-top: 0;
-    padding: 12px;
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .j-actions .button {
-    width: 100%;
-    margin-bottom: 5px;
-    text-align: center;
-  }
-  .j-actions .button.alignright {
-    float: none;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .user-01,
-  .wpuser-02 {
-    max-width: 100px;
-  }
-}
-
 .manage__icon {
   width: 155px;
   height: 155px;

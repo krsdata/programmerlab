@@ -2,9 +2,9 @@
 Contributors: mythemeshop
 Creator's website link: http://mythemeshop.com/
 Tags: shortcodes, shortcode, shortcodes list, toggle shortcode, buttons, google map shortcode, youtube shortcode, vimeo shortcode, alert shortcode, notification shortcode, column shortcodes
-Requires at least: 3.0.1
-Tested up to: 4.7.2
-Stable tag: 1.4.3
+Requires at least: 4.5
+Tested up to: 5.5
+Stable tag: 1.4.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,46 @@ Please disable all plugins and check if shortcode plugin is working properly. Th
 7. Google Maps Shortcode
 
 == Changelog ==
+
+= 1.4.16 =
+* Code Improvements.
+
+= 1.4.15 =
+* Made compatible with WP 5.0+.
+
+= 1.4.14 =
+* Updated admin notices
+
+= 1.4.13 =
+* Changed admin notices
+
+= 1.4.12 =
+* Fixed responsive column issue.
+
+= 1.4.11 =
+* Fixed broken pages.
+
+= 1.4.10 =
+* Enqueued required scripts only on the pages where the plugin's shortcodes are used.
+
+= 1.4.9 =
+* Fixed shortcodes filter
+
+= 1.4.8 =
+* Added filter to extend list of shortcodes
+* Minor fixes
+
+= 1.4.7 =
+* Removed unused code
+
+= 1.4.6 =
+* Fixed styling and escaping issues
+
+= 1.4.5 =
+* Fixed sanitize_html_class() functions
+
+= 1.4.4 =
+* Fixed XSS vulnerability (thanks to https://www.threatpress.com)
 
 = 1.4.3 =
 * Added shortcode attribute "rel" to buttons

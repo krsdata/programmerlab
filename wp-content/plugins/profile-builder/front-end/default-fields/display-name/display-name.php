@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /* handle field output */
 function wppb_display_name_handler( $output, $form_location, $field, $user_id, $field_check_errors, $request_data ){	
 	$item_title = apply_filters( 'wppb_'.$form_location.'_display-name_item_title', wppb_icl_t( 'plugin profile-builder-pro', 'default_field_'.$field['id'].'_title_translation', $field['field-title'] ) );
@@ -37,7 +39,7 @@ function wppb_display_name_handler( $output, $form_location, $field, $user_id, $
         $public_display = array_unique( $public_display );
 
         $output = '<label for="display_name">'.$item_title.$error_mark.'</label>';
-        $output .= '<select class="default_field_display-name" name="display_name" id="display-name">';
+        $output .= '<select class="default_field_display-name '. apply_filters( 'wppb_fields_extra_css_class', '', $field ) .'" name="display_name" id="display-name">';
 
             foreach( $public_display as $display_name_option ) {
                 $output .= '<option ' . selected( $user_data->display_name, $display_name_option, false ) . '>' . $display_name_option . '</option>';
@@ -57,9 +59,11 @@ add_filter( 'wppb_output_form_field_default-display-name-publicly-as', 'wppb_dis
 
 /* handle field validation */
 function wppb_check_display_name_value( $message, $field, $request_data, $form_location ){
-    if( $field['required'] == 'Yes' ){
-        if( ( isset( $request_data['display_name'] ) && ( trim( $request_data['display_name'] ) == '' ) ) || !isset( $request_data['display_name'] ) ){
-            return wppb_required_field_error($field["field-title"]);
+    if( $form_location != 'register' ){
+        if ($field['required'] == 'Yes') {
+            if ((isset($request_data['display_name']) && (trim($request_data['display_name']) == '')) || !isset($request_data['display_name'])) {
+                return wppb_required_field_error($field["field-title"]);
+            }
         }
     }
 
@@ -69,10 +73,12 @@ add_filter( 'wppb_check_form_field_default-display-name-publicly-as', 'wppb_chec
 
 
 /* handle field save */
-function wppb_userdata_add_display_name( $userdata, $global_request ){
-	if ( isset( $global_request['display_name'] ) )
-		$userdata['display_name'] = trim( sanitize_text_field( $global_request['display_name'] ) );
-		
+function wppb_userdata_add_display_name( $userdata, $global_request, $form_args ){
+    if( wppb_field_exists_in_form( 'Default - Display name publicly as', $form_args ) ) {
+        if (isset($global_request['display_name']))
+            $userdata['display_name'] = trim(sanitize_text_field($global_request['display_name']));
+    }
+
 	return $userdata;
 }
-add_filter( 'wppb_build_userdata', 'wppb_userdata_add_display_name', 10, 2 );
+add_filter( 'wppb_build_userdata', 'wppb_userdata_add_display_name', 10, 3 );

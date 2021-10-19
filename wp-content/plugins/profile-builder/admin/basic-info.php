@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /**
  * Function that creates the "Basic Information" submenu page
  *
@@ -27,21 +28,36 @@ function wppb_basic_info_content() {
 ?>
 	<div class="wrap wppb-wrap wppb-info-wrap">
 		<div class="wppb-badge <?php echo $version; ?>"><span><?php printf( __( 'Version %s' ), PROFILE_BUILDER_VERSION ); ?></span></div>
-		<h1><?php echo __( '<strong>Profile Builder </strong>' . $version, 'profile-builder' ); ?></h1>
+		<h1><?php printf( __( '<strong>Profile Builder </strong> %s', 'profile-builder' ), $version ); ?></h1>
 		<p class="wppb-info-text"><?php printf( __( 'The best way to add front-end registration, edit profile and login forms.', 'profile-builder' ) ); ?></p>
 		<hr />
-		<h2 class="wppb-callout"><?php _e( 'For Modern User Interaction', 'profile-builder' ); ?></h2>
+		<?php
+		$wppb_pages_created = get_option( 'wppb_pages_created' );
+		$shortcode_pages_query = new WP_Query( array( 'post_type' => 'page', 's' => '[wppb-' ) );
+		if( empty( $wppb_pages_created ) && !$shortcode_pages_query->have_posts() ){
+		?>
+			<div class="wppb-auto-form-creation wppb-2-1-col">
+				<div><h3><?php _e( 'Speed up the setup process by automatically creating the form pages:', 'profile-builder' ); ?></h3></div>
+				<div><a href="<?php echo admin_url('admin.php?page=profile-builder-basic-info&wppb_create_pages=true') ?>" class="button primary button-primary button-hero"><?php _e( 'Create Form Pages', 'profile-builder' ); ?></a></div>
+			</div>
+		<?php }else{ ?>
+			<div class="wppb-auto-form-creation wppb-forms-created wppb-2-1-col">
+				<div><h3><?php _e( 'You can see all the pages with Profile Builder form shortcodes here:', 'profile-builder' ); ?></h3></div>
+				<div><a href="<?php echo admin_url('edit.php?s=%5Bwppb-&post_status=all&post_type=page&action=-1&m=0&paged=1&action2=-1') ?>" class="button primary button-primary button-hero"><?php _e( 'View Form Pages', 'profile-builder' ); ?></a></div>
+			</div>
+		<?php } ?>
+
 		<div class="wppb-row wppb-3-col">
 			<div>
-				<h3><?php _e( 'Login', 'profile-builder' ); ?></h3>
+				<h3><?php _e( 'Login Form', 'profile-builder' ); ?></h3>
 				<p><?php printf( __( 'Friction-less login using %s shortcode or a widget.', 'profile-builder' ), '<strong class="nowrap">[wppb-login]</strong>' ); ?></p>
 			</div>
 			<div>
-				<h3><?php _e( 'Registration', 'profile-builder'  ); ?></h3>
+				<h3><?php _e( 'Registration Form', 'profile-builder'  ); ?></h3>
 				<p><?php printf( __( 'Beautiful registration forms fully customizable using the %s shortcode.', 'profile-builder' ), '<strong class="nowrap">[wppb-register]</strong>' ); ?></p>
 			</div>
 			<div>
-				<h3><?php _e( 'Edit Profile', 'profile-builder' ); ?></h3>
+				<h3><?php _e( 'Edit Profile Form', 'profile-builder' ); ?></h3>
 				<p><?php printf( __( 'Straight forward edit profile forms using %s shortcode.', 'profile-builder' ), '<strong class="nowrap">[wppb-edit-profile]</strong>' ); ?></p>
 			</div>
 		</div>
@@ -65,6 +81,10 @@ function wppb_basic_info_content() {
 				<h3><?php _e( 'Email Confirmation', 'profile-builder' ); ?></h3>
 				<p><?php _e( 'Make sure users sign up with genuine emails. On registration users will receive a notification to confirm their email address.', 'profile-builder' ); ?></p>
 			</div>
+            <div>
+                <h3><?php _e( 'Content Restriction', 'profile-builder' ); ?></h3>
+                <p><?php _e( 'Restrict users from accessing certain pages, posts or custom post types based on user role or logged-in status.', 'profile-builder' ); ?></p>
+            </div>
 			<div>
 				<h3><?php _e( 'Minimum Password Length and Strength Meter', 'profile-builder' ); ?></h3>
 				<p><?php _e( 'Eliminate weak passwords altogether by setting a minimum password length and enforcing a certain password strength.', 'profile-builder' ); ?></p>
@@ -72,6 +92,10 @@ function wppb_basic_info_content() {
 			<div>
 				<h3><?php _e( 'Login with Email or Username', 'profile-builder' ); ?></h3>
 				<p><?php _e( 'Allow users to log in with their email or username when accessing your site.', 'profile-builder' ); ?></p>
+			</div>
+			<div style="clear:left;">
+				<h3><?php _e( 'Roles Editor', 'profile-builder' ); ?></h3>
+				<p><?php _e( 'Add, remove, clone and edit roles and also capabilities for these roles.', 'profile-builder' ); ?></p>
 			</div>
 		</div>
 
@@ -122,13 +146,13 @@ function wppb_basic_info_content() {
 		</div>
 		<hr/>
 		<div> 
-			<h3><?php _e( 'Powerful Modules (**)', 'profile-builder' );?></h3>
-			<p><?php _e( 'Everything you will need to manage your users is probably already available using the Pro Modules.', 'profile-builder' ); ?></p>
-            <?php if( file_exists ( WPPB_PLUGIN_DIR.'/modules/modules.php' ) ): ?>
-			    <p><a href="admin.php?page=profile-builder-modules" class="button"><?php _e( 'Enable your modules', 'profile-builder' ); ?></a></p>
+			<h3><?php _e( 'Powerful Add-ons (**)', 'profile-builder' );?></h3>
+			<p><?php _e( 'Everything you will need to manage your users is probably already available using the Pro Add-ons.', 'profile-builder' ); ?></p>
+            <?php if( file_exists ( WPPB_PLUGIN_DIR.'/add-ons/add-ons.php' ) ): ?>
+			    <p><a href="admin.php?page=profile-builder-add-ons" class="button"><?php _e( 'Enable your add-ons', 'profile-builder' ); ?></a></p>
             <?php endif; ?>
 			<?php if ($version == 'Free'){ ?>
-				<p><a href="https://www.cozmoslabs.com/wordpress-profile-builder/?utm_source=wpbackend&utm_medium=clientsite&utm_content=basicinfo-modules&utm_campaign=PBFree" class="wppb-button-free"><?php _e( 'Find out more about PRO Modules', 'profile-builder' ); ?></a></p>
+				<p><a href="https://www.cozmoslabs.com/wordpress-profile-builder/?utm_source=wpbackend&utm_medium=clientsite&utm_content=basicinfo-add-ons&utm_campaign=PBFree" class="wppb-button-free"><?php _e( 'Find out more about PRO Modules', 'profile-builder' ); ?></a></p>
 			<?php }?>
 		</div>
 		<div class="wppb-row wppb-3-col">
@@ -177,6 +201,18 @@ function wppb_basic_info_content() {
 				<p>One of the most requested features in Profile Builder was for users to be able to pay for an account.</p>
 				<p>Now that's possible using the free WordPress plugin - <a href="<?php echo admin_url('options.php?page=profile-builder-pms-promo'); ?>">Paid Member Subscriptions</a>.</p>
 				<p><a href="<?php echo admin_url('options.php?page=profile-builder-pms-promo'); ?>" class="button">Find out how</a></p>
+
+			</div>
+		</div>
+		<div class="wrap wppb-wrap wppb-1-3-col">
+			<div>
+				<a href="https://wordpress.org/plugins/translatepress-multilingual/" target="_blank"><img src="<?php echo plugins_url( '../assets/images/pb-trp-cross-promotion.png', __FILE__ ); ?>" alt="TranslatePress Logo"/></a>
+			</div>
+			<div>
+				<h3>Easily translate your entire WordPress website</h3>
+				<p>Translate your Profile Builder forms with a WordPress translation plugin that anyone can use.</p>
+				<p>It offers a simpler way to translate WordPress sites, with full support for WooCommerce and site builders.</p>
+				<p><a href="https://wordpress.org/plugins/translatepress-multilingual/" class="button" target="_blank">Find out how</a></p>
 
 			</div>
 		</div>

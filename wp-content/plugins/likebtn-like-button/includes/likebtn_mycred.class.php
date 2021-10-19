@@ -43,6 +43,9 @@ if (class_exists('myCRED_Hook')) {
 		const REF_DISLIKE = 'likebtn_dislike';
 		const REF_GET_DISLIKE = 'likebtn_get_dislike';
 
+		public $hook_prefs_copy;
+		public $type_copy;
+
 		/**
 		 * Construct
 		 */
@@ -71,6 +74,9 @@ if (class_exists('myCRED_Hook')) {
 					$this->prefs[$instance.'_'.LIKEBTN_ENTITY_POST] = $hook_prefs[self::ID][$instance];
 				}
 			}
+
+			$this->hook_prefs_copy = $hook_prefs;
+			$this->type_copy = $type;
 		}
 
 		/**
@@ -100,6 +106,11 @@ if (class_exists('myCRED_Hook')) {
 		 * Award user and author
 		 */
 		public function award($entity_name, $entity_id, $instance, $ref_user, $ref_author) {
+
+			// We have to call cunstructor again, as custom post types are not
+			// ready when it is called first time.
+			$this->__construct( $this->hook_prefs_copy, $this->type_copy );
+
 			$user_id 	= get_current_user_id();
 
 			if (!$user_id) {
@@ -194,29 +205,29 @@ if (class_exists('myCRED_Hook')) {
 ?>
 <h3 class="nav-tab-wrapper likebtn_mycred_tab_labels" style="padding: 0">
     <?php foreach ($likebtn_entities as $tab_entity_name => $tab_entity_title): ?>
-        <a class="nav-tab likebtn_mycred_tab_lbl_<?php echo $tab_entity_name; ?> <?php echo ('post' == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="javascript:likebtnGotoTab('<?php echo $tab_entity_name ?>', '.likebtn_mycred_tab', '.likebtn_mycred_tab_', '.likebtn_mycred_tab_labels', 'likebtn_mycred_tab_lbl_');void(0);"><?php _e($tab_entity_title, LIKEBTN_I18N_DOMAIN); ?></a>
+        <a class="nav-tab likebtn_mycred_tab_lbl_<?php echo $tab_entity_name; ?> <?php echo ('post' == $tab_entity_name ? 'nav-tab-active' : '') ?>" href="javascript:likebtnGotoTab('<?php echo $tab_entity_name ?>', '.likebtn_mycred_tab', '.likebtn_mycred_tab_', '.likebtn_mycred_tab_labels', 'likebtn_mycred_tab_lbl_');void(0);"><?php _e($tab_entity_title, 'likebtn-like-button'); ?></a>
     <?php endforeach ?>
 </h3>
 
 <?php foreach ($likebtn_entities as $entity_name => $entity_title): ?>
 <div class="likebtn_mycred_tab postbox likebtn_mycred_tab_<?php echo $entity_name; ?> <?php if ($entity_name !== 'post'): ?>hidden<?php endif ?>" >
 	<div class="inside">
-		<label class="subheader"><?php echo _e( 'Points for Liking Content', LIKEBTN_I18N_DOMAIN ); ?></label>
+		<label class="subheader"><?php echo _e( 'Points for Liking Content', 'likebtn-like-button' ); ?></label>
 		<?php
 			$instance = 'like_'.$entity_name;
 			$this->settings_block($prefs, $instance);
 		?>
-		<label class="subheader"><?php _e( 'Points for Getting a Content Like', LIKEBTN_I18N_DOMAIN ); ?></label>
+		<label class="subheader"><?php _e( 'Points for Getting a Content Like', 'likebtn-like-button' ); ?></label>
 		<?php
 			$instance = 'get_like_'.$entity_name;
 			$this->settings_block($prefs, $instance);
 		?>
-		<label class="subheader"><?php echo _e( 'Points for Disliking Content', LIKEBTN_I18N_DOMAIN ); ?></label>
+		<label class="subheader"><?php echo _e( 'Points for Disliking Content', 'likebtn-like-button' ); ?></label>
 		<?php
 			$instance = 'dislike_'.$entity_name;
 			$this->settings_block($prefs, $instance);
 		?>
-		<label class="subheader"><?php _e( 'Points for Getting a Content Dislike', LIKEBTN_I18N_DOMAIN ); ?></label>
+		<label class="subheader"><?php _e( 'Points for Getting a Content Dislike', 'likebtn-like-button' ); ?></label>
 		<?php
 			$instance = 'get_dislike_'.$entity_name;
 			$this->settings_block($prefs, $instance);
@@ -238,12 +249,12 @@ if (class_exists('myCRED_Hook')) {
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( $instance => 'log' ) ); ?>"><?php _e('Percent from voter\'s points balance added on voting to the points amount above', LIKEBTN_I18N_DOMAIN); ?></label>
+		<label for="<?php echo $this->field_id( array( $instance => 'log' ) ); ?>"><?php _e('Percent from voter\'s points balance added on voting to the points amount above', 'likebtn-like-button'); ?></label>
 		<div class="h2"><input type="text" name="<?php echo $this->field_name( array( $instance => 'share' ) ); ?>" id="<?php echo $this->field_id( array( $instance => 'share' ) ); ?>" value="<?php echo (float)$prefs[$instance]['share']; ?>" size="8" autocomplete="off" /><small>%</small></div>
 	</li>
 	<li class="empty"></li>
 	<li>
-		<label for="<?php echo $this->field_id( array( $instance => 'limit' ) ); ?>"><?php _e( 'Limit', LIKEBTN_I18N_DOMAIN ); ?></label>
+		<label for="<?php echo $this->field_id( array( $instance => 'limit' ) ); ?>"><?php _e( 'Limit', 'likebtn-like-button' ); ?></label>
 		<?php echo $this->hook_limit_setting( $this->field_name( array( $instance => 'limit' ) ), $this->field_id( array( $instance => 'limit' ) ), $prefs[$instance]['limit'] ); ?>
 	</li>	
 	<li class="empty"></li>

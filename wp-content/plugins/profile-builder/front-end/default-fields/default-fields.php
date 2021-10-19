@@ -1,4 +1,6 @@
-<?php 
+<?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 // include individual modules
 function wppb_include_default_fields_files() {
     $wppb_generalSettings = get_option('wppb_general_settings', 'not_found' );
@@ -37,5 +39,16 @@ function wppb_include_default_fields_files() {
     if ( wppb_can_users_signup_blog() ) {
         include_once(WPPB_PLUGIN_DIR . '/front-end/default-fields/blog-details/blog-details.php');
     }
+    
+    /* added recaptcha and user role field since version 2.6.2 */
+    include_once( WPPB_PLUGIN_DIR.'/front-end/default-fields/recaptcha/recaptcha.php' );
+    include_once( WPPB_PLUGIN_DIR.'/front-end/default-fields/user-role/user-role.php' );
+
+    /* added recaptcha and user role field since version 2.8.2 */
+    include_once( WPPB_PLUGIN_DIR.'/front-end/default-fields/gdpr/gdpr.php' );
+    include_once( WPPB_PLUGIN_DIR.'/front-end/default-fields/gdpr-delete/gdpr-delete.php' );
+
+    /* added email-confirmation field in main plugin since version 3.3.4 */
+    include_once( WPPB_PLUGIN_DIR.'/front-end/default-fields/email-confirmation/email-confirmation.php' );
 }
 wppb_include_default_fields_files();

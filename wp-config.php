@@ -20,8 +20,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
- define(‘WP_MAX_MEMORY_LIMIT’, ‘512M’);
-define( 'WP_MEMORY_LIMIT', '512M' );
+//define( 'WP_MEMORY_LIMIT', '512M' );
 //define('DB_NAME', 'programm_db');
 
 /** MySQL database username */
@@ -33,13 +32,13 @@ define( 'WP_MEMORY_LIMIT', '512M' );
 /** MySQL hostname */
 //define('DB_HOST', 'localhost');
 
-define('DB_NAME', 'programm_wp412');
+define('DB_NAME', 'programmerlab');
 
 /** MySQL database username */
-define('DB_USER', 'programm_wp412');
+define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'oc2tPS[[83');
+define('DB_PASSWORD', 'Ninja@DB2021');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
